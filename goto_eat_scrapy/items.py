@@ -5,8 +5,12 @@
 
 import scrapy
 
-
-class GotoEatScrapyItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class ShopItem(scrapy.Item):
+    # 必須項目
+    shop_name = scrapy.Field()      # 店舗名
+    address = scrapy.Field()        # 住所(市区町村以下)
+    tel = scrapy.Field()            # 電話番号
+    # オプション項目
+    genre_name = scrapy.Field()     # ジャンル名
+    zip_code = scrapy.Field()       # 郵便番号
+    offical_page = scrapy.Field()   # 公式ホームページ

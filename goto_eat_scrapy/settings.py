@@ -86,3 +86,10 @@ HTTPCACHE_EXPIRATION_SECS = 0
 HTTPCACHE_DIR = 'httpcache'
 HTTPCACHE_IGNORE_HTTP_CODES = []
 HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+# 出力ファイル(CSV)の文字コード設定
+# TODO: convert to SJIS or EUC
+FEED_EXPORT_ENCODING = 'utf-8'
+
+# 出力ファイル(CSV)のフィールド順
+FEED_EXPORT_FIELDS = ['shop_name', 'address', 'tel', 'genre_name', 'zip_code', 'offical_page']
