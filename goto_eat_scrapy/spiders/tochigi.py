@@ -15,16 +15,15 @@ class TochigiSpider(scrapy.Spider):
 
     def parse(self, response):
         # 各加盟店情報を抽出
-        base = '//*[@id="contents"]/ul[@class="serch_result"]'  # "serch" is not my TYPO...
-        for i, _ in enumerate(response.xpath(f'{base}/li'), 1):
+        for li in response.xpath('//*[@id="contents"]/ul[@class="serch_result"]/li'):  # "serch" is not my TYPO...
             item = ShopItem()
             # 「店舗名」 (例: "幸楽苑　足利店")
-            item['shop_name'] = response.xpath(f'{base}/li[{i}]/p[@class="name"]/text()').extract_first().strip()
+            item['shop_name'] = li.xpath('.//p[@class="name"]/text()').get().strip()
             # 「ジャンル名」 (例: "ラーメン・餃子")
-            item['genre_name'] = response.xpath(f'{base}/li[{i}]/p[@class="name"]/span/text()').extract_first().strip()
+            item['genre_name'] = li.xpath('//p[@class="name"]/span/text()').get().strip()
             # 「所在地」から「郵便番号」「住所」を取得
             #   (例: "〒326-0335 栃木県 足利市 上渋垂町字伊勢宮364-1") => "326-0335", "足利市 上渋垂町字伊勢宮364-1"
-            place = response.xpath(f'{base}/li[{i}]/div[@class="add"]/p[1]/text()').extract_first().strip()
+            place = li.xpath('.//div[@class="add"]/p[1]/text()').get().strip()
             logger.debug(f'  place={place}')
             # たまに入力ブレがあるので、正規表現とかで適当に処理
             #   (例: スペースなし "〒328-0054 栃木県栃木市平井町659-7")
@@ -34,9 +33,9 @@ class TochigiSpider(scrapy.Spider):
             item['address'] = m.group('address')
             item['zip_code'] = m.group('zip_code')
             # 「電話番号」 (例: "0284-70-5620"・無入力の場合あり)
-            item['tel'] = response.xpath(f'{base}/li[{i}]/div[@class="add"]/p[2]/a/text()').extract_first()
+            item['tel'] = li.xpath('.//div[@class="add"]/p[2]/a/text()').extract_first()
             # 「公式ホームページ」 (例: "https://www.kourakuen.co.jp/"・無入力の場合あり)
-            item['offical_page'] = response.xpath(f'{base}/li[{i}]/ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
+            item['offical_page'] = li.xpath('.//ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
             yield item
 
         # 「次の一覧」がなければ終了

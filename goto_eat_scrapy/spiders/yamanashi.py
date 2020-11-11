@@ -1,8 +1,6 @@
 import re
 import scrapy
-from logzero import logger
 from goto_eat_scrapy.items import ShopItem
-from goto_eat_scrapy.exceptions import ScrapingError
 
 class YamanashiSpider(scrapy.Spider):
     """
