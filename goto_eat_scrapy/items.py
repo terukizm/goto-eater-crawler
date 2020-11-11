@@ -14,3 +14,5 @@ class ShopItem(scrapy.Item):
     genre_name = scrapy.Field()     # ジャンル名
     zip_code = scrapy.Field()       # 郵便番号
     offical_page = scrapy.Field()   # 公式ホームページ
+    opening_hours = scrapy.Field()  # 営業時間
+    closing_day = scrapy.Field()    # 定休日

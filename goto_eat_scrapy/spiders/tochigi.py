@@ -3,7 +3,7 @@ import scrapy
 from logzero import logger
 from goto_eat_scrapy.items import ShopItem
 
-class GotoeatTochigiSpider(scrapy.Spider):
+class TochigiSpider(scrapy.Spider):
     """
     usage:
       $ scrapy crawl tochigi -O output.csv
