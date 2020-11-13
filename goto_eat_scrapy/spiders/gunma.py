@@ -29,7 +29,7 @@ class GunmaSpider(scrapy.Spider):
             # オプション項目
             tel = article.xpath('.//div[2]/p[@class="shoptel"]/text()').get()
             item['tel'] = tel.replace('TEL.', '') if tel else None
-            item['offical_page'] = article.xpath('.//div[2]/p[@class="shopurl"]/a/@href').get()
+            item['offical_page'] = article.xpath('.//div[2]/div[@class="shopinfo"]/a[2]/@href').get()
 
             yield item
 
