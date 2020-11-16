@@ -34,8 +34,8 @@ class KagoshimaSpider(scrapy.Spider):
         # TODO: 行数確認
 
         # MEMO: tabula-pyはtempfile, io.stringIO等ではきちんと動作しなかったので実ファイルに書き込んでいる
-        tmp_pdf = '/tmp/temp_kagoshima.pdf'
-        tmp_csv = '/tmp/temp_kagoshima.csv'
+        tmp_pdf = f'/tmp/temp_{self.name}.pdf'
+        tmp_csv = f'/tmp/temp_{self.name}.csv'
         with open(tmp_pdf, 'wb') as f:
             f.write(response.body)
 

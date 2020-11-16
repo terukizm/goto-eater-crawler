@@ -38,7 +38,7 @@ class FukuokaSpider(scrapy.Spider):
 
     def parse(self, response):
         # MEMO: tempfile, io.stringIO等ではきちんと動作しなかったので実ファイルに書き込んでいる
-        tmp_csv = '/tmp/temp_fukuoka.csv'
+        tmp_csv = f'/tmp/temp_{self.name}.csv'
         with open(tmp_csv, 'wb') as f:
             f.write(response.body)
 
