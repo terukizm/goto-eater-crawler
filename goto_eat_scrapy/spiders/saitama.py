@@ -1,6 +1,8 @@
 import re
 import scrapy
 
+from goto_eat_scrapy.items import ShopItem
+
 class SaitamaSpider(scrapy.Spider):
     """
     usage:
