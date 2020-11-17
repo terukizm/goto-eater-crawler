@@ -46,7 +46,7 @@ class KagoshimaSpider(scrapy.Spider):
             item = ShopItem()
             item['shop_name'] = row['店舗名'].strip()
             item['address'] = row['所在地'].strip()
-            item['genre_name'] = '飲食店' # 鹿児島のPDFにはジャンルがないので
+            # item['genre_name'] = '' # 鹿児島のPDFにはジャンルがないので
             yield item
 
         pathlib.Path(tmp_csv)

@@ -68,6 +68,6 @@ class IwateSpider(scrapy.Spider):
             # item['genre_name'] = article.xpath('.//p[@class="stores_box_genre"]/text()').get().strip()
 
             # TODO: 部分一致くらいで引っ掛けてジャンル分けするしかなさそう...　とりあえず諦めてジャンルなし
-            item['genre_name'] = '飲食店'
+            # item['genre_name'] = ''
 
             yield item

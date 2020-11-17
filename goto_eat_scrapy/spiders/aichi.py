@@ -23,7 +23,7 @@ class aichiSpider(scrapy.Spider):
             genre_name = article.xpath('.//ul[@class="lcl-shop-tag"]/li[@class="lcl-shop-tag__item lcl-shop-tag__item--cat"]/text()').get()
             if not genre_name:
                 logger.warn('  ジャンル名未指定: {}'.format(item['shop_name']))
-            item['genre_name'] = genre_name or '飲食店'
+            item['genre_name'] = genre_name
 
             place = article.xpath('.//p[@class="lcl-shop__address"]/text()').get().strip()
             m = re.match(r'〒\s*(?P<zip_code>.*?)\s(?P<address>.*)', place)

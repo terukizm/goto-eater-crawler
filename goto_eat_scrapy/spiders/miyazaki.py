@@ -64,6 +64,6 @@ class MiyazakiSpider(scrapy.Spider):
                 genre_name = ['アジア・エスニック']
             return shop_name, genre_name
 
-        # ジャンル名がなければ"飲食店"に寄せる
-        return text, '飲食店'
+        # ジャンル名がなければ"その他"に寄せる
+        return text, 'その他'
 

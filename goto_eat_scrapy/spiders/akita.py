@@ -39,7 +39,7 @@ class AkitaSpider(scrapy.Spider):
             item['address'] = row['所在地'].replace('<!--', '').replace('-->', '').strip()
 
             item['tel'] = row['電話番号']
-            item['genre_name'] = '飲食店'    # ジャンルなし
+            # item['genre_name'] = ''    # ジャンルなし
             item['offical_page'] = row['公式ホームページ']
             yield item
 
