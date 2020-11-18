@@ -96,7 +96,7 @@ class NiigataSpider(scrapy.Spider):
 
             yield item
 
-        # 「NEXT」ボタンがなければ(最終ページなので)終了
+        # 「次へ」ボタンがなければ(最終ページなので)終了
         next_page = response.xpath('//div[@id="pagination"]/ul/li[@class="next"]/a/@onclick').extract_first()
         if next_page is None:
             logger.info('💻 finished. last page = ' + response.request.url)
