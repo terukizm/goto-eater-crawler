@@ -18,15 +18,15 @@ class TokyoSpider(scrapy.Spider):
         'CONCURRENT_REQUESTS': 1,
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
-        'DOWNLOAD_DELAY': 3,
+        'DOWNLOAD_DELAY': 5,
         # 'LOG_LEVEL': 'INFO',
     }
 
     start_urls = [
         # 紙とデジタル両方使える方だけとした
-        # 'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?sc_lid=gtetokyo_top_search_analog', # 都内全体
+        'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?sc_lid=gtetokyo_top_search_analog', # 都内全体
         # 'https://r.gnavi.co.jp/area/areal2228/kods17214/rs/?resp=1&fwp=%E9%8C%A6%E7%B3%B8%E7%94%BA%E3%83%BB%E6%8A%BC%E4%B8%8A%E3%83%BB%E6%96%B0%E5%B0%8F%E5%B2%A9', # 錦糸町
-        'https://r.gnavi.co.jp/area/areal2273/kods17214/rs/?gtet_all=1&resp=1&fwp=%E5%BA%9C%E4%B8%AD%E3%83%BB%E8%AA%BF%E5%B8%83', # 調布
+        # 'https://r.gnavi.co.jp/area/areal2273/kods17214/rs/?gtet_all=1&resp=1&fwp=%E5%BA%9C%E4%B8%AD%E3%83%BB%E8%AA%BF%E5%B8%83', # 調布
     ]
 
     def parse(self, response):
