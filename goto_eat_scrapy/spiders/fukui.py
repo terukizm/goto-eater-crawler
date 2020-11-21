@@ -20,7 +20,7 @@ class FukuiSpider(scrapy.Spider):
     def search(self, response):
         for article in response.xpath('//div[@class="result"]/ul/li'):
             url = article.xpath('.//a/@href').get().strip()
-            yield scrapy.Request(response.urljoin(url), callback=self.detail)
+            return scrapy.Request(response.urljoin(url), callback=self.detail)
 
 
     def detail(self, response):
@@ -29,6 +29,8 @@ class FukuiSpider(scrapy.Spider):
         item['shop_name'] = response.xpath('//div[@id="contents"]/h3/text()').get().strip()
         for dl in response.xpath('//div[@id="contents"]/dl'):
             # 複数ジャンル指定あり
+            # TODO: ジャンル指定がない「グルメ民宿 はまもと」があり、その場合にfollowing-siblingが変なところ(住所？)を見に行ってしまう
+            # https://gotoeat-fukui.com/shop/?id=180097  (にしても画像がうまそうでつらい)
             genre_name = dl.xpath('.//dt[contains(text(), "ジャンル")]/following-sibling::dd/text()').get().strip()
             item['genre_name'] = genre_name.replace('、', '|')
 
