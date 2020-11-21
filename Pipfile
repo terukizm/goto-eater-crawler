@@ -9,6 +9,7 @@ verify_ssl = true
 scrapy = "*"
 logzero = "*"
 tabula-py = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"

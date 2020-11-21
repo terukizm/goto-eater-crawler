@@ -6,12 +6,15 @@ import pandas as pd
 from logzero import logger
 from goto_eat_scrapy.items import ShopItem
 
-class HokkaidoSpider(scrapy.Spider):
+class OldHokkaidoSpider(scrapy.Spider):
     """
+    かつてはPDFが直置きされていてtabulaで頑張ったが、不要になった…
+    PDF系の参照用に残しておく…　(後で消す)
+
     usage:
       $ scrapy crawl hokkaido -O output.csv
     """
-    name = 'hokkaido'
+    name = 'hokkaido_old'
     allowed_domains = [ 'gotoeat-hokkaido.jp' ]
 
     start_urls = [
