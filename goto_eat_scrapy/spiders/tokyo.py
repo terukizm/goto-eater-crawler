@@ -18,7 +18,7 @@ class TokyoSpider(scrapy.Spider):
         'CONCURRENT_REQUESTS': 1,
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
-        'DOWNLOAD_DELAY': 5,
+        'DOWNLOAD_DELAY': 2,
         # 'LOG_LEVEL': 'INFO',
     }
 
@@ -78,6 +78,7 @@ class TokyoSpider(scrapy.Spider):
         else:
             # "header-meta-gen-desc"がない場合は以下を利用(単一)
             # TODO: こちらを利用する場合、ジャンル分けがまったく整理されてないので(鬼畜)　csv2geojsonの方できちんとジャンルの名寄せをやること
+            # いまのところ800件くらいの変なジャンルが追加されてて死んでる
             item['genre_name'] = response.xpath('//header[@role="banner"]//dd[@id="header-meta-cat-desc"]/text()').get().strip()
 
 
