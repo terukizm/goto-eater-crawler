@@ -25,7 +25,7 @@ class GifuSpider(scrapy.Spider):
 
     def parse(self, response):
         # 各加盟店情報を抽出
-        for article in response.xpath('//table[@id="smp-table-26722"]//tr[contains(@class, "smp-row-data")]'):
+        for article in response.xpath('//table[@id="smp-table-26960"]//tr[contains(@class, "smp-row-data")]'):
             url = article.xpath('.//td[contains(@class, "smp-cell-col-3")]/a[@target="_self"]/@href').get()
             yield scrapy.Request(response.urljoin(url), callback=self.detail)
 
@@ -52,8 +52,8 @@ class GifuSpider(scrapy.Spider):
             item['zip_code'] = place_list[0].strip()
             item['address'] = ''.join(place_list[1:]).strip()
 
-            # 岐阜はテーブル構造が壊れてない
-            item['tel'] = tr.xpath('.//tr/th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
+            # 岐阜もテーブル構造が壊れてた…
+            item['tel'] = tr.xpath('.//th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
 
         return item
 
