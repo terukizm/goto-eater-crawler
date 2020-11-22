@@ -10,6 +10,7 @@ scrapy = "*"
 logzero = "*"
 tabula-py = "*"
 requests = "*"
+pyppeteer = "*"
 
 [requires]
 python_version = "3.8"
