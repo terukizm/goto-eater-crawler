@@ -6,7 +6,7 @@ from goto_eat_scrapy.items import ShopItem
 class MiyazakiSpider(scrapy.Spider):
     """
     usage:
-      $ scrapy crawl miyazaki -O output.csv
+      $ scrapy crawl miyazaki -O 45_miyazaki.csv
     """
     name = 'miyazaki'
     allowed_domains = [ 'premium-gift.jp' ]
@@ -15,24 +15,22 @@ class MiyazakiSpider(scrapy.Spider):
 
     def parse(self, response):
         # 各加盟店情報を抽出
-        for card in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
+        for article in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
             item = ShopItem()
             # 店舗名、ジャンル名
-            text = card.xpath('.//h3[@class="store-card__title"]/text()').get().strip()
-            item['shop_name'], item['genre_name'] = self._ジャンル抽出(text)
+            text = ' '.join(article.xpath('.//h3[@class="store-card__title"]/text()').getall()).strip()
+            item['shop_name'], item['genre_name'] = self._genre(text)
 
-            # テーブル部分
-            table = card.xpath('.//table/tbody')
             # 「郵便番号」「住所」
-            place = table.xpath('.//tr[1]/td/text()').get().strip()
+            place = article.xpath('.//table/tbody/tr[1]/td/text()').get().strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)
             item['address'] = m.group('address')
             item['zip_code'] = m.group('zip_code')
             # 「電話番号」
-            tel = table.xpath('.//tr[2]/td/text()').get().strip()
+            tel = article.xpath('.//table/tbody/tr[2]/td/text()').get().strip()
             item['tel'] = '' if tel == '-' else tel
             # 「URL」
-            offical_page = table.xpath('.//tr[3]/td/text()').get().strip()
+            offical_page = article.xpath('.//table/tbody/tr[3]/td/text()').get().strip()
             item['offical_page'] = '' if offical_page == '-' else offical_page
 
             yield item
@@ -49,9 +47,9 @@ class MiyazakiSpider(scrapy.Spider):
 
         yield scrapy.Request(next_page, callback=self.parse)
 
-    def _ジャンル抽出(self, text: str):
-        # 宮崎は"／"区切りで店舗名部分にジャンル名を無理やり入れているため、その書式であればジャンル名として利用する
-        m = re.match(r'(?P<shop_name>.*)／(?P<genre_name>.*)', text)
+    def _genre(self, text: str):
+        # 宮崎は"/"もしくは"／"区切りで店舗名部分にジャンル情報を無理やり入れているため、その書式であればジャンル名として利用する
+        m = re.match(r'(?P<shop_name>.*)(\/|／)(?P<genre_name>.*)', text)
         if m:
             shop_name = m.group('shop_name')
             # ただしジャンル名は記入ブレがあるため、それらを寄せる

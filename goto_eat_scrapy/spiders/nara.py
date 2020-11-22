@@ -6,7 +6,7 @@ from goto_eat_scrapy.items import ShopItem
 class NaraSpider(scrapy.Spider):
     """
     usage:
-      $ scrapy crawl nara -O output.csv
+      $ scrapy crawl nara -O 29_nara.csv
     """
     name = 'nara'
     allowed_domains = [ 'premium-gift.jp' ]
@@ -17,7 +17,7 @@ class NaraSpider(scrapy.Spider):
         # 各加盟店情報を抽出
         for card in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
             item = ShopItem()
-            item['shop_name'] = card.xpath('.//h3[@class="store-card__title"]/text()').get().strip()
+            item['shop_name'] = ' '.join(card.xpath('.//h3[@class="store-card__title"]/text()').getall()).strip()
             item['genre_name'] = card.xpath('.//p[@class="store-card__tag"]/text()').get().strip()
             # テーブル部分
             table = card.xpath('.//table/tbody')
