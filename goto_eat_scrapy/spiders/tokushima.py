@@ -20,8 +20,10 @@ class TokushimaSpider(scrapy.Spider):
             item['shop_name'] = article.xpath('.//header/h2/text()').get().strip()
 
             # 「ジャンル」
+            # ,区切りで複数指定してるものがあるので|区切りに変換
             text = ''.join(article.xpath('.//header/text()').getall())
-            item['genre_name'] = text.strip().replace('ジャンル：', '')
+            genre = text.strip().replace('ジャンル：', '')
+            item['genre_name'] = '|'.join([s.strip() for s in genre.split(',')])
 
             # 2020/11/18時点の暫定実装
             # 本来所在地なしはありえないが、"富田街ダイニング坊乃"を出力したときだけ、DOMが崩れている(理由は謎)

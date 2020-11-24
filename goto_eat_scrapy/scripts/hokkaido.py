@@ -78,7 +78,7 @@ def parse(html):
         item = ShopItem()
         item['shop_name'] = article.xpath('.//div[@class="left"]/h4[@class="results-tit"]/text()')[0].strip()
         item['address'] = article.xpath('.//div[@class="left"]/p[@class="results-txt01"]/text()')[0].strip()
-        item['genre_name'] = _genre(article.xpath('.//div[@class="right"]/p[@class="results-txt02"]/text()')[0].strip())
+        item['genre_name'] = article.xpath('.//div[@class="right"]/p[@class="results-txt02"]/text()')[0].strip()
         tel = article.xpath('.//div[@class="right"]/p[@class="results-txt03"]/text()')
         item['tel'] = tel[0].strip() if tel else None
 
@@ -86,50 +86,6 @@ def parse(html):
 
     next_page = html.xpath('//ul[@role="navigation"]/li/a[@rel="next"]/@href')
     return result, next_page
-
-
-def _genre(genre_name: str):
-    # ジャンル名がめちゃめちゃになっているので、ある程度寄せる
-    # TODO: csv2geojson側でやるべきかもしれない
-    if genre_name in ['すし', '回転すし']:
-        return 'すし'
-    if genre_name in ['焼肉', 'ホルモン焼', 'ステーキ・鉄板焼', 'ジンギスカン']:
-        return '焼肉・ステーキ・鉄板焼'
-    if genre_name in ['日本料理・郷土料理', '懐石・割烹', '天ぷら・うなぎ', 'とんかつ', \
-        'すきやき・しゃぶしゃぶ', 'かに料理・海鮮料理', 'おにぎり・釜飯', 'もつ焼・おでん', \
-        '丼・鍋', 'その他の日本料理']:
-        return '和食'
-    if genre_name in ['フランス料理・イタリア料理', 'その他の西洋料理']:
-        return '洋食'
-    if genre_name in ['中華料理・台湾料理', 'ぎょうざ']:
-        return '中華'
-    if genre_name in ['ラーメン・中華そば', 'そば・うどん', 'スパゲティ・パスタ']:
-        return '麺類'
-    if genre_name in ['アジア・エスニック料理', '韓国料理', '無国籍料理・多国籍料理', 'インド料理・カレー']:
-        return 'アジア・エスニック・多国籍料理'
-    if genre_name in ['居酒屋・大衆酒場', 'ダイニングバー', 'ビヤホール・ビアレストラン'] \
-        or genre_name.startswith('ショットバー') \
-        or genre_name.startswith('スナック'):
-        return '居酒屋・バー'
-    if genre_name in ['カフェ・フルーツパーラー', '喫茶店・珈琲店・紅茶店・茶房', 'ベーカリーカフェ']:
-        return 'カフェ・喫茶店'
-
-    # この辺からカテゴライズなんもわからん…
-    if genre_name in ['焼鳥', 'フライドチキン', 'から揚げ・ザンギ']:
-        return '焼鳥・フライドチキン・から揚げ・ザンギ'
-    if genre_name in ['ハンバーガー', '一般食堂・定食'] \
-        or genre_name.startswith('バイキング') \
-        or genre_name.startswith('レストラン'):
-        return 'レストラン・ファーストフード・バイキング・食堂'
-    if genre_name.startswith('イートイン'):
-        return 'イートイン'
-    if genre_name in ['その他', 'お好み焼き・焼きそば', 'たこ焼き・もんじゃ焼き']:
-        return 'その他'
-
-    # それ以外はその他に全部寄せても良いが、一応例外投げて停止するようにした
-    # (しれっと新ジャンル追加されて落ちそう...)
-    logger.error(f'unknown: {genre_name}')
-    raise Exception('不明なジャンル')
 
 
 if __name__ == "__main__":

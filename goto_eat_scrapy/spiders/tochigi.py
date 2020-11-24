@@ -6,7 +6,7 @@ from goto_eat_scrapy.items import ShopItem
 class TochigiSpider(scrapy.Spider):
     """
     usage:
-      $ scrapy crawl tochigi -O output.csv
+      $ scrapy crawl tochigi -O 09_tochigi.csv
     """
     name = 'tochigi'
     allowed_domains = [ 'gotoeat-tochigi.jp' ]
@@ -25,7 +25,7 @@ class TochigiSpider(scrapy.Spider):
             #   (例: "〒326-0335 栃木県 足利市 上渋垂町字伊勢宮364-1") => "326-0335", "足利市 上渋垂町字伊勢宮364-1"
             place = li.xpath('.//div[@class="add"]/p[1]/text()').get().strip()
             logger.debug(f'  place={place}')
-            # たまに入力ブレがあるので、正規表現とかで適当に処理
+            # たまに入力ブレがあるので、正規表現で適当に処理
             #   (例: スペースなし "〒328-0054 栃木県栃木市平井町659-7")
             #   (例: 都道府県名なし "〒320-0026 宇都宮市 馬場通り1-1-1　シティータワー宇都宮1F")
             #   (例: 郵便番号のハイフンなし "〒3270821 栃木県 佐野市 高萩町1216-2")
