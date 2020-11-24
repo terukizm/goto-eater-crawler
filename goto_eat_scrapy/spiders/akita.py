@@ -27,7 +27,7 @@ class AkitaSpider(scrapy.Spider):
         # ここは特にpandasでやる理由ない…
         df = pd.read_csv(tmp_csv, header=None, dtype={'13.店舗情報ジャンル': int}, \
             names=('店舗名', '市町村', '所在地', '電話番号', '公式ホームページ')
-        )
+        ).fillna({'公式ホームページ': ''})
 
         for _, row in df.iterrows():
             item = ShopItem()
