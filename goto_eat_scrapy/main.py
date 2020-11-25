@@ -11,30 +11,30 @@ import datetime
 
 def run_spiders(base='result/csv'):
     logger.info('... ScrapyのSpiderを実行 ... ')
-    # scrapconfigure_logging(install_root_handler = False)
-    # configure_logging({
-    #     'LOG_LEVEL': 'DEBUG',
-    # })
     settings = get_project_settings()
     settings.set('FEED_URI', f'{base}/%(name)s.csv')
-    settings.set('LOG_FILE', 'tmp/scrapy.log')
-    settings.set('LOG_LEVEL', 'DEBUG')
-    process = CrawlerProcess(settings)
+    settings.set('FEED_FORMAT', 'csv')
+    settings.set('LOG_FILE', 'tmp/scrapy.log')  # scrapyのログ出力、request/httpcache周りの切り分け用
 
+    process = CrawlerProcess(settings)
     spiders = process.spiders.list()
+    # 単体動作確認
     spiders = [
-        # 'nara',
+        'aichi',
+        'nara',
         'saga',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     for spider in spiders:
-        print(f'[{spider}] start ...')
+        # MEMO: 2020/10リリースのv2.4.0で追加されたoverwriteオプションでCSVを上書きできればよいのだが、
+        # イマイチ使い方がわからないので古いCSVに追記されないように消している
+        logger.info(f'[ {spider} ] start ...')
+        (pathlib.Path.cwd() / f'{base}/{spider}.csv' ).unlink(missing_ok=False)
         process.crawl(spider, logfile=f'{base}/logs/{spider}_{timestamp}.log')
-        print(f'[{spider}]  end ...')
+        logger.info(f'[ {spider} ]  end ...')
 
     process.start()
-
     logger.info('all complete!!! ')
 
 
@@ -60,6 +60,7 @@ def sort_csv(base='result/csv'):
 
 
 if __name__ == "__main__":
+    # TODO: use args
     run_spiders()
     # run_scripts()
     # sort_csv()

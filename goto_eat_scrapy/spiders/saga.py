@@ -1,38 +1,23 @@
 import re
 import scrapy
-import logzero
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class SagaSpider(scrapy.Spider):
+class SagaSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl saga -O 41_saga.csv
+      $ scrapy crawl saga -O saga.csv
     """
     name = 'saga'
     allowed_domains = [ 'gotoeat-saga.jp' ]
     start_urls = ['https://gotoeat-saga.jp/consumer/shop.php?name=#search_result']
 
     def __init__(self, logfile=None, *args, **kwargs):
-        logger_name = f'logzero_logger_{self.name}'
-        import logging
-        if logfile:
-            self.logzero_logger = logzero.setup_logger(
-                name=logger_name,
-                logfile=logfile,
-                fileLoglevel=logging.DEBUG,
-                disableStderrLogger=True
-            )
-        else:
-            self.logzero_logger = logzero.setup_logger(
-                name=logger_name,
-                level=logging.INFO
-            )
-
-        super(SagaSpider, self).__init__(*args, **kwargs)
+        super().__init__(logfile, *args, **kwargs)
 
     def parse(self, response):
-        self.logzero_logger.info(f'💾 url = {response.request.url}')
         # 各加盟店情報を抽出
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//main[@id="primary"]//div[@class="shop_info"]/div[@class="shop_detail"]'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//div[@class="ttl"]/text()').get().strip()
