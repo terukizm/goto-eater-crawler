@@ -87,15 +87,7 @@ def parse(html):
     next_page = html.xpath('//ul[@role="navigation"]/li/a[@rel="next"]/@href')
     return result, next_page
 
-
-if __name__ == "__main__":
-    """
-    北海道のサイトはセッションを共有しているため、検索結果のURLが一意にならず、また並列にアクセスすると結果が混ざってしまうので、
-    色々試行錯誤したがScrapyでうまく処理できなかったため、愚直にrequests + lxmlでゴリゴリと実装した…
-
-    usage:
-    $ python -m goto_eat_scrapy.scripts.hokkaido
-    """
+def main(outfile: str):
     token = show_search_page()
     results = []
     for area in ['道央', '道北', '道南', '道東']:
@@ -108,7 +100,17 @@ if __name__ == "__main__":
             results += result
 
     df = pd.DataFrame(results, columns=settings.FEED_EXPORT_FIELDS)
-    outfile = '/tmp/01_hokkaido.csv' # やる気がおわりだよ
     df.to_csv(outfile, index=False)
 
+
+if __name__ == "__main__":
+    """
+    北海道のサイトはセッションを共有しているため、検索結果のURLが一意にならず、また並列にアクセスすると結果が混ざってしまうので、
+    色々試行錯誤したがScrapyでうまく処理できなかったため、愚直にrequests + lxmlでゴリゴリと実装した…
+
+    usage:
+    $ python -m goto_eat_scrapy.scripts.hokkaido
+    """
+    outfile = '/tmp/01_hokkaido.csv' # やる気がおわりだよ
+    main(outfile)
     print(f'success!! > {outfile}')

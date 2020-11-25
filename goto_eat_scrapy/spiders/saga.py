@@ -1,6 +1,6 @@
 import re
 import scrapy
-from logzero import logger
+import logzero
 from goto_eat_scrapy.items import ShopItem
 
 class SagaSpider(scrapy.Spider):
@@ -10,10 +10,28 @@ class SagaSpider(scrapy.Spider):
     """
     name = 'saga'
     allowed_domains = [ 'gotoeat-saga.jp' ]
-
     start_urls = ['https://gotoeat-saga.jp/consumer/shop.php?name=#search_result']
 
+    def __init__(self, logfile=None, *args, **kwargs):
+        logger_name = f'logzero_logger_{self.name}'
+        import logging
+        if logfile:
+            self.logzero_logger = logzero.setup_logger(
+                name=logger_name,
+                logfile=logfile,
+                fileLoglevel=logging.DEBUG,
+                disableStderrLogger=True
+            )
+        else:
+            self.logzero_logger = logzero.setup_logger(
+                name=logger_name,
+                level=logging.INFO
+            )
+
+        super(SagaSpider, self).__init__(*args, **kwargs)
+
     def parse(self, response):
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         # 各加盟店情報を抽出
         for article in response.xpath('//main[@id="primary"]//div[@class="shop_info"]/div[@class="shop_detail"]'):
             item = ShopItem()
@@ -25,15 +43,16 @@ class SagaSpider(scrapy.Spider):
             item['opening_hours'] = article.xpath('.//dl[3]/dd/text()').get()
             item['closing_day'] = article.xpath('.//dl[4]/dd/text()').get()
             item['offical_page'] = article.xpath('.//dl[5]/dd/a[@rel="noopener noreferrer"]/@href').get()
+            self.logzero_logger.debug(item)
             yield item
 
         # 「NEXT」ボタンがなければ(最終ページなので)終了
         next_page = response.xpath('//div[@class="pagination"]/ul/li[@class="next"]/a/@href').extract_first()
         if next_page is None:
-            logger.info('💻 finished. last page = ' + response.request.url)
+            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
             return
 
         next_page = response.urljoin(next_page)
-        logger.info(f'🛫 next url = {next_page}')
+        self.logzero_logger.info(f'🛫 next url = {next_page}')
 
         yield scrapy.Request(next_page, callback=self.parse)

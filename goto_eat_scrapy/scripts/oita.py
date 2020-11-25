@@ -52,15 +52,7 @@ def parse(html: str):
 
     return results
 
-
-if __name__ == "__main__":
-    """
-    大分県のサイトはSPAなのでscrapy単体だと処理できない。
-    splashを大分のためだけに使うのもめんどくさかったのでpyppeteerでゴリゴリ実装。
-
-    usage:
-    $ python -m goto_eat_scrapy.scripts.oita
-    """
+def main(outfile: str):
     # クローリングは時間かかるので一回成功したらpickleにしてる
     _html_pkl = "/tmp/44_oita.pkl"
     try:
@@ -76,7 +68,17 @@ if __name__ == "__main__":
     results = parse(html)
 
     df = pd.DataFrame(results, columns=settings.FEED_EXPORT_FIELDS)
-    outfile = '/tmp/44_oita.csv' # やる気がおわりだよ
     df.to_csv(outfile, index=False)
 
+
+if __name__ == "__main__":
+    """
+    大分県のサイトはSPAなのでscrapy単体だと処理できない。
+    splashを大分のためだけに使うのもめんどくさかったのでpyppeteerでゴリゴリ実装。
+
+    usage:
+    $ python -m goto_eat_scrapy.scripts.oita
+    """
+    outfile = '/tmp/44_oita.csv' # やる気がおわりだよ
+    main(outfile)
     logger.info(f'👍 success!! > {outfile}')
