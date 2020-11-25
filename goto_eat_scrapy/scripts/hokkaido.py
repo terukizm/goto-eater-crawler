@@ -11,7 +11,7 @@ from goto_eat_scrapy.items import ShopItem
 session = requests.Session()
 
 CACHE_PATH = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / 'hokkaido_script'
-CACHE_PATH.mkdir(parents=False, exist_ok=True)
+CACHE_PATH.mkdir(parents=True, exist_ok=True)
 
 SLEEP_SEC = 3
 HEADERS = {'User-Agent': settings.USER_AGENT}
@@ -21,7 +21,7 @@ def show_search_page():
     「取扱店リスト」の初期表示(GET)
     """
     r = session.get('https://gotoeat-hokkaido.jp/general/particStores', headers=HEADERS)
-    r.raise_for_status()     # retryなし、40x / 50x は例外で即終了とする
+    r.raise_for_status()     # retryなし。ステータスコード 40x/50x は例外で即終了とする
 
     html = lxml.html.fromstring(r.content)
     token = html.xpath('//p[@class="buttons"]/input[@name="_token"]/@value')[0]
@@ -57,6 +57,8 @@ def get_page(url, area, with_cache=True):
     logger.info(f'GET {url}...')
 
     # requestに対してのpickleを用いた簡易キャッシュ
+    # 保存先はscrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)
+    # TODO: この辺のcache処理を消す、もしくはオプションにする
     cache_file = CACHE_PATH / '{}_{}.pkl'.format(url.replace('/', '_').replace('?', '_'), area)
     if with_cache and cache_file.exists():
         logger.debug(f'  load from cache... {cache_file}')
@@ -100,17 +102,17 @@ def main(outfile: str):
             results += result
 
     df = pd.DataFrame(results, columns=settings.FEED_EXPORT_FIELDS)
-    df.to_csv(outfile, index=False)
+    df.to_csv(outfile, index=False, encoding=settings.FEED_EXPORT_ENCODING)
 
 
 if __name__ == "__main__":
     """
-    北海道のサイトはセッションを共有しているため、検索結果のURLが一意にならず、また並列にアクセスすると結果が混ざってしまうので、
-    色々試行錯誤したがScrapyでうまく処理できなかったため、愚直にrequests + lxmlでゴリゴリと実装した…
+    北海道のサイトはセッションを共有しているため、検索結果のURLが一意にならず、並列にアクセスすると結果が混ざってしまう。
+    色々と試行錯誤したがScrapyではシンプルに処理できなかったため、愚直にrequests + lxmlでゴリゴリと実装した…
 
     usage:
     $ python -m goto_eat_scrapy.scripts.hokkaido
     """
-    outfile = '/tmp/01_hokkaido.csv' # やる気がおわりだよ
+    outfile = '/tmp/01_hokkaido.csv'
     main(outfile)
     print(f'success!! > {outfile}')

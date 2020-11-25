@@ -83,7 +83,7 @@ class OldHokkaidoSpider(scrapy.Spider):
         #      774
         # 合計 = 4671
 
-        # MEMO: tabula-pyはtempfile, io.stringIO等ではきちんと動作しなかったので実ファイルに書き込んでいる
+        # MEMO: tabula-pyはtempfile, io.stringIO等ではpd.read_csv()がきちんと動作しなかったので実ファイルに書き込んでいる
         tmp_pdf = f'/tmp/temp_{self.name}.pdf'
         tmp_csv = f'/tmp/temp_{self.name}.csv'
         with open(tmp_pdf, 'wb') as f:

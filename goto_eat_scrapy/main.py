@@ -20,9 +20,10 @@ def run_spiders(base='result/csv'):
     spiders = process.spiders.list()
     # 単体動作確認
     spiders = [
-        'aichi',
-        'nara',
-        'saga',
+        'kagoshima',
+        # 'aichi',
+        # 'nara',
+        # 'saga',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -30,7 +31,7 @@ def run_spiders(base='result/csv'):
         # MEMO: 2020/10リリースのv2.4.0で追加されたoverwriteオプションでCSVを上書きできればよいのだが、
         # イマイチ使い方がわからないので古いCSVに追記されないように消している
         logger.info(f'[ {spider} ] start ...')
-        (pathlib.Path.cwd() / f'{base}/{spider}.csv' ).unlink(missing_ok=False)
+        (pathlib.Path.cwd() / f'{base}/{spider}.csv' ).unlink(missing_ok=True)
         process.crawl(spider, logfile=f'{base}/logs/{spider}_{timestamp}.log')
         logger.info(f'[ {spider} ]  end ...')
 

@@ -2,6 +2,7 @@ import asyncio
 from pyppeteer import launch
 from pyppeteer.errors import PageError
 import lxml.html
+import pathlib
 import pandas as pd
 from logzero import logger
 from goto_eat_scrapy import settings
@@ -10,9 +11,9 @@ from goto_eat_scrapy.items import ShopItem
 async def crawl():
     browser = await launch({
         'defaultViewport': None,
-        # 開発中は以下を有効にすると実際にブラウザが動くのでわかりやすい
-        # 'headless': False,
-        # 'slowMo': 5,
+        'headless': True,           # pipenvなど手元で動かしている場合はFalseにすると実際にchroniumが動くのでわかりやすい
+        'args': ['--no-sandbox'],   # Docker内で動かす場合に必要(あんまりよろしくないらしいが)
+        'slowMo': 5,                # 適宜食わせないとコケる(？)ので
     })
     page = await browser.newPage()
     await page.goto('https://oita-gotoeat.com/shop/')
@@ -29,6 +30,9 @@ async def crawl():
 
     html: str = await page.content()
     await browser.close()
+
+    if not html:
+        raise Exception('html is none....')
 
     return html
 
@@ -54,7 +58,11 @@ def parse(html: str):
 
 def main(outfile: str):
     # クローリングは時間かかるので一回成功したらpickleにしてる
-    _html_pkl = "/tmp/44_oita.pkl"
+    # 保存先はscrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)
+    # TODO: この辺のcache処理を消す、もしくはオプションにする
+    cache_dir = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / 'oita_script'
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    _html_pkl = str(cache_dir / 'pyppeteer.pkl')
     try:
         logger.info('  load from pickle ...')
         html = pd.read_pickle(_html_pkl)
@@ -66,19 +74,18 @@ def main(outfile: str):
 
     # html文字列を解析してShopItemに
     results = parse(html)
-
     df = pd.DataFrame(results, columns=settings.FEED_EXPORT_FIELDS)
-    df.to_csv(outfile, index=False)
+    df.to_csv(outfile, index=False, encoding=settings.FEED_EXPORT_ENCODING)
 
 
 if __name__ == "__main__":
     """
-    大分県のサイトはSPAなのでscrapy単体だと処理できない。
-    splashを大分のためだけに使うのもめんどくさかったのでpyppeteerでゴリゴリ実装。
+    大分県のサイトはSPAなのでscrapy単体では処理できない。
+    splashを大分のためだけに使うのもめんどくさかったので、pyppeteerでゴリゴリ実装。
 
     usage:
     $ python -m goto_eat_scrapy.scripts.oita
     """
-    outfile = '/tmp/44_oita.csv' # やる気がおわりだよ
+    outfile = '/tmp/44_oita.csv'
     main(outfile)
     logger.info(f'👍 success!! > {outfile}')
