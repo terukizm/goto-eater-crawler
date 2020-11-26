@@ -1,20 +1,20 @@
 import re
 import scrapy
-from logzero import logger
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class KumamotoSpider(scrapy.Spider):
+class KumamotoSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl kumamoto -O 43_kumamoto.csv
+      $ scrapy crawl kumamoto -O kumamoto.csv
     """
     name = 'kumamoto'
     allowed_domains = [ 'gotoeat-kumamoto.jp' ]
-
     start_urls = ['https://gotoeat-kumamoto.jp/shop']
 
     def parse(self, response):
         # 各加盟店情報を抽出
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//section[@id="sale-page"]//div[@class="sec-body__inner"]/article'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h3/text()').get().strip()
@@ -26,14 +26,15 @@ class KumamotoSpider(scrapy.Spider):
 
             item['offical_page'] = article.xpath('.//p[3]/a/@href').get()
 
+            self.logzero_logger.debug(item)
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了
         next_page = response.xpath('//div[@class="pagination"]/a[@class="next page-numbers"]/@href').extract_first()
         if next_page is None:
-            logger.info('💻 finished. last page = ' + response.request.url)
+            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
             return
 
-        logger.info(f'🛫 next url = {next_page}')
+        self.logzero_logger.info(f'🛫 next url = {next_page}')
 
         yield scrapy.Request(next_page, callback=self.parse)

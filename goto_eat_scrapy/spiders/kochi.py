@@ -2,11 +2,12 @@
 import scrapy
 import json
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class KochiSpider(scrapy.Spider):
+class KochiSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl kochi -O 39_kochi.csv
+      $ scrapy crawl kochi -O kochi.csv
     """
     name = 'kochi'
     allowed_domains = [ 'gotoeat-kochi.jp' ]
@@ -28,9 +29,11 @@ class KochiSpider(scrapy.Spider):
             #   6: shop_name_kana,
             #   7: address,
             #   8: tel
-            yield ShopItem(
+            item = ShopItem(
                 genre_name = row[3],
                 shop_name = row[5],
                 address = row[7],
                 tel = row[8],
             )
+            self.logzero_logger.debug(item)
+            yield item

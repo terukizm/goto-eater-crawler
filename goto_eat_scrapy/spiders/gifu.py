@@ -22,13 +22,13 @@ class GifuSpider(AbstractSpider):
         'CONCURRENT_REQUESTS': 1,
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
-        'DOWNLOAD_DELAY': 3,
+        'DOWNLOAD_DELAY': 2,    # 詳細ページまで見ないといけないので(4000件前後だから許して…)
     }
 
     def parse(self, response):
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
-        for article in response.xpath('//table[@id="smp-table-{self.table_id}"]//tr[contains(@class, "smp-row-data")]'):
+        for article in response.xpath(f'//table[@id="smp-table-{self.table_id}"]//tr[contains(@class, "smp-row-data")]'):
             url = article.xpath('.//td[contains(@class, "smp-cell-col-3")]/a[@target="_self"]/@href').get()
             yield scrapy.Request(response.urljoin(url), callback=self.detail)
 
