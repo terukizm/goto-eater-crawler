@@ -2,24 +2,22 @@
 import scrapy
 import pathlib
 import pandas as pd
-from logzero import logger
+from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class FukuokaSpider(scrapy.Spider):
+class FukuokaSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl fukuoka -O 40_fukuoka.csv
+      $ scrapy crawl fukuoka -O fukuoka.csv
     """
     name = 'fukuoka'
     allowed_domains = [ 'gotoeat-fukuoka.jp' ]
-
-    start_urls = [
-        'https://gotoeat-fukuoka.jp/csv/fk_gotoeat_UTF-8.csv',
-    ]
+    start_urls = ['https://gotoeat-fukuoka.jp/csv/fk_gotoeat_UTF-8.csv']
 
     genre_list = [
-        '', # genre_list[1]="和食・寿司" 〜 genre_list[15]="その他"
-        '和食・寿司',
+        '', # CSVの「13.店舗情報ジャンル」のコード値、[1]="和食・寿司" から [15]="その他" となるように
+        '和食・寿司',   # [1]
         '洋食',
         '中華料理',
         'フレンチ・イタリアン',
@@ -33,16 +31,17 @@ class FukuokaSpider(scrapy.Spider):
         'バー・ダイニングバー',
         'ファーストフード',
         'うどん・そば・丼',
-        'その他',
+        'その他',       # [15]
     ]
 
     def parse(self, response):
-        # MEMO: tempfile, io.stringIO等ではきちんと動作しなかったので実ファイルに書き込んでいる
-        tmp_csv = f'/tmp/temp_{self.name}.csv'
+        # MEMO: tempfile, io.stringIO等ではpd.read_csv()がきちんと動作しなかったので
+        # scrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)に書き込んでいる
+        cache_dir = pathlib.Path(__file__).parent.parent.parent / '.scrapy' / settings.HTTPCACHE_DIR / self.name
+        tmp_csv = str(cache_dir / 'fk_gotoeat_UTF-8.csv')
         with open(tmp_csv, 'wb') as f:
             f.write(response.body)
 
-        # ここは特にpandasでやる理由ない…
         df = pd.read_csv(tmp_csv, dtype={'13.店舗情報ジャンル': int}, \
             usecols=('11.店舗情報：店舗名', '13.店舗情報ジャンル', '14.店舗住所：郵便番号', \
                 '16.店舗住所：市町村', '17.店舗住所：町域、番地', '18.店舗住所：建物名', \
@@ -52,10 +51,9 @@ class FukuokaSpider(scrapy.Spider):
         for _, row in df.iterrows():
             item = ShopItem()
             item['shop_name'] = row['11.店舗情報：店舗名']
-            item['genre_name'] = self.genre_list[row['13.店舗情報ジャンル']]    # 1〜15をmapping
+            item['genre_name'] = self.genre_list[row['13.店舗情報ジャンル']]    # コード値から対応文字列をmapping
             item['address'] = '{}{}{}'.format(row['16.店舗住所：市町村'], row['17.店舗住所：町域、番地'], row['18.店舗住所：建物名'])
             item['tel'] = row['19.店舗情報：電話番号']
             item['offical_page'] = row['20.店舗ホームページ']
+            self.logzero_logger.debug(item)
             yield item
-
-        pathlib.Path(tmp_csv)

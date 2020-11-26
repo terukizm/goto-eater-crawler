@@ -20,10 +20,13 @@ def run_spiders(base='result/csv'):
     spiders = process.spiders.list()
     # 単体動作確認
     spiders = [
-        'kagoshima',
         # 'aichi',
+        # 'akita',
+        'fukui',
+        'fukuoka',
         # 'nara',
         # 'saga',
+        # 'kagoshima',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')

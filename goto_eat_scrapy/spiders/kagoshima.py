@@ -38,7 +38,7 @@ class KagoshimaSpider(AbstractSpider):
 
         # MEMO: tempfile, io.stringIOではtabula-pyがきちんと動作しなかったので、
         # scrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)に書き込んでいる
-        cache_dir = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / self.name
+        cache_dir = pathlib.Path(__file__).parent.parent.parent / '.scrapy' / settings.HTTPCACHE_DIR / self.name
         prefix = response.request.url.replace('http://www.kagoshima-cci.or.jp/wp-content/uploads/', '').replace('/', '-').replace('.pdf', '')
         tmp_pdf = str(cache_dir / f'{prefix}.pdf')
         tmp_csv = str(cache_dir / f'{prefix}.csv')

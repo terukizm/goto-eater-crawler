@@ -22,7 +22,7 @@ class AkitaSpider(AbstractSpider):
     def parse(self, response):
         # MEMO: tempfile, io.stringIO等ではpd.read_csv()がきちんと動作しなかったので
         # scrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)に書き込んでいる
-        cache_dir = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / self.name
+        cache_dir = pathlib.Path(__file__).parent.parent.parent / '.scrapy' / settings.HTTPCACHE_DIR / self.name
         tmp_csv = str(cache_dir / 'list.csv')
         with open(tmp_csv, 'wb') as f:
             f.write(response.body)
