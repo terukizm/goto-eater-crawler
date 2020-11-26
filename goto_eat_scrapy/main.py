@@ -22,10 +22,13 @@ def run_spiders(base='result/csv'):
     spiders = [
         # 'aichi',
         # 'akita',
-        'fukui',
-        'fukuoka',
+        # 'fukui',
+        # 'fukuoka',
+        'fukushima',
+        'gifu',
         # 'nara',
         # 'saga',
+        'tochigi',
         # 'kagoshima',
     ]
 
