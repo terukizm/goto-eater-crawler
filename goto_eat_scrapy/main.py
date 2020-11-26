@@ -24,11 +24,16 @@ def run_spiders(base='result/csv'):
         # 'akita',
         # 'fukui',
         # 'fukuoka',
-        'fukushima',
+        # 'fukushima',
         'gifu',
+        # 'gunma',
+        # 'hiroshima',
+        # 'hyogo',
+        # 'ibaraki',
+
         # 'nara',
         # 'saga',
-        'tochigi',
+        # 'tochigi',
         # 'kagoshima',
     ]
 
