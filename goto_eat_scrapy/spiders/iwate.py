@@ -1,16 +1,17 @@
 import re
 import scrapy
-
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class IwateSpider(scrapy.Spider):
+class IwateSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl iwate -O 03_iwate.csv
+      $ scrapy crawl iwate -O iwate.csv
     """
     name = 'iwate'
     allowed_domains = [ 'iwate-gotoeat.jp' ]
 
+    # 岩手はPOST検索でかつ市町村指定必須のため
     area_list = [
         '盛岡市',
         '宮古市',
@@ -50,6 +51,7 @@ class IwateSpider(scrapy.Spider):
     def start_requests(self):
         for area in self.area_list:
             params = {'k': '', 'area': area}
+            self.logzero_logger.info(f'💾 params = {params}')
             yield scrapy.FormRequest('https://www.iwate-gotoeat.jp/stores/#search_result', \
                     callback=self.parse, method='POST', \
                     formdata=params)
@@ -64,10 +66,10 @@ class IwateSpider(scrapy.Spider):
             m = re.match(r'.*(?P<tel>0\d{1,4}-\d{1,4}-\d{3,4})', tel)
             item['tel'] = m.group('tel')
 
-            # ジャンル指定が自由入力になっていて地獄 (ジャンル: イカの唐揚げってなんだよ)
             # item['genre_name'] = article.xpath('.//p[@class="stores_box_genre"]/text()').get().strip()
+            # で取れるが、ジャンル指定が自由入力になっていて地獄 (ジャンル: 「イカの唐揚げ」ってなんだよ...)
+            # もしやるなら、部分一致で引っ掛けてジャンル分けするしかなさそう...　とりあえず諦めてジャンルなし
+            item['genre_name'] = None
 
-            # TODO: 部分一致くらいで引っ掛けてジャンル分けするしかなさそう...　とりあえず諦めてジャンルなし
-            # item['genre_name'] = ''
-
+            self.logzero_logger.debug(item)
             yield item

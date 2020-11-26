@@ -25,16 +25,20 @@ def run_spiders(base='result/csv'):
         # 'fukui',
         # 'fukuoka',
         # 'fukushima',
-        'gifu',
+        # 'gifu',
         # 'gunma',
         # 'hiroshima',
         # 'hyogo',
         # 'ibaraki',
-
+        'ishikawa',
+        'iwate',
+        'kagawa',
+        # 'kagoshima',
+        # '',
+        # '',
         # 'nara',
         # 'saga',
         # 'tochigi',
-        # 'kagoshima',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
