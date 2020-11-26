@@ -12,9 +12,6 @@ class NaraSpider(AbstractSpider):
     allowed_domains = [ 'premium-gift.jp' ]
     start_urls = ['https://premium-gift.jp/nara-eat/use_store']
 
-    def __init__(self, logfile=None, *args, **kwargs):
-        super().__init__(logfile, *args, **kwargs)
-
     def parse(self, response):
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
@@ -23,16 +20,15 @@ class NaraSpider(AbstractSpider):
             item['shop_name'] = ' '.join(article.xpath('.//h3[@class="store-card__title"]/text()').getall()).strip()
             item['genre_name'] = article.xpath('.//p[@class="store-card__tag"]/text()').get().strip()
 
-            place = article.xpath('.//table/tbody/tr[1]/td/text()').get().strip()
+            place = article.xpath('.//table/tbody/tr/th[contains(text(), "住所：")]/following-sibling::td/text()').get().strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)
             item['address'] = m.group('address')
             item['zip_code'] = m.group('zip_code')
 
-            tel = article.xpath('.//table/tbody/tr[2]/td/text()').get().strip()
+            tel = article.xpath('.//table/tbody/tr/th[contains(text(), "電話番号：")]/following-sibling::td/text()').get().strip()
             item['tel'] = '' if tel == '-' else tel
 
-            offical_page = article.xpath('.//table/tbody/tr[3]/td/text()').get().strip()
-            item['offical_page'] = None if offical_page == '-' else offical_page    # "-" 表記は公式ページなし
+            item['offical_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

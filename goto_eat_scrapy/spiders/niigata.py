@@ -1,34 +1,17 @@
 import re
 import scrapy
-from logzero import logger
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class NiigataSpider(scrapy.Spider):
+class NiigataSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl niigata -O 15_niigata.csv
+      $ scrapy crawl niigata -O niigata.csv
     """
     name = 'niigata'
     allowed_domains = [ 'niigata-gte.com' ]     # .comとは
-
     start_urls = ['https://niigata-gte.com/shop/']
 
-    # ジャンルはタグで管理されてるが、地域名(泉州とか)も一緒にタグ管理されてて区別できないので…
-    genre_list = [
-        '和食',
-        '寿司',
-        '割烹',
-        '洋食',
-        'イタリアン',
-        'フレンチ',
-        '中華',
-        'ラーメン',
-        'ファストフード',
-        '軽食',
-        '喫茶',
-        '居酒屋',
-        'その他',
-    ]
     area_list = [
         '新潟市北区',
         '新潟市東区',
@@ -71,6 +54,7 @@ class NiigataSpider(scrapy.Spider):
 
     def parse(self, response):
         # 各加盟店情報を抽出
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//div[@id="result"]/div[@class="cont"]'):
             item = ShopItem()
             item['shop_name'] = ''.join(article.xpath('.//h4/text() | .//h4/a/text()').getall()).strip()
@@ -82,28 +66,29 @@ class NiigataSpider(scrapy.Spider):
             item['zip_code'] = m.group('zip_code')
             item['tel'] = article.xpath('.//p[@class="tel"]/text()').get()
 
-            # 「ジャンル名」 (例: "その他")
+            # 「地域名」と「ジャンル名」がタグで一緒になっているため、ジャンル名だけを取得
+            genres = []
             for tag in article.xpath('.//div[@class="tag"]/span/text()'):
-                # 完全一致するタグがあれば設定(それ以外のタグは地域名としてskip)
-                tagtext = tag.get()
+                tagtext = tag.get().strip()
                 if not tagtext:
                     continue
-                if tagtext in self.genre_list:
-                    item['genre_name'] = tagtext
-                    break
-                if tagtext not in self.area_list:
-                    raise ScrapingError(f'想定していない、不明なタグ 「{tagtext}」')
+                if tagtext in self.area_list:
+                    # 地域名ならskip
+                    continue
+                genres.append(tagtext)
+            item['genre_name'] = '|'.join(genres)
 
+            self.logzero_logger.debug(item)
             yield item
 
         # 「次へ」ボタンがなければ(最終ページなので)終了
         next_page = response.xpath('//div[@id="pagination"]/ul/li[@class="next"]/a/@onclick').extract_first()
         if next_page is None:
-            logger.info('💻 finished. last page = ' + response.request.url)
+            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
             return
 
         m = re.match(r"^mySubmit\('(?P<page>.*)'\);$", next_page)
         next_page = m.group('page')
-        logger.info(f'🛫 next url = {next_page}')
+        self.logzero_logger.info(f'🛫 next url = {next_page}')
 
         yield scrapy.Request(next_page, callback=self.parse)

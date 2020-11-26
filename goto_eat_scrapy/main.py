@@ -14,7 +14,7 @@ def run_spiders(base='result/csv'):
     settings = get_project_settings()
     settings.set('FEED_URI', f'{base}/%(name)s.csv')
     settings.set('FEED_FORMAT', 'csv')
-    settings.set('LOG_FILE', 'tmp/scrapy.log')  # scrapyのログ出力、request/httpcache周りの切り分け用
+    settings.set('LOG_FILE', 'tmp/scrapy.log')  # scrapyのログ出力(request/httpcache周りの切り分け用)
 
     process = CrawlerProcess(settings)
     spiders = process.spiders.list()
@@ -25,7 +25,7 @@ def run_spiders(base='result/csv'):
         # 'fukui',
         # 'fukuoka',
         # 'fukushima',
-        'gifu',
+        # 'gifu',
         # 'gunma',
         # 'hiroshima',
         # 'hyogo',
@@ -34,13 +34,21 @@ def run_spiders(base='result/csv'):
         # 'iwate',
         # 'kagawa',
         # 'kagoshima',
-        'kochi',
-        'kumamoto',
-        'kyoto',
-        'mie',
+        # 'kochi',
+        # 'kumamoto',
+        # 'kyoto',
+        # 'mie',
         'miyazaki',
-        # 'nara',
+        'nagano',
+        'nagasaki',
+        'nara',
+        'niigata',
+        # '',
+        # '',
         # 'saga',
+        # '',
+        # '',
+        # '',
         # 'tochigi',
     ]
 

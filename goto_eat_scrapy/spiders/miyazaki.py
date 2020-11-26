@@ -33,8 +33,7 @@ class MiyazakiSpider(AbstractSpider):
             tel = article.xpath('.//table/tbody/tr/th[contains(text(), "電話番号：")]/following-sibling::td/text()').get().strip()
             item['tel'] = '' if tel == '-' else tel
             # 「URL」
-            offical_page = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/text()').get().strip()
-            item['offical_page'] = '' if offical_page == '-' else offical_page    # "-" 表記は公式ページなし
+            item['offical_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
 
             self.logzero_logger.debug(item)
             yield item
