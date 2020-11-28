@@ -18,11 +18,12 @@ def run_spiders(base='result/csv'):
 
     process = CrawlerProcess(settings)
     spiders = process.spiders.list()
-    # 単体動作確認
+    # 単体動作確認用
     spiders = [
         # 'aichi',
         # 'aomori',
         # 'akita',
+        # 'ehime',
         # 'fukui',
         # 'fukuoka',
         # 'fukushima',
@@ -43,7 +44,7 @@ def run_spiders(base='result/csv'):
         # 'miyazaki',
         # 'nagano',
         # 'nagasaki',
-        'nara',
+        # 'nara',
         # 'niigata',
         # 'okinawa',
         # 'osaka',
@@ -53,13 +54,14 @@ def run_spiders(base='result/csv'):
         # 'shizuoka',
         # 'tochigi',
         # 'tokushima',
-        # 'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて詳細ページまで見ないといけないので考え中
+        'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて詳細ページまで見ないといけないので考え中
         # 'tottori',
         # 'toyama',
-        # '',
-        # '',
-        # '',
-        # '',
+
+        # 'wakayama',
+        # 'yamagata',
+        # 'yamaguchi',
+        # 'yamanashi',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')

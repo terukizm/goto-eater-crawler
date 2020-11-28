@@ -2,13 +2,13 @@ import re
 import scrapy
 import w3lib
 import json
-from logzero import logger
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class TokyoSpider(scrapy.Spider):
+class TokyoSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl tokyo -O 13_tokyo.csv
+      $ scrapy crawl tokyo -O tokyo.csv
     """
     name = 'tokyo'
     allowed_domains = [ 'r.gnavi.co.jp' ]
@@ -18,19 +18,18 @@ class TokyoSpider(scrapy.Spider):
         'CONCURRENT_REQUESTS': 1,
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
-        'DOWNLOAD_DELAY': 2,
-        # 'LOG_LEVEL': 'INFO',
+        'DOWNLOAD_DELAY': 1,
+        # MEMO: 16k件以上ある → 11/28に見たら23k件超えてた... 詳細ページまで見ないといけないので秒間1件で許して…
     }
 
     start_urls = [
-        # 紙とデジタル両方使える方だけとした
-        'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?sc_lid=gtetokyo_top_search_analog', # 都内全体
-        # 'https://r.gnavi.co.jp/area/areal2228/kods17214/rs/?resp=1&fwp=%E9%8C%A6%E7%B3%B8%E7%94%BA%E3%83%BB%E6%8A%BC%E4%B8%8A%E3%83%BB%E6%96%B0%E5%B0%8F%E5%B2%A9', # 錦糸町
-        # 'https://r.gnavi.co.jp/area/areal2273/kods17214/rs/?gtet_all=1&resp=1&fwp=%E5%BA%9C%E4%B8%AD%E3%83%BB%E8%AA%BF%E5%B8%83', # 調布
+        # 紙と電子、両方使える店とした(紙しか使えない店はあるが、電子しか使えない店はなさそう)
+        'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?gtet_all=1&resp=1&fwp=%E6%9D%B1%E4%BA%AC%E9%83%BD', # 都内全体、食事券対象店(すべて)
     ]
 
     def parse(self, response):
         # 各加盟店情報を抽出
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//div[@class="result-cassette__wrapper result-cassette__wrapper--normal"]/ul[@class="result-cassette__list"]/li'):
             url = article.xpath('.//div[@class="result-cassette__box"]//a[@class="result-cassette__box-title js-measure"]/@href').get()
             yield scrapy.Request(url, callback=self.detail)
@@ -38,21 +37,22 @@ class TokyoSpider(scrapy.Spider):
         # 「>」ボタンがなければ(最終ページなので)終了
         next_page = response.xpath('//nav//li[@class="pagination__arrow-item"]/a[@class="pagination__arrow-item-inner pagination__arrow-item-inner-next"]/@href').extract_first()
         if next_page is None:
-            logger.info('💻 finished. last page = ' + response.request.url)
+            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
             return
 
-        logger.info(f'🛫 next url = {next_page}')
+        self.logzero_logger.info(f'🛫 next url = {next_page}')
 
         yield scrapy.Request(next_page, callback=self.parse)
 
     def detail(self, response):
         item = ShopItem()
-        logger.debug(response.url) # TODO: 東京に限らず、csvにdetailのurl、入れてやるほうがいいかもしれない
+        self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
+        # TODO: 東京に限らず、csvにdetailのurl、入れてやるほうがいいかもしれない
         for tr in response.xpath('//div[@id="info-table"]/table/tbody'):
             item['shop_name'] = tr.xpath('.//tr/th[contains(text(), "店名")]/following-sibling::td/p[@id="info-name"]/text()').get().strip()
             item['tel'] = tr.xpath('.//tr/th[contains(text(), "電話番号・FAX")]/following-sibling::td/ul/li/span[@class="number"]/text()').get()
 
-            # data-oに入ってる謎json？をparse
+            # data-oに入ってる謎json？をparseしてURLを組み立て
             data_o = tr.xpath('.//tr/th[contains(text(), "お店のホームページ")]/following-sibling::td/ul/li/a[@class="url go-off"]/@data-o').get()
             if data_o:
                 data = json.loads(data_o)
@@ -64,23 +64,22 @@ class TokyoSpider(scrapy.Spider):
 
             text = tr.xpath('.//tr/th[contains(text(), "営業時間")]/following-sibling::td/div/text()').get()
             item['opening_hours'] = w3lib.html.remove_tags(text).strip() if text else None
-
             texts = tr.xpath('.//tr/th[contains(text(), "定休日")]/following-sibling::td/ul/li/text()').getall()
             item['closing_day'] = '\n'.join(texts)
 
-        ## ジャンル算出
-        # "header-meta-gen-desc"があればそちらをジャンルとして利用(複数ジャンルが設定されている)
+        ## ジャンル抽出
+        # "header-meta-gen-desc"があればそちらをジャンルとして利用(複数ジャンルあり)
         genre_list = []
         for genre in response.xpath('//header[@role="banner"]//dd[@id="header-meta-gen-desc"]/ol/li'):
             genre_list.append(genre.xpath('.//a/text()').get().strip())
         if genre_list:
             item['genre_name'] = '|'.join(genre_list)
         else:
-            # "header-meta-gen-desc"がない場合は以下を利用(単一)
-            # TODO: こちらを利用する場合、ジャンル分けがまったく整理されてないので(鬼畜)　csv2geojsonの方できちんとジャンルの名寄せをやること
-            # いまのところ800件くらいの変なジャンルが追加されてて死んでる
+            # "header-meta-gen-desc"がない場合は以下を利用
+            # MEMO: こちらを利用する場合、ジャンル分けが自由入力なのでcsv2geojsonの方できちんとジャンルの名寄せをやる必要がある(やった)
+            # それでもアホみたいなジャンルが多数設定されているが、そういうのはしょうがない…
             item['genre_name'] = response.xpath('//header[@role="banner"]//dd[@id="header-meta-cat-desc"]/text()').get().strip()
 
-
+        self.logzero_logger.debug(item)
         return item
 
