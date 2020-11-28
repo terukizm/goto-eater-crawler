@@ -1,0 +1,38 @@
+import re
+import scrapy
+from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
+
+class EhimeSpider(AbstractSpider):
+    """
+    usage:
+      $ scrapy crawl ehime -O ehime.csv
+    """
+    name = 'ehime'
+    allowed_domains = [ 'goto-eat-ehime.com' ] # .comとは
+    start_urls = ['https://www.goto-eat-ehime.com/shop_list/']
+
+    def parse(self, response):
+        # 各加盟店情報を抽出
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
+        for article in response.xpath('//div[@id="sortable"]/ul[@class="shop_list"]/li'):
+            item = ShopItem()
+            item['shop_name'] = article.xpath('.//div/dl/dt/text()').get().strip()
+            item['genre_name'] = article.xpath('.//div/p/span/text()').get().strip()    # 複数カテゴリなし
+            item['address'] = article.xpath('.//div/dl/dd/ul/li/span[contains(text(), "住所")]/following-sibling::span/text()').get().strip()
+            item['tel'] = article.xpath('.//div/dl/dd/ul/li/span/a[@class="tel_link"]/text()').get()
+
+            # MEMO: closing_day, opening_hours, official_pageなどを
+            # 詳細ページから取得可能だが、とりあえず未対応
+
+            self.logzero_logger.debug(item)
+            yield item
+
+        # 「>」ボタンがなければ(最終ページなので)終了
+        next_page = response.xpath('//div[@role="navigation"]/a[@rel="next"]/@href').extract_first()
+        if next_page is None:
+            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
+            return
+
+        self.logzero_logger.info(f'🛫 next url = {next_page}')
+        yield scrapy.Request(next_page, callback=self.parse)
