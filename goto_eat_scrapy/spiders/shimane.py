@@ -1,20 +1,20 @@
 import re
 import scrapy
-from logzero import logger
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class shimaneSpider(scrapy.Spider):
+class shimaneSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl shimane -O 32_shimane.csv
+      $ scrapy crawl shimane -O shimane.csv
     """
     name = 'shimane'
     allowed_domains = [ 'gotoeat-shimane.jp' ]
-
     start_urls = ['https://www.gotoeat-shimane.jp/inshokuten/']
 
     def parse(self, response):
-        # 詳細ページから各加盟店情報を抽出
+        # 各加盟店情報を抽出
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//div[@id="main"]//div[@class="com-location"]/ul/li'):
             url = article.xpath('.//a/@href').get()
             yield scrapy.Request(response.urljoin(url), callback=self.detail)
@@ -26,11 +26,12 @@ class shimaneSpider(scrapy.Spider):
             return
 
         next_page = response.urljoin(next_page)
-        logger.info(f'🛫 next url = {next_page}')
+        self.logzero_logger.info(f'🛫 next url = {next_page}')
 
         yield scrapy.Request(next_page, callback=self.parse)
 
     def detail(self, response):
+        self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
         item = ShopItem()
         item['shop_name'] = response.xpath('//h1[@class="title"]/text()').get().strip()
         item['address'] = response.xpath('//div[@class="info line addr"]/p/text()').get().strip()
@@ -42,4 +43,5 @@ class shimaneSpider(scrapy.Spider):
         tel = response.xpath('//div[@class="info line tel"]/p/text()').get()
         item['tel'] = tel.strip() if tel else None
 
+        self.logzero_logger.debug(item)
         yield item

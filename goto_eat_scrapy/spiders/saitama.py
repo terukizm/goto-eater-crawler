@@ -1,18 +1,18 @@
 import re
 import scrapy
-
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class SaitamaSpider(scrapy.Spider):
+class SaitamaSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl saitama -O output.csv
+      $ scrapy crawl saitama -O saitama.csv
     """
     name = 'saitama'
     allowed_domains = [ 'saitama-goto-eat.com' ]    # .comとは
 
     # 埼玉県は各市区町村の固定htmlをjQueryで読んでるだけ
-    # 例: https://saitama-goto-eat.com/store/北埼玉郡騎西町.html
+    # @see https://saitama-goto-eat.com/store.html
     area_list = [
         "さいたま市西区",
         "さいたま市北区",
@@ -88,15 +88,16 @@ class SaitamaSpider(scrapy.Spider):
         "北葛飾郡松伏町",
         "北埼玉郡騎西町",
     ]
-    start_urls = [f'https://saitama-goto-eat.com/store/{area}.html' for area in area_list]
+    start_urls = [ f'https://saitama-goto-eat.com/store/{area}.html' for area in area_list ]
 
     def parse(self, response):
-        # ジャンル別
+        # MEMO: ジャンル別のテーブル構造になっている
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for genre in response.xpath('//div[@class="tab_content"]'):
             genre_name = genre.xpath('.//div[@class="aria_genre"]/text()').get().strip()
             # 各店の情報
             for storebox in genre.xpath('.//div[@class="aria_store_content"]/div[@class="storebox"]'):
-                yield ShopItem(
+                item = ShopItem(
                     genre_name = genre_name,
                     shop_name = storebox.xpath('.//span[1]/text()').get().strip(),
                     # (span[2]はひととおり見たが一つも入ってない)
@@ -105,3 +106,5 @@ class SaitamaSpider(scrapy.Spider):
                     tel = storebox.xpath('.//span[5]/text()').get(),
                     offical_page = storebox.xpath('.//span[6]/a/@href').get()
                 )
+                self.logzero_logger.debug(item)
+                yield item
