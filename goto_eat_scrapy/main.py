@@ -46,6 +46,7 @@ def run_spiders(base='result/csv'):
         # 'nagasaki',
         # 'nara',
         # 'niigata',
+        'okayama',
         # 'okinawa',
         # 'osaka',
         # 'saga',
@@ -54,7 +55,7 @@ def run_spiders(base='result/csv'):
         # 'shizuoka',
         # 'tochigi',
         # 'tokushima',
-        'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて詳細ページまで見ないといけないので考え中
+        # 'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけないので考え中
         # 'tottori',
         # 'toyama',
 
