@@ -1,46 +1,41 @@
 import re
 import scrapy
+import pathlib
+import pandas as pd
+from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class NaraSpider(AbstractSpider):
+class naraSpider(AbstractSpider):
     """
     usage:
       $ scrapy crawl nara -O nara.csv
     """
     name = 'nara'
     allowed_domains = [ 'premium-gift.jp' ]
-    start_urls = ['https://premium-gift.jp/nara-eat/use_store']
+    start_urls = ['https://premium-gift.jp/nara-eat']
 
     def parse(self, response):
-        # 各加盟店情報を抽出
-        self.logzero_logger.info(f'💾 url = {response.request.url}')
-        for article in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
+        # Topページからリンクを取る(多分最新版が最初に来るだろうという決め打ち)
+        xlsx_url = response.xpath('//section[@class="news-list"]//a[contains(text(), "Excel形式")]/@href').extract_first()
+        yield scrapy.Request(xlsx_url, callback=self.parse_from_xlsx)
+
+    def parse_from_xlsx(self, response):
+        cache_dir = pathlib.Path(__file__).parent.parent.parent / '.scrapy' / settings.HTTPCACHE_DIR / self.name
+        tmp_xlsx = str(cache_dir / '利用店舗一覧.xlsx')
+
+        with open(tmp_xlsx, 'wb') as f:
+            f.write(response.body)
+        self.logzero_logger.info(f'💾 saved pdf: {response.request.url} > {tmp_xlsx}')
+
+        df = pd.read_excel(tmp_xlsx, sheet_name='リスト').fillna({'電話番号': '', 'URL': ''})
+        for _, row in df.iterrows():
             item = ShopItem()
-            item['shop_name'] = ' '.join(article.xpath('.//h3[@class="store-card__title"]/text()').getall()).strip()
-            item['genre_name'] = article.xpath('.//p[@class="store-card__tag"]/text()').get().strip()
-
-            place = article.xpath('.//table/tbody/tr/th[contains(text(), "住所：")]/following-sibling::td/text()').get().strip()
-            m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)
-            item['address'] = m.group('address')
-            item['zip_code'] = m.group('zip_code')
-
-            tel = article.xpath('.//table/tbody/tr/th[contains(text(), "電話番号：")]/following-sibling::td/text()').get().strip()
-            item['tel'] = '' if tel == '-' else tel
-
-            item['offical_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
+            item['shop_name'] = ' '.join(row['店舗名称'].splitlines()) # 店舗名に改行が入ってるものがあるので半角スペースに置換
+            item['genre_name'] = row['カテゴリー'].strip()
+            item['address'] = row['住所'].strip()
+            item['tel'] = row['電話番号']
+            item['offical_page'] = row['URL']
 
             self.logzero_logger.debug(item)
             yield item
-
-        # 「次へ」がなければ(最終ページなので)終了
-        next_page = response.xpath('//nav[@class="pagenation"]/a[contains(text(),"次へ")]/@href').extract_first()
-        if next_page is None:
-            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
-            return
-
-        m = re.match(r"^javascript:on_events\('page',(?P<page>\d+)\);$", next_page)
-        next_page = 'https://premium-gift.jp/nara-eat/use_store?events=page&id={}&store=&addr=&industry='.format(m.group('page'))
-        self.logzero_logger.info(f'🛫 next url = {next_page}')
-
-        yield scrapy.Request(next_page, callback=self.parse)

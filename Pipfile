@@ -11,6 +11,7 @@ logzero = "*"
 tabula-py = "*"
 requests = "*"
 pyppeteer = "*"
+xlrd = "*"
 
 [requires]
 python_version = "3.8"
