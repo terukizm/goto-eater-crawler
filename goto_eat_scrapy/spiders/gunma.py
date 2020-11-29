@@ -28,6 +28,7 @@ class GunmaSpider(AbstractSpider):
                 # MEMO: 2020/11/27現在、「舟木亭館林店」だけジャンル設定がない(入力ミス？)
                 self.logzero_logger.warn('⛔ no genre name.')
             item['genre_name'] = genre.strip() if genre else None
+            item['area_name'] = article.xpath('.//div[1]/span/text()').get().strip()
 
             item['shop_name'] = article.xpath('.//div[2]/h3/text()').get().strip()
             item['zip_code'] =  article.xpath('.//div[2]/p[@class="shopadr"]/span/text()').get()[1:]

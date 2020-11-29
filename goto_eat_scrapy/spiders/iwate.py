@@ -60,6 +60,7 @@ class IwateSpider(AbstractSpider):
         for article in response.xpath('//section[@id="search_result"]//div[@class="stores_box"]'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h2[@class="stores_box_name"]/text()').get().strip()
+            item['area_name'] = article.xpath('.//p[@class="stores_box_cities"]/text()').get().strip()
             item['address'] = article.xpath('.//p[@class="stores_box_add"]/text()').get().strip()
 
             tel = article.xpath('.//p[@class="stores_box_tel"]/text()').get()

@@ -45,12 +45,13 @@ class GifuSpider(AbstractSpider):
 
     def detail(self, response):
         item = ShopItem()
+        item['detail_page'] = response.request.url
         self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
-        # TODO: 岐阜に限らず、csvにdetailのurl、入れてやるほうがいいかもしれない
         for tr in response.xpath('//table[@class="smp-card-list"]'):
             item['shop_name'] = tr.xpath('.//tr/th[contains(text(), "店舗名")]/following-sibling::td/text()').get().strip()
             item['genre_name'] = tr.xpath('.//tr/th[contains(text(), "業態")]/following-sibling::td/text()').get().strip()
             item['offical_page'] = tr.xpath('.//tr/th[contains(text(), "WEB URL")]/following-sibling::td/a/@href').get()
+            item['area_name'] = tr.xpath('.//tr/th[contains(text(), "店舗エリア")]/following-sibling::td/text()').get().strip()
 
             place_list = tr.xpath('.//tr/th[contains(text(), "住所情報")]/following-sibling::td/text()').getall()
             item['zip_code'] = place_list[0].strip()

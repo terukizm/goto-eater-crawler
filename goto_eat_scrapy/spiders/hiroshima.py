@@ -14,6 +14,7 @@ class HiroshimaSpider(AbstractSpider):
 
     def parse(self, response):
         # 各加盟店情報を抽出
+        # MEMO: 広島のエリア情報は検索条件指定以外で取得する方法がない
         self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//div[@class="result"]/div[@class="result__row"]'):
             item = ShopItem()

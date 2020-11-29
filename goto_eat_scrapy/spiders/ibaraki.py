@@ -32,6 +32,7 @@ class IbarakiSpider(AbstractSpider):
             item = ShopItem()
             item['genre_name'] = article.xpath('.//td[1]/text()').get().strip()
             item['shop_name'] = article.xpath('.//td[2]/a/text()').get().strip()
+            item['detail_page'] = response.urljoin(article.xpath('.//td[2]/a/@href').get().strip())
 
             item['tel'] = article.xpath('.//td[3]/text()').get()
 

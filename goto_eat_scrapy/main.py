@@ -58,10 +58,10 @@ def run_spiders(base='result/csv'):
         # 'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけないので考え中
         # 'tottori',
         # 'toyama',
-        'wakayama',
-        'yamagata',
-        'yamaguchi',
-        'yamanashi',
+        # 'wakayama',
+        # 'yamagata',
+        # 'yamaguchi',
+        # 'yamanashi',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')

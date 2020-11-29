@@ -18,6 +18,7 @@ class IshikawaSpider(AbstractSpider):
         for article in response.xpath('//div[@class="baseW"]/ul[@class="member_list"]/li[@class="member_item"]'):
             item = ShopItem()
             item['genre_name'] = article.xpath('.//div[@class="tag_list"]/div[@class="tag_list_item type"]/text()').get().strip()
+            item['area_name'] = article.xpath('.//div[@class="tag_list"]/div[@class="tag_list_item city"]/text()').get().strip()
             item['shop_name'] = article.xpath('.//h4[@class="name"]/text()').get().strip()
             item['zip_code'] = article.xpath('.//div[@class="address"]/div[@class="post"]/text()').get().strip().replace('〒', '')
             item['address'] = article.xpath('.//div[@class="address"]/p/text()').get().strip()

@@ -18,6 +18,7 @@ class KagawaSpider(AbstractSpider):
         for article in response.xpath('//div[@class="container"]/div[contains(@class, "store-list")]'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h4/text()').get().strip()
+            item['area_name'] = article.xpath('.//table/tr/th/span[contains(text(), "エリア")]/../following-sibling::td/text()').get().strip()
 
             # 複数ジャンルの場合があり、区切り文字が "｜"(全角) で指定されている
             # CSVの複数ジャンル指定時の内部表現に合わせて "|"(半角) に置換

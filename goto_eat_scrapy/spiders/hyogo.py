@@ -24,6 +24,7 @@ class HyogoSpider(AbstractSpider):
             item['zip_code'] = places[0].strip().replace('〒', '')
 
             item['tel'] = article.xpath('.//span[contains(text(), "TEL：")]/following-sibling::span/a/text()').get()
+            item['detail_page'] = article.xpath('.//div/p[@class="search-results-list-btn"]/a/@href').get().strip()
 
             # MEMO: 詳細ページ中にも「ジャンル」に相当する情報がHTMLに含まれていないため、「ジャンル」を抜いてくる方法がない。
             # (おそらく内部的にはデータとして保持しているが、検索クエリで当てていく以外に取得する方法がない)
