@@ -16,3 +16,5 @@ class ShopItem(scrapy.Item):
     offical_page = scrapy.Field()   # 公式ホームページ
     opening_hours = scrapy.Field()  # 営業時間
     closing_day = scrapy.Field()    # 定休日
+    area_name = scrapy.Field()      # エリア名
+    detail_page = scrapy.Field()    # 詳細ページ

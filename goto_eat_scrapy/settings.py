@@ -94,8 +94,7 @@ HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 FEED_EXPORT_ENCODING = 'utf-8'
 
 # 出力ファイル(CSV)のフィールド順
-# TODO: FEED_EXPORT_FIELDS = ['shop_name', 'address', 'tel', 'genre_name', 'zip_code', 'offical_page', 'opening_hours', 'closing_day']
-FEED_EXPORT_FIELDS = ['shop_name', 'address', 'tel', 'genre_name', 'zip_code', 'offical_page']
+FEED_EXPORT_FIELDS = ['shop_name', 'address', 'tel', 'genre_name', 'zip_code', 'offical_page', 'opening_hours', 'closing_day', 'area_name']
 
 # Scrapyのログレベル(デフォルト = 'DEBUG')
 #LOG_LEVEL = 'DEBUG'

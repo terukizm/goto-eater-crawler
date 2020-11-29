@@ -24,6 +24,7 @@ class AichiSpider(AbstractSpider):
             if not genre_name:
                 self.logzero_logger.warn('  ジャンル名未指定: {}'.format(item['shop_name']))
             item['genre_name'] = genre_name
+            item['area_name'] = article.xpath('.//ul[@class="lcl-shop-tag"]/li[@class="lcl-shop-tag__item lcl-shop-tag__item--area"]/text()').get()
 
             place = article.xpath('.//p[@class="lcl-shop__address"]/text()').get().strip()
             m = re.match(r'〒\s*(?P<zip_code>.*?)\s(?P<address>.*)', place)

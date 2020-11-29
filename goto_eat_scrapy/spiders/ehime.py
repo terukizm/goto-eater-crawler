@@ -22,8 +22,10 @@ class EhimeSpider(AbstractSpider):
             item['address'] = article.xpath('.//div/dl/dd/ul/li/span[contains(text(), "住所")]/following-sibling::span/text()').get().strip()
             item['tel'] = article.xpath('.//div/dl/dd/ul/li/span/a[@class="tel_link"]/text()').get()
 
+            item['detail_page'] = article.xpath('.//p[@class="btn_link"]/a/@href').get().strip()
             # MEMO: closing_day, opening_hours, official_pageなどを
             # 詳細ページから取得可能だが、とりあえず未対応
+            # エリアについては検索条件でのみ設定可能なため、結果(一覧/詳細)ページからは取得不可
 
             self.logzero_logger.debug(item)
             yield item

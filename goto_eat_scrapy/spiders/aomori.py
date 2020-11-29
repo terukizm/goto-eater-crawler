@@ -29,6 +29,7 @@ class AomoriSpider(AbstractSpider):
             item['tel'] = '' if tel == '-' else tel
 
             item['offical_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
+            item['detail_page'] = article.xpath('.//a[@class="store-card__button"]/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

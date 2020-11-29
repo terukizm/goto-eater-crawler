@@ -28,7 +28,9 @@ class FukuiSpider(AbstractSpider):
         self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
         item = ShopItem()
         item['shop_name'] = response.xpath('//div[@id="contents"]/h3/text()').get().strip()
-        # TODO: 福井に限らず、csvにdetailのurl、入れてやるほうがいいかもしれない
+        item['area_name'] = response.xpath('//div[@id="contents"]/div[@class="icon"]/span[@class="area"]/text()').get().strip()
+        item['detail_page'] = response.request.url
+
         # FIXME: ジャンル指定がされていない(ddが空の)「グルメ民宿 はまもと」があり、その場合にfollowing-siblingが変なところ
         # (dd/text()の値が存在する「住所」？)を見に行ってしまう
         # 参考: https://gotoeat-fukui.com/shop/?id=180097  (にしても画像がうまそうでつらい)
