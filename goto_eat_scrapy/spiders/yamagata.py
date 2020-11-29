@@ -1,18 +1,16 @@
 import re
 import scrapy
 import json
-from logzero import logger
-
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class YamagataSpider(scrapy.Spider):
+class YamagataSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl yamagata -O 06_yamagata.csv
+      $ scrapy crawl yamagata -O yamagata.csv
     """
     name = 'yamagata'
     allowed_domains = [ 'yamagata-gotoeat.com' ]    # .comとは
-
     endpoint = 'https://yamagata-gotoeat.com/wp/wp-content/themes/gotoeat/search.php'
 
     area_list = [
@@ -53,38 +51,14 @@ class YamagataSpider(scrapy.Spider):
         '遊佐町',
     ]
 
-    genre_list = [
-        'ラーメン',
-        'うどん・そば',
-        'カレー',
-        '居酒屋・創作料理',
-        '焼鳥・串揚げ',
-        'ダイニングバー・バル',
-        '和食・寿司・天ぷら',
-        '鉄板・ステーキ',
-        '洋食',
-        'イタリアン',
-        'フレンチ',
-        '中華料理',
-        '焼肉',
-        'アジア・エスニック',
-        'お好み焼き・もんじゃ',
-        'カフェ・スイーツ',
-        'ファミリーレストラン',
-        'ファーストフード',
-        '定食屋',
-        'その他',
-    ]
-
     def start_requests(self):
         params = {'text': '', 'page': '1'}
         yield scrapy.FormRequest(self.endpoint, callback=self.parse, method='POST', formdata=params)
 
-
     def parse(self, response):
-        # レスポンスはjsonなので直接parse
-        data = json.loads(response.body)
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
 
+        # レスポンスはjsonなので直接parse
         # (参考): htmlは以下のDOM構造にしてから、XPathで抽出
         #
         # <article>
@@ -100,8 +74,8 @@ class YamagataSpider(scrapy.Spider):
         #   <li>....<li>
         #   <li>....<li>
         # </article>
-
-        html = scrapy.Selector(text=f'<article>{data["html"]}</article>')
+        data = json.loads(response.body)
+        html = scrapy.Selector(text='<article>{}</article>'.format(data["html"]))
         for article in html.xpath('//article/li'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h2/text() | .//h2/a/text()').get().strip()
@@ -114,18 +88,16 @@ class YamagataSpider(scrapy.Spider):
             tel = article.xpath('.//div[2]/text()').get()
             item['tel'] = tel.replace('TEL : ', '') if tel else None
 
-            # 「ジャンル名」 (例: "その他")
+            # 「ジャンル名」 (エリア名のタグはskip)
             for tag in article.xpath('.//ul[@class="search__result__tag"]/li/text()'):
-                # 完全一致するタグがあれば設定(それ以外のタグは地域名としてskip)
                 tagtext = tag.get()
                 if not tagtext:
                     continue
-                if tagtext in self.genre_list:
-                    item['genre_name'] = tagtext
-                    break
-                if tagtext not in self.area_list:
-                    raise ScrapingError(f'想定していない、不明なタグ 「{tagtext}」')
+                if tagtext in self.area_list:
+                    continue
+                item['genre_name'] = tagtext
 
+            self.logzero_logger.debug(item)
             yield item
 
         # 最後のページを表示させても「次へ(最後へ)」の出し分けがされてないので、
@@ -149,9 +121,9 @@ class YamagataSpider(scrapy.Spider):
         # </div>
 
         if active_page == next_page:
-            logger.info('💻 finished. last page = ' + active_page)
+            self.logzero_logger.info('💻 finished. last page = ' + active_page)
             return
 
-        logger.info(f'next_page = {next_page}')
+        self.logzero_logger.info(f'next_page = {next_page}')
         params = {'text': '', 'page': next_page}
         yield scrapy.FormRequest(self.endpoint, callback=self.parse, method='POST', formdata=params)

@@ -1,8 +1,9 @@
 import re
 import scrapy
 from goto_eat_scrapy.items import ShopItem
+from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class YamanashiSpider(scrapy.Spider):
+class YamanashiSpider(AbstractSpider):
     """
     usage:
       $ scrapy crawl yamanashi -O output.csv
@@ -15,12 +16,15 @@ class YamanashiSpider(scrapy.Spider):
 
     def parse(self, response):
         # 市区町村単位(甲府市〜小菅村)
+        self.logzero_logger.info(f'💾 url = {response.request.url}')
         for section in response.xpath('//*[@id="shopList"]/section[@class="shopInfoSection"]'):
-            # テーブル中の各行をparse(先頭はヘッダなので飛ばす)
+            # テーブル中の各行をparse(先頭行はヘッダなので飛ばす)
             for tr in section.xpath('.//div[@class="secInnr"]/table[@class="shopTable"]/tr')[1:]:
-                yield ShopItem(
+                item = ShopItem(
                     shop_name = tr.xpath('.//td[1]/text()').get().strip(),
                     genre_name = tr.xpath('.//td[1]/span[@class="genre"]/a/text()').get().strip(),
                     address = tr.xpath('.//td[2]/text()').get().strip(),
                     tel = tr.xpath('.//td[3]/text()').get().strip(),
                 )
+                self.logzero_logger.debug(item)
+                yield item
