@@ -35,7 +35,7 @@ def run_spiders(base='result/csv'):
         # 'ishikawa',
         # 'iwate',
         # 'kagawa',
-        # 'kagoshima',
+        'kagoshima',
         # 'kochi',
         # 'kumamoto',
         # 'kyoto',
@@ -99,6 +99,9 @@ def sort_csv(base='result/csv'):
 
 
 if __name__ == "__main__":
+    # usage:
+    # $ python -m goto_eat_scrapy.main
+
     # TODO: use args
     run_spiders()
     # run_scripts()

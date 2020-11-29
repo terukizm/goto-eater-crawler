@@ -8,10 +8,10 @@ verify_ssl = true
 [packages]
 scrapy = "*"
 logzero = "*"
-tabula-py = "*"
 requests = "*"
 pyppeteer = "*"
 xlrd = "*"
+pymupdf = "*"
 
 [requires]
 python_version = "3.8"
