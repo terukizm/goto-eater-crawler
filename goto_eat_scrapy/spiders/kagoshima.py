@@ -30,9 +30,6 @@ class KagoshimaSpider(AbstractSpider):
         'http://www.kagoshima-cci.or.jp/wp-content/uploads/2020/11/21.pdf',    # 「その他地域」　3ページくらい
     ]
 
-    def __init__(self, logfile=None, *args, **kwargs):
-        super().__init__(logfile, *args, **kwargs)
-
     def parse(self, response):
         # TODO: 実際にPDFデータと行数を突き合わせての結果確認
 

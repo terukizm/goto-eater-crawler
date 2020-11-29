@@ -12,9 +12,6 @@ class SagaSpider(AbstractSpider):
     allowed_domains = [ 'gotoeat-saga.jp' ]
     start_urls = ['https://gotoeat-saga.jp/consumer/shop.php?name=#search_result']
 
-    def __init__(self, logfile=None, *args, **kwargs):
-        super().__init__(logfile, *args, **kwargs)
-
     def parse(self, response):
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')

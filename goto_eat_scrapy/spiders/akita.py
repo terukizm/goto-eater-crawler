@@ -16,9 +16,6 @@ class AkitaSpider(AbstractSpider):
     allowed_domains = [ 'gotoeat-akita.com' ]    # .comとは
     start_urls = ['https://gotoeat-akita.com/csv/list.csv']
 
-    def __init__(self, logfile=None, *args, **kwargs):
-        super().__init__(logfile, *args, **kwargs)
-
     def parse(self, response):
         # MEMO: tempfile, io.stringIO等ではpd.read_csv()がきちんと動作しなかったので
         # scrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)に書き込んでいる
