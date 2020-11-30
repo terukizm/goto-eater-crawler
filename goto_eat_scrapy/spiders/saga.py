@@ -25,6 +25,10 @@ class SagaSpider(AbstractSpider):
             item['opening_hours'] = article.xpath('.//dl[3]/dd/text()').get()
             item['closing_day'] = article.xpath('.//dl[4]/dd/text()').get()
             item['offical_page'] = article.xpath('.//dl[5]/dd/a[@rel="noopener noreferrer"]/@href').get()
+
+            # MEMO: 佐賀は検索結果にエリア情報が含まれないため、エリア情報を取得したければ検索条件に指定して
+            # エリア別に検索する必要がある。また詳細ページはなし
+
             self.logzero_logger.debug(item)
             yield item
 

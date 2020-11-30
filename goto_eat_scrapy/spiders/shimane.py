@@ -22,7 +22,7 @@ class shimaneSpider(AbstractSpider):
         # 「>」ボタンがなければ(最終ページなので)終了
         next_page = response.xpath('//nav[@class="pagination"]/span[@class="next"]/a[@rel="next"]/@href').extract_first()
         if next_page is None:
-            logger.info('💻 finished. last page = ' + response.request.url)
+            self.logzero_logger.info('💻 finished. last page = ' + response.request.url)
             return
 
         next_page = response.urljoin(next_page)
@@ -33,6 +33,9 @@ class shimaneSpider(AbstractSpider):
     def detail(self, response):
         self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
         item = ShopItem()
+        item['detail_page'] = response.request.url
+        item['area_name'] = response.xpath('//div[contains(@class, "com-location")]/p[contains(@class, "area")]/span/text()').get().strip()
+
         item['shop_name'] = response.xpath('//h1[@class="title"]/text()').get().strip()
         item['address'] = response.xpath('//div[@class="info line addr"]/p/text()').get().strip()
         item['offical_page'] = response.xpath('//div[@class="info line url"]/p/text()').get()

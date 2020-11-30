@@ -1,3 +1,5 @@
+import os
+import urllib.parse
 import re
 import scrapy
 from goto_eat_scrapy.items import ShopItem
@@ -91,20 +93,25 @@ class SaitamaSpider(AbstractSpider):
     start_urls = [ f'https://saitama-goto-eat.com/store/{area}.html' for area in area_list ]
 
     def parse(self, response):
+        # MEMO: start_requests()でやった方がシンプルかもしれないが、愚直に
+        area_name = os.path.split(response.request.url)[1].replace('.html', '')
+        area_name = urllib.parse.unquote(area_name)
+
         # MEMO: ジャンル別のテーブル構造になっている
         self.logzero_logger.info(f'💾 url = {response.request.url}')
         for genre in response.xpath('//div[@class="tab_content"]'):
             genre_name = genre.xpath('.//div[@class="aria_genre"]/text()').get().strip()
             # 各店の情報
-            for storebox in genre.xpath('.//div[@class="aria_store_content"]/div[@class="storebox"]'):
+            for article in genre.xpath('.//div[@class="aria_store_content"]/div[@class="storebox"]'):
                 item = ShopItem(
+                    area_name = area_name,
                     genre_name = genre_name,
-                    shop_name = storebox.xpath('.//span[1]/text()').get().strip(),
+                    shop_name = article.xpath('.//span[1]/text()').get().strip(),
                     # (span[2]はひととおり見たが一つも入ってない)
-                    zip_code = storebox.xpath('.//span[3]/text()').get().strip(),
-                    address = storebox.xpath('.//span[4]/text()').get().strip(),
-                    tel = storebox.xpath('.//span[5]/text()').get(),
-                    offical_page = storebox.xpath('.//span[6]/a/@href').get()
+                    zip_code = article.xpath('.//span[3]/text()').get().strip(),
+                    address = article.xpath('.//span[4]/text()').get().strip(),
+                    tel = article.xpath('.//span[5]/text()').get(),
+                    offical_page = article.xpath('.//span[6]/a/@href').get()
                 )
                 self.logzero_logger.debug(item)
                 yield item

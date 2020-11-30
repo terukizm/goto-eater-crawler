@@ -10,7 +10,7 @@ class TochigiSpider(AbstractSpider):
     """
     name = 'tochigi'
     allowed_domains = [ 'gotoeat-tochigi.jp' ]
-    start_urls = ['https://www.gotoeat-tochigi.jp/merchant/index.php?page=1']
+    start_urls = ['https://www.gotoeat-tochigi.jp/merchant/index.php']
 
     def parse(self, response):
         # 各加盟店情報を抽出
@@ -29,6 +29,8 @@ class TochigiSpider(AbstractSpider):
 
             item['tel'] = li.xpath('.//div[@class="add"]/p[2]/a/text()').extract_first()
             item['offical_page'] = li.xpath('.//ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
+
+            # MEMO: エリア情報は検索結果中に含まれないので、必要なら検索条件として指定する必要がある
 
             self.logzero_logger.debug(item)
             yield item

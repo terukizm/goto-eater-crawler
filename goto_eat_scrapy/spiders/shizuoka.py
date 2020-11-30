@@ -15,7 +15,7 @@ class ShizuokaSpider(AbstractSpider):
     def parse(self, response):
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
-        for article in response.xpath('//div[@class="areaBox"]/div[@class="areaBox__item"]/a[@class="content"]'):
+        for article in response.xpath('//div[@class="areaBox"]/div[@class="areaBox__item"]'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//div[@class="content__ttl"]/h5[@class="title"]/text()').get().strip()
             item['genre_name'] = article.xpath('.//div[@class="content__ttl"]/div[@class="hashTag"]/p/text()').get().strip()
@@ -27,6 +27,9 @@ class ShizuokaSpider(AbstractSpider):
 
             item['tel'] = article.xpath('.//div[@class="infoArea__item"][2]/div[@class="detail"]/p/text()').get()
             item['offical_page'] = article.xpath('.//div[@class="infoArea__item"][3]/div[@class="detail"]/p/text()').get()
+
+            # MEMO: エリア情報、営業時間、定休日は詳細ページから取得可能。とりあえずは未対応。
+            item['detail_page'] = response.urljoin(article.xpath('.//a[@class="content"]/@href').get().strip())
 
             self.logzero_logger.debug(item)
             yield item
