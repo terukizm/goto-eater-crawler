@@ -28,6 +28,8 @@ class ToyamaSpider(AbstractSpider):
             item['opening_hours'] = article.xpath('.//div[@class="work"]/div[@class="rig"]/text()').get()
             item['closing_day'] = article.xpath('.//div[@class="off_day"]/div[@class="rig"]/text()').get()
 
+            # MEMO: 検索結果にエリア情報が含まれないため、必要なら検索条件で絞り込んで取得する必要がある
+
             self.logzero_logger.debug(item)
             yield item
 

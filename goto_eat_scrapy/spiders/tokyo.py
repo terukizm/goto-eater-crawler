@@ -47,7 +47,8 @@ class TokyoSpider(AbstractSpider):
     def detail(self, response):
         item = ShopItem()
         self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
-        # TODO: 東京に限らず、csvにdetailのurl、入れてやるほうがいいかもしれない
+        item['detail_page'] = response.request.url
+        item['area_name'] = response.xpath('//ol[@id="gn_info-breadcrumbs-inner"]/li/a[contains(text(), "東京")]/../following-sibling::li/a/text()').extract_first()
         for tr in response.xpath('//div[@id="info-table"]/table/tbody'):
             item['shop_name'] = tr.xpath('.//tr/th[contains(text(), "店名")]/following-sibling::td/p[@id="info-name"]/text()').get().strip()
             item['tel'] = tr.xpath('.//tr/th[contains(text(), "電話番号・FAX")]/following-sibling::td/ul/li/span[@class="number"]/text()').get()

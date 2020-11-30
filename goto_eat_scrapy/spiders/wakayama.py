@@ -19,6 +19,7 @@ class WakayamaSpider(AbstractSpider):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//div[1]/h3[@class="shop_name"]/text()').get().strip()
             item['genre_name'] = article.xpath('.//div[1]/ul[@class="shop_tag flex"]/li[@class="shop_cat"]/text()').get().strip()
+            item['area_name'] = article.xpath('.//div[1]/ul[@class="shop_tag flex"]/li[@class="shop_area"]/text()').get().strip()
 
             place = article.xpath('.//div[2]/p[@class="shop_address"]/text()').get().strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)

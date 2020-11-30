@@ -11,6 +11,8 @@ class YamagataSpider(AbstractSpider):
     """
     name = 'yamagata'
     allowed_domains = [ 'yamagata-gotoeat.com' ]    # .comとは
+
+    # @see https://yamagata-gotoeat.com/shop/
     endpoint = 'https://yamagata-gotoeat.com/wp/wp-content/themes/gotoeat/search.php'
 
     area_list = [
@@ -67,7 +69,7 @@ class YamagataSpider(AbstractSpider):
         #       <li>鶴岡市</li>
         #       <li>和食・寿司・天ぷら</li>
         #     </ul>
-        #     <h2>和食藤川</h2>
+        #     <h2>和食藤川</h2>    # 公式ページがaタグで入る場合がある
         #     <div>997-0034 山形県鶴岡市本町2-15-27</div>
         #     <div>TEL : 023-522-8821</div>
         #   </li>
@@ -79,6 +81,7 @@ class YamagataSpider(AbstractSpider):
         for article in html.xpath('//article/li'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h2/text() | .//h2/a/text()').get().strip()
+            item['offical_page'] = article.xpath('.//h2/a/@href').get()
 
             place = article.xpath('.//div[1]/text()').get().strip()
             m = re.match(r'(?P<zip_code>.*?)\s(?P<address>.*)', place)
@@ -88,12 +91,14 @@ class YamagataSpider(AbstractSpider):
             tel = article.xpath('.//div[2]/text()').get()
             item['tel'] = tel.replace('TEL : ', '') if tel else None
 
-            # 「ジャンル名」 (エリア名のタグはskip)
+            # タグ(ジャンル名、エリア名)
+            # MEMO: ジャンル名、エリア名ともに複数指定はないという前提での実装
             for tag in article.xpath('.//ul[@class="search__result__tag"]/li/text()'):
                 tagtext = tag.get()
                 if not tagtext:
                     continue
                 if tagtext in self.area_list:
+                    item['area_name'] = tagtext
                     continue
                 item['genre_name'] = tagtext
 

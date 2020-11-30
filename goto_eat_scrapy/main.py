@@ -50,18 +50,18 @@ def run_spiders(base='result/csv'):
         # 'okinawa',
         # 'osaka',
         # 'saga',
-        'saitama',
-        'shimane',
-        'shizuoka',
-        'tochigi',
-        'tokushima', ## 「※本サイトのコンテンツの無断転載を禁じます。」という一文を見つけたのでskipするかもしれない
-        # 'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけないので考え中
-        # 'tottori',
-        # 'toyama',
-        # 'wakayama',
-        # 'yamagata',
-        # 'yamaguchi',
-        # 'yamanashi',
+        # 'saitama',
+        # 'shimane',
+        # 'shizuoka',
+        # 'tochigi',
+        # 'tokushima', ## 「※本サイトのコンテンツの無断転載を禁じます。」という一文を見つけたのでskipするかもしれない
+        'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけないので考え中
+        'tottori',
+        'toyama',
+        'wakayama',
+        'yamagata',
+        'yamaguchi',
+        'yamanashi',
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')

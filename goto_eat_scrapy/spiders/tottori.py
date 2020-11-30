@@ -17,19 +17,18 @@ class TottoriSpider(AbstractSpider):
         self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//div[@class="row"]//div[contains(@class, "store-list_v2")]'):
             item = ShopItem()
+            item['area_name'] = article.xpath('.//div[1]/p[1]/span[@class="icon-area"]/text()').get().strip()
             item['shop_name'] = article.xpath('.//div[1]/h2[contains(@class, "mr-3")]/text()').get().strip()
 
             # MEMO: (2020/11/22) 理由はわからないが、公式サイトでも検索するとページにまたがって同じデータが出てくるものがある
-            # 例: そば処井田農園(P.5〜P.7)
-            # 例: ミニレストキューピット(P.6〜P.7)
-            # これらが重複レコードしてカウントされてしまうが、公式サイト側でもそう表示されてしまうので(理由は謎…) 対処方法がない。
-            # 店名だけで検索しても重複データは出てこないので、limit offsetでページ分けしたときにorder byで指定したソートがユニークに効いてなくて
-            # (created_at, updated_atでソートかけてるとかで)同順データが多数ある場合ににページが分かれてしまうとかなんじゃないかと思う
-            # 2020/11/28治ってるかも？
+            # これらが重複レコードしてカウントされてしまうが、公式サイト側でもそのように表示されてしまっているので対処方法がない。
+            # 店名だけで検索しても重複データは出てこないので、RDBMS側でlimit offsetでページ分けしたときにorder byで指定したソート順の結果が
+            # ユニークになっておらず(created_at, updated_atでソートかけてるとかで)同順データが多数ある場合にページが分かれてしまうと、
+            # 結果として結果が一意にならない、とかなんじゃないかと思う。内部的にはWPっぽいけどこれ以上はなんとも…
 
-            # MEMO: 以下は今後入れてもよいかも、という項目
-            # area: article.xpath('.//div[1]/p[1]/span[@class="icon-area"]/text()').get().strip()
-            # comment: article.xpath('.//div[1]/p[2]/text()').get()
+            # MEMO: 店からの一言コメント、妙に好き…
+            # comment = article.xpath('.//div[1]/p[2]/text()').get()
+            # 他にもテイクアウトの有無など、鳥取は検索オプションが豪華
 
             item['address'] = article.xpath('.//div[2]/p/text()').get().strip()
             item['tel'] = article.xpath('.//div[2]/div[@class="d-flex"]/a/@href').get()
