@@ -24,10 +24,16 @@ class MiyagiSpider(AbstractSpider):
     ]
 
     def parse(self, response):
+        # エリア名取得
+        text = response.xpath('//div[@class="wrap"]/div[@class="cont"]/h2/span/text()').extract_first()
+        m = re.search(r'\[\s(?P<area_name>.*)\s\]', text)
+        area_name = m.group('area_name')
+
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//div[@class="SLCont"]//dl[@class="shopList"]'):
             item = ShopItem()
+            item['area_name'] = area_name
             item['shop_name'] = article.xpath('.//dt/text()').get().strip()
             item['genre_name'] = article.xpath('.//dd[1]/span[2]/text()').get().strip()
 

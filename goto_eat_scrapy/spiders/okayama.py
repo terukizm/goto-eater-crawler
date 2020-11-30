@@ -25,6 +25,7 @@ class OkayamaSpider(AbstractSpider):
         for article in response.xpath('//div[@id="shop"]/div[@class="container"]/div[@class="box"]'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//p/text()').get().strip()
+            item['area_name'] = article.xpath('.//dl/dt[contains(text(), "エリア")]/following-sibling::dd/text()').get().strip()
             item['genre_name'] = article.xpath('.//dl/dt[contains(text(), "業種")]/following-sibling::dd/text()').get().strip()
             item['tel'] = article.xpath('.//dl/dt[contains(text(), "電話番号")]/following-sibling::dd/a[@class="tellink"]/text()').get()
             item['address'] = article.xpath('.//dl/dt[contains(text(), "住所")]/following-sibling::dd/text()').get().strip()

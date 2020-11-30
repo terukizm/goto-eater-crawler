@@ -24,7 +24,7 @@ def run_spiders(base='result/csv'):
         # 'aomori',
         # 'akita',
         # 'ehime',
-        # 'fukui',
+        'fukui',
         # 'fukuoka',
         # 'fukushima',
         # 'gifu',
@@ -35,20 +35,20 @@ def run_spiders(base='result/csv'):
         # 'ishikawa',
         # 'iwate',
         # 'kagawa',
-        'kagoshima',
-        # 'kochi',
-        # 'kumamoto',
-        # 'kyoto',
-        # 'mie',
-        # 'miyagi',
-        # 'miyazaki',
-        # 'nagano',
-        # 'nagasaki',
-        # 'nara',
-        # 'niigata',
-        # 'okayama',
-        # 'okinawa',
-        # 'osaka',
+        # 'kagoshima',
+        'kochi',
+        'kumamoto',
+        'kyoto',
+        'mie',
+        'miyagi',
+        'miyazaki',
+        'nagano',
+        'nagasaki',
+        'nara',
+        'niigata',
+        'okayama',
+        'okinawa',
+        'osaka',
         # 'saga',
         # 'saitama',
         # 'shimane',
@@ -66,7 +66,7 @@ def run_spiders(base='result/csv'):
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     for spider in spiders:
-        # MEMO: 2020/10リリースのv2.4.0で追加されたoverwriteオプションでCSVを上書きできればよいのだが、
+        # MEMO: 2020/10リリースのv2.4.0以降で追加されたoverwriteオプションでCSVを上書きできればよいのだが、
         # イマイチ使い方がわからないので古いCSVに追記されないように消している
         logger.info(f'[ {spider} ] start ...')
         (pathlib.Path.cwd() / f'{base}/{spider}.csv' ).unlink(missing_ok=True)

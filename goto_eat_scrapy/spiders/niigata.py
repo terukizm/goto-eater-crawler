@@ -73,7 +73,8 @@ class NiigataSpider(AbstractSpider):
                 if not tagtext:
                     continue
                 if tagtext in self.area_list:
-                    # 地域名ならskip
+                    # MEMO: 地域名タグは複数指定されていない前提(後勝ちで上書きされてしまう)
+                    item['area_name'] = tagtext
                     continue
                 genres.append(tagtext)
             item['genre_name'] = '|'.join(genres)

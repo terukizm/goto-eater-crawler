@@ -17,23 +17,23 @@ class MiyazakiSpider(AbstractSpider):
         self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
             item = ShopItem()
-            # 店舗名、ジャンル名
+
             # 宮崎は"/"もしくは"／"区切りで店舗名部分にジャンル情報を無理やり入れているため、その書式であればジャンル名として利用する
             text = ' '.join(article.xpath('.//h3[@class="store-card__title"]/text()').getall()).strip()
             m = re.match(r'(?P<shop_name>.*)(\/|／)+(?P<genre_name>.*)', text)
             item['shop_name'] = m.group('shop_name') if m else text
             item['genre_name'] = m.group('genre_name') if m else None
 
-            # 「郵便番号」「住所」
             place = article.xpath('.//table/tbody/tr/th[contains(text(), "住所：")]/following-sibling::td/text()').get().strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)
             item['address'] = m.group('address')
             item['zip_code'] = m.group('zip_code')
-            # 「電話番号」
+
             tel = article.xpath('.//table/tbody/tr/th[contains(text(), "電話番号：")]/following-sibling::td/text()').get().strip()
             item['tel'] = '' if tel == '-' else tel
-            # 「URL」
+
             item['offical_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
+            item['detail_page'] = article.xpath('.//a[@class="store-card__button"]/@href').get().strip()
 
             self.logzero_logger.debug(item)
             yield item

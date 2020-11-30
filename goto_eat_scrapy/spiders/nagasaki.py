@@ -19,6 +19,9 @@ class NagasakiSpider(AbstractSpider):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//div[@class="shop-list-content-name"]/text()').get().strip()
 
+            text = ''.join(article.xpath('.//div[@class="shop-list-content-area"]/text()').getall())
+            item['area_name'] = text.strip()
+
             text = ''.join(article.xpath('.//div[@class="shop-list-content-cat"]/text()').getall())
             item['genre_name'] = text.strip()
 

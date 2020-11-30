@@ -31,6 +31,7 @@ class naraSpider(AbstractSpider):
         df = pd.read_excel(tmp_xlsx, sheet_name='リスト').fillna({'電話番号': '', 'URL': ''})
         for _, row in df.iterrows():
             item = ShopItem()
+            item['area_name'] = row['エリア'].strip()
             item['shop_name'] = ' '.join(row['店舗名称'].splitlines()) # 店舗名に改行が入ってるものがあるので半角スペースに置換
             item['genre_name'] = row['カテゴリー'].strip()
             item['address'] = row['住所'].strip()

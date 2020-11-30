@@ -19,10 +19,12 @@ class NaganoSpider(AbstractSpider):
         for article in response.xpath('//div[@class="shop_block"]/div[@class="shop"]'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//p[@class="shop_title"]/text()').get().strip()
+            item['area_name'] = article.xpath('.//p[@class="shop_type"]/span[@class="shop_shozaichi"]/text()').get().strip()
             item['genre_name'] = article.xpath('.//p[@class="shop_type"]/span[@class="shopgenre"]/text()').get().strip()
-            item['address'] = article.xpath('.//p[@class="shop_address"][2]/text()').get().strip().replace('住所：', '')    # classがuniqueでないので注意
+            item['address'] = article.xpath('.//p[@class="shop_address"][2]/text()').get().strip().replace('住所：', '')    # class名がuniqueでないので注意
             item['tel'] = article.xpath('.//p[@class="shop_tel"]/span/text()').get()
             item['offical_page'] = article.xpath('.//p[@class="shop_tel"]/a/@href').get()
+
             self.logzero_logger.debug(item)
             yield item
 

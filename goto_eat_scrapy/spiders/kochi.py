@@ -30,6 +30,7 @@ class KochiSpider(AbstractSpider):
             #   7: address,
             #   8: tel
             item = ShopItem(
+                area_name = row[1],
                 genre_name = row[3],
                 shop_name = row[5],
                 address = row[7],

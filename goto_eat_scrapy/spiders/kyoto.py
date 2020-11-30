@@ -19,9 +19,11 @@ class KyotoSpider(AbstractSpider):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//div[@class="name"]/a/text()').get().strip()
             item['genre_name'] = article.xpath('.//table/tr/th[contains(text(), "ジャンル")]/following-sibling::td/text()').get().strip()
+            item['area_name'] = article.xpath('.//table/tr/th[contains(text(), "エリア")]/following-sibling::td/text()').get().strip()
             item['address'] = article.xpath('.//table/tr/th[contains(text(), "住所")]/following-sibling::td/text()').get().strip()
             item['tel'] = article.xpath('.//table/tr/th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
             item['offical_page'] = article.xpath('.//table/tr/th[contains(text(), "U R L")]/following-sibling::td/a/@href').get()
+            item['detail_page'] = response.urljoin(article.xpath('.//a[@class="btnDetail"]/@href').get().strip())
 
             self.logzero_logger.debug(item)
             yield item

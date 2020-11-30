@@ -18,6 +18,7 @@ class KumamotoSpider(AbstractSpider):
         for article in response.xpath('//section[@id="sale-page"]//div[@class="sec-body__inner"]/article'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h3/text()').get().strip()
+            item['area_name'] = article.xpath('.//p[@class="cat"]/a[@class="tag"]/text()').get().strip()
 
             place = article.xpath('.//p[1]/text()').get().strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)
@@ -25,6 +26,7 @@ class KumamotoSpider(AbstractSpider):
             item['zip_code'] = m.group('zip_code')
 
             item['offical_page'] = article.xpath('.//p[3]/a/@href').get()
+            item['genre_name'] = None   # 熊本県はジャンル設定なし
 
             self.logzero_logger.debug(item)
             yield item
