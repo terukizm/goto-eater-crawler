@@ -31,13 +31,17 @@ class FukuiSpider(AbstractSpider):
         item['area_name'] = response.xpath('//div[@id="contents"]/div[@class="icon"]/span[@class="area"]/text()').get().strip()
         item['detail_page'] = response.request.url
 
-        # FIXME: ジャンル指定がされていない(ddが空の)「グルメ民宿 はまもと」があり、その場合にfollowing-siblingが変なところ
-        # (dd/text()の値が存在する「住所」？)を見に行ってしまう
-        # 参考: https://gotoeat-fukui.com/shop/?id=180097  (にしても画像がうまそうでつらい)
         for dl in response.xpath('//div[@id="contents"]/dl'):
-            # 複数ジャンル指定あり
-            genre_name = dl.xpath('.//dt[contains(text(), "ジャンル")]/following-sibling::dd/text()').get().strip()
-            item['genre_name'] = genre_name.replace('、', '|')
+            # MEMO: ジャンル指定がされていない(dt[1]が空の)データ、「グルメ民宿 はまもと」があり、その場合following-siblingが変なところ
+            # (dd/text()の値が存在する「住所」？)を見に行ってしまうので、暫定的にジャンル部分だけ直指定で実装
+            # 参考: https://gotoeat-fukui.com/shop/?id=180097  (にしても画像がうまそうでつらい)
+
+            genre_name = dl.xpath('.//dt[1]/dd/text()').get()
+            genre_name = genre_name.strip() if genre_name else ''   # はまもとだけの例外対応
+            item['genre_name'] = genre_name.replace('、', '|')  # 複数ジャンル指定あり
+            # 元データが修正されれば以下の実装でよい
+            # genre_name = dl.xpath('.//dt[contains(text(), "ジャンル")]/following-sibling::dd/text()').get().strip()
+
             item['tel'] = dl.xpath('.//dt[contains(text(), "電　　話")]/following-sibling::dd/a/text()').get().strip()
             item['address'] = dl.xpath('.//dt[contains(text(), "住　　所")]/following-sibling::dd/text()').get().strip()
             item['opening_hours'] = dl.xpath('.//dt[contains(text(), "営業時間")]/following-sibling::dd/text()').get().strip()
