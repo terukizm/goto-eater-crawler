@@ -59,7 +59,7 @@ class KagoshimaSpider(AbstractSpider):
                 yield scrapy.Request(pdf_url, callback=self.parse_from_pdf)
             else:
                 # たのむぞkcci...
-                self.logzero_logger.warn(f'鹿児島商工会議所エラー: 「{text}」 is not found.')
+                self.logzero_logger.warning(f'鹿児島商工会議所エラー: 「{text}」 is not found.')
 
 
     def parse_from_pdf(self, response):

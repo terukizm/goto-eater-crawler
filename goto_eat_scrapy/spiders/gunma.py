@@ -26,7 +26,7 @@ class GunmaSpider(AbstractSpider):
             genre = article.xpath('.//div[2]/span[@class="shopcat"]/text()').get() # 本来はMUST
             if not genre:
                 # MEMO: 2020/11/27現在、「舟木亭館林店」だけジャンル設定がない(入力ミス？)
-                self.logzero_logger.warn('⛔ no genre name.')
+                self.logzero_logger.warning('⛔ no genre name.')
             item['genre_name'] = genre.strip() if genre else None
             item['area_name'] = article.xpath('.//div[1]/span/text()').get().strip()
 

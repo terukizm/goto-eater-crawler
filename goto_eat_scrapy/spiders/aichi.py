@@ -22,7 +22,7 @@ class AichiSpider(AbstractSpider):
             # ジャンル名が未設定になっているものがいくつかあるのでlogging
             genre_name = article.xpath('.//ul[@class="lcl-shop-tag"]/li[@class="lcl-shop-tag__item lcl-shop-tag__item--cat"]/text()').get()
             if not genre_name:
-                self.logzero_logger.warn('  ジャンル名未指定: {}'.format(item['shop_name']))
+                self.logzero_logger.warning('  ジャンル名未指定: {}'.format(item['shop_name']))
             item['genre_name'] = genre_name
             item['area_name'] = article.xpath('.//ul[@class="lcl-shop-tag"]/li[@class="lcl-shop-tag__item lcl-shop-tag__item--area"]/text()').get()
 
