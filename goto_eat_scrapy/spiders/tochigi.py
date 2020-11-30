@@ -28,7 +28,7 @@ class TochigiSpider(AbstractSpider):
             item['zip_code'] = m.group('zip_code')
 
             item['tel'] = li.xpath('.//div[@class="add"]/p[2]/a/text()').extract_first()
-            item['offical_page'] = li.xpath('.//ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
+            item['official_page'] = li.xpath('.//ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
 
             # MEMO: エリア情報は検索結果中に含まれないので、必要なら検索条件として指定する必要がある
 

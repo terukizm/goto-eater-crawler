@@ -38,7 +38,7 @@ class shimaneSpider(AbstractSpider):
 
         item['shop_name'] = response.xpath('//h1[@class="title"]/text()').get().strip()
         item['address'] = response.xpath('//div[@class="info line addr"]/p/text()').get().strip()
-        item['offical_page'] = response.xpath('//div[@class="info line url"]/p/text()').get()
+        item['official_page'] = response.xpath('//div[@class="info line url"]/p/text()').get()
 
         genre_name = response.xpath('//div[@class="info select genre"]/p/span/text()').get().strip()
         item['genre_name'] = ''.join(genre_name.split())

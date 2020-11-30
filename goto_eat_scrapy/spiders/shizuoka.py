@@ -26,7 +26,7 @@ class ShizuokaSpider(AbstractSpider):
             item['zip_code'] = m.group('zip_code')
 
             item['tel'] = article.xpath('.//div[@class="infoArea__item"][2]/div[@class="detail"]/p/text()').get()
-            item['offical_page'] = article.xpath('.//div[@class="infoArea__item"][3]/div[@class="detail"]/p/text()').get()
+            item['official_page'] = article.xpath('.//div[@class="infoArea__item"][3]/div[@class="detail"]/p/text()').get()
 
             # MEMO: エリア情報、営業時間、定休日は詳細ページから取得可能。とりあえずは未対応。
             item['detail_page'] = response.urljoin(article.xpath('.//a[@class="content"]/@href').get().strip())

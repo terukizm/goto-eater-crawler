@@ -28,7 +28,7 @@ class OkinawaSpider(AbstractSpider):
 
             tel = article.xpath('.//div[@class="column"]/p[@class="tel"]/a/text()').get()
             item['tel'] = tel.replace('TEL:', '') if tel else None
-            item['offical_page'] = article.xpath('.//div[@class="column"]/p[@class="url"]/a[@rel="noopener"]/@href').get()
+            item['official_page'] = article.xpath('.//div[@class="column"]/p[@class="url"]/a[@rel="noopener"]/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

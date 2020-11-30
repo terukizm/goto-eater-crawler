@@ -54,6 +54,6 @@ class FukuokaSpider(AbstractSpider):
             item['genre_name'] = self.genre_list[row['13.店舗情報ジャンル']]    # コード値から対応文字列をmapping
             item['address'] = '{}{}{}'.format(row['16.店舗住所：市町村'], row['17.店舗住所：町域、番地'], row['18.店舗住所：建物名'])
             item['tel'] = row['19.店舗情報：電話番号']
-            item['offical_page'] = row['20.店舗ホームページ']
+            item['official_page'] = row['20.店舗ホームページ']
             self.logzero_logger.debug(item)
             yield item

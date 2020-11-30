@@ -81,7 +81,7 @@ class YamagataSpider(AbstractSpider):
         for article in html.xpath('//article/li'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//h2/text() | .//h2/a/text()').get().strip()
-            item['offical_page'] = article.xpath('.//h2/a/@href').get()
+            item['official_page'] = article.xpath('.//h2/a/@href').get()
 
             place = article.xpath('.//div[1]/text()').get().strip()
             m = re.match(r'(?P<zip_code>.*?)\s(?P<address>.*)', place)

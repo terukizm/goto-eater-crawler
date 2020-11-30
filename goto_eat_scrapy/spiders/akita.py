@@ -39,7 +39,7 @@ class AkitaSpider(AbstractSpider):
             item['address'] = row['所在地'].replace('<!--', '').replace('-->', '').strip()
 
             item['tel'] = row['電話番号']
-            item['offical_page'] = row['公式ホームページ']
+            item['official_page'] = row['公式ホームページ']
             item['genre_name'] = None    # 秋田にはジャンル情報なし
 
             self.logzero_logger.debug(item)

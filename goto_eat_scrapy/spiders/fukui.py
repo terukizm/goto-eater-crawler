@@ -46,7 +46,7 @@ class FukuiSpider(AbstractSpider):
             item['address'] = dl.xpath('.//dt[contains(text(), "住　　所")]/following-sibling::dd/text()').get().strip()
             item['opening_hours'] = dl.xpath('.//dt[contains(text(), "営業時間")]/following-sibling::dd/text()').get().strip()
             item['closing_day'] = dl.xpath('.//dt[contains(text(), "定 休 日")]/following-sibling::dd/text()').get().strip()
-            item['offical_page'] = dl.xpath('.//dt[contains(text(), "HP・SNS")]/following-sibling::dd/text()').get()
+            item['official_page'] = dl.xpath('.//dt[contains(text(), "HP・SNS")]/following-sibling::dd/text()').get()
 
         self.logzero_logger.debug(item)
         return item

@@ -36,7 +36,7 @@ class naraSpider(AbstractSpider):
             item['genre_name'] = row['カテゴリー'].strip()
             item['address'] = row['住所'].strip()
             item['tel'] = row['電話番号']
-            item['offical_page'] = row['URL']
+            item['official_page'] = row['URL']
 
             self.logzero_logger.debug(item)
             yield item

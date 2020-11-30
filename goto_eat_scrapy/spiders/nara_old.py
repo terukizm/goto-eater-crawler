@@ -33,7 +33,7 @@ class OldNaraSpider(AbstractSpider):
             tel = article.xpath('.//table/tbody/tr/th[contains(text(), "電話番号：")]/following-sibling::td/text()').get().strip()
             item['tel'] = '' if tel == '-' else tel
 
-            item['offical_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
+            item['official_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

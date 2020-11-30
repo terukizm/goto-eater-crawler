@@ -111,7 +111,7 @@ class SaitamaSpider(AbstractSpider):
                     zip_code = article.xpath('.//span[3]/text()').get().strip(),
                     address = article.xpath('.//span[4]/text()').get().strip(),
                     tel = article.xpath('.//span[5]/text()').get(),
-                    offical_page = article.xpath('.//span[6]/a/@href').get()
+                    official_page = article.xpath('.//span[6]/a/@href').get()
                 )
                 self.logzero_logger.debug(item)
                 yield item

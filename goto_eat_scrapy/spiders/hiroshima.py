@@ -23,7 +23,7 @@ class HiroshimaSpider(AbstractSpider):
             text = article.xpath('.//div[@class="result__data"]/h3/a/text() | .//div[@class="result__data"]/h3/text()').getall()
             item['shop_name'] = ''.join(text).strip()
 
-            item['offical_page'] = article.xpath('.//div[@class="result__data"]/h3/a/@href').get()
+            item['official_page'] = article.xpath('.//div[@class="result__data"]/h3/a/@href').get()
             item['address'] = article.xpath('.//div[@class="result__data"]/p[@class="result__address"]/text()').get().strip()
 
             self.logzero_logger.debug(item)

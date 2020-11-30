@@ -57,7 +57,7 @@ class TokyoSpider(AbstractSpider):
             data_o = tr.xpath('.//tr/th[contains(text(), "お店のホームページ")]/following-sibling::td/ul/li/a[@class="url go-off"]/@data-o').get()
             if data_o:
                 data = json.loads(data_o)
-                item['offical_page'] = data['b'] + '://' + data['a']
+                item['official_page'] = data['b'] + '://' + data['a']
 
             zip_code = tr.xpath('.//tr/th[contains(text(), "住所")]/following-sibling::td/p[@class="adr slink"]/text()').get()
             item['zip_code'] = zip_code.strip().replace('〒', '') if zip_code else None

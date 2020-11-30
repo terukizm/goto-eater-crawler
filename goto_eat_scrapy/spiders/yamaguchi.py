@@ -28,7 +28,7 @@ class YamaguchiSpider(AbstractSpider):
             item['tel'] = article.xpath('.//div[@class="left break"]/p/strong[contains(text(), "［TEL］")]/../text()').get()
 
             # MEMO: 山口県の"rink"は複数指定でき、公式HP以外にも各種SNSアカウント等が登録されているが、とりあえず先頭のものだけ取得している
-            item['offical_page'] = article.xpath('.//div[@class="rink"]/a[1]/@href').get()
+            item['official_page'] = article.xpath('.//div[@class="rink"]/a[1]/@href').get()
 
             # MEMO: エリア情報については検索結果に含まれず、検索条件を指定して取得しなければいけないため、現時点では非対応とする
 

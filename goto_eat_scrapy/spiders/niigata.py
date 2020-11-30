@@ -58,7 +58,7 @@ class NiigataSpider(AbstractSpider):
         for article in response.xpath('//div[@id="result"]/div[@class="cont"]'):
             item = ShopItem()
             item['shop_name'] = ''.join(article.xpath('.//h4/text() | .//h4/a/text()').getall()).strip()
-            item['offical_page'] = article.xpath('.//h4/a/@href').get()
+            item['official_page'] = article.xpath('.//h4/a/@href').get()
 
             place = ''.join(article.xpath('.//p[@class="add"]/text()').getall()).strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)

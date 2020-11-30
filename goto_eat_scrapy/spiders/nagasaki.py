@@ -27,7 +27,7 @@ class NagasakiSpider(AbstractSpider):
 
             item['address'] = article.xpath('.//div[@class="shop-list-content-add-002"]/text()').get().strip()
             item['tel'] = article.xpath('.//div[@class="shop-list-content-tel-002"]/text()').get()
-            item['offical_page'] = article.xpath('.//div[@class="shop-list-content-url"]/a/@href').get()
+            item['official_page'] = article.xpath('.//div[@class="shop-list-content-url"]/a/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

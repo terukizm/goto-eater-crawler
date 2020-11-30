@@ -29,7 +29,7 @@ class OkayamaSpider(AbstractSpider):
             item['genre_name'] = article.xpath('.//dl/dt[contains(text(), "業種")]/following-sibling::dd/text()').get().strip()
             item['tel'] = article.xpath('.//dl/dt[contains(text(), "電話番号")]/following-sibling::dd/a[@class="tellink"]/text()').get()
             item['address'] = article.xpath('.//dl/dt[contains(text(), "住所")]/following-sibling::dd/text()').get().strip()
-            item['offical_page'] = article.xpath('.//dl/dt[contains(text(), "URL")]/following-sibling::dd/a/@href').get()
+            item['official_page'] = article.xpath('.//dl/dt[contains(text(), "URL")]/following-sibling::dd/a/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

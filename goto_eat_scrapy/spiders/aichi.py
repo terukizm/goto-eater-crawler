@@ -31,7 +31,7 @@ class AichiSpider(AbstractSpider):
             item['address'] = m.group('address').strip()
             item['zip_code'] = m.group('zip_code').strip()
             item['tel'] = article.xpath('.//a[@class="lcl-shop__link lcl-shop__link--tel"]/@href').get()
-            item['offical_page'] = article.xpath('.//a[@class="lcl-shop__link lcl-shop__link--web"]/@href').get()
+            item['official_page'] = article.xpath('.//a[@class="lcl-shop__link lcl-shop__link--web"]/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

@@ -27,7 +27,7 @@ class WakayamaSpider(AbstractSpider):
             item['zip_code'] = m.group('zip_code')
 
             item['tel'] = article.xpath('.//div[2]/div[@class="shop_info flex"]/p[@class="shop_tel"]/text()').get()
-            item['offical_page'] = article.xpath('.//div[2]/div[@class="shop_info flex"]/p[@class="shop_web"]/a/@href').get()
+            item['official_page'] = article.xpath('.//div[2]/div[@class="shop_info flex"]/p[@class="shop_web"]/a/@href').get()
 
             self.logzero_logger.debug(item)
             yield item

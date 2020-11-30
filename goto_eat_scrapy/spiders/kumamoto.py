@@ -25,7 +25,7 @@ class KumamotoSpider(AbstractSpider):
             item['address'] = m.group('address')
             item['zip_code'] = m.group('zip_code')
 
-            item['offical_page'] = article.xpath('.//p[3]/a/@href').get()
+            item['official_page'] = article.xpath('.//p[3]/a/@href').get()
             item['genre_name'] = None   # 熊本県はジャンル設定なし
 
             self.logzero_logger.debug(item)

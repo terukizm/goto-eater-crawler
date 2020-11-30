@@ -25,7 +25,7 @@ class FukushimaSpider(AbstractSpider):
             item['tel'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[3]/span[@class="info-text"]/text()').get()
             item['opening_hours'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[4]/span[@class="info-text"]/text()').get()
             item['closing_day'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[5]/span[@class="info-text"]/text()').get()
-            item['offical_page'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[6]/span[@class="info-text"]/a/@href').get()
+            item['official_page'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[6]/span[@class="info-text"]/a/@href').get()
             self.logzero_logger.debug(item)
             yield item
 

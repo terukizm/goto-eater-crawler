@@ -44,7 +44,7 @@ class MiyagiSpider(AbstractSpider):
             item['tel'] = article.xpath('.//dd[3]/span[2]/text()').get().strip()
 
             # MEMO: 本来は@hrefで取りたいが、aリンクが貼られてないのもあるため(2020/11/28)
-            item['offical_page'] = article.xpath('.//dd[4]/span[@class="url"]/text()').get()
+            item['official_page'] = article.xpath('.//dd[4]/span[@class="url"]/text()').get()
 
             self.logzero_logger.debug(item)
             yield item
