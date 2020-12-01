@@ -1,13 +1,13 @@
 from scrapy.utils.project import get_project_settings
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
+import datetime
 import pathlib
 import pandas as pd
 import multiprocessing
+from logzero import logger
 from goto_eat_scrapy.scripts import oita
 from goto_eat_scrapy.scripts import hokkaido
-from logzero import logger
-import datetime
 
 def run_spiders(base='result/csv'):
     logger.info('... ScrapyのSpiderを実行 ... ')
@@ -53,15 +53,20 @@ def run_spiders(base='result/csv'):
         # 'saitama',
         # 'shimane',
         # 'shizuoka',
-        # 'tochigi',
-        # 'tokushima', ## 「※本サイトのコンテンツの無断転載を禁じます。」という一文を見つけたのでskipするかもしれない
-        'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけないので考え中
-        'tottori',
-        'toyama',
-        'wakayama',
-        'yamagata',
-        'yamaguchi',
-        'yamanashi',
+        'tochigi',
+        # 'tokushima', ## 「※本サイトのコンテンツの無断転載を禁じます。」という一文を見つけたのでskip
+        # 'tokyo',  ## 東京は企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけないので考え中
+        # 'tottori',
+        # 'toyama',
+        # 'wakayama',
+        # 'yamagata',
+        # 'yamaguchi',
+        # 'yamanashi',
+        #
+        # MEMO: 未対応
+        # 'chiba',
+        # 'kanagawa',
+        # 'shiga'
     ]
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')

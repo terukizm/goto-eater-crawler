@@ -15,20 +15,20 @@ class TochigiSpider(AbstractSpider):
     def parse(self, response):
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
-        for li in response.xpath('//*[@id="contents"]/ul[@class="serch_result"]/li'):  # "serch" is not my TYPO...
+        for article in response.xpath('//div[@id="contents"]/ul[@class="serch_result"]/li'):  # "serch" is not my TYPO...
             item = ShopItem()
-            item['shop_name'] = li.xpath('.//p[@class="name"]/text()').get().strip()
-            item['genre_name'] = li.xpath('//p[@class="name"]/span/text()').get().strip()
+            item['shop_name'] = article.xpath('.//p[@class="name"]/text()').get().strip()
+            item['genre_name'] = article.xpath('.//p[@class="name"]/span[contains(@class, "genre")]/text()').get().strip()
 
             # 「所在地」から「郵便番号」「住所」を取得
             # MEMO: 郵便番号形式にはたまに入力ブレがあるので、正規表現で適当に処理
-            place = li.xpath('.//div[@class="add"]/p[1]/text()').get().strip()
+            place = article.xpath('.//div[@class="add"]/p[1]/text()').get().strip()
             m = re.match(r'〒(?P<zip_code>.*?)\s(?P<address>.*)', place)
             item['address'] = m.group('address')
             item['zip_code'] = m.group('zip_code')
 
-            item['tel'] = li.xpath('.//div[@class="add"]/p[2]/a/text()').extract_first()
-            item['official_page'] = li.xpath('.//ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
+            item['tel'] = article.xpath('.//div[@class="add"]/p[2]/a/text()').extract_first()
+            item['official_page'] = article.xpath('.//ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href').extract_first()
 
             # MEMO: エリア情報は検索結果中に含まれないので、必要なら検索条件として指定する必要がある
 
