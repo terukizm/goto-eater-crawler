@@ -3,8 +3,6 @@ FROM python:3.8-slim
 COPY requirements.txt /tmp
 RUN apt-get update \
     && apt-get install -y gcc python-dev \
-    # for tabula-py
-    && mkdir -p /usr/share/man/man1 && apt-get install -y openjdk-11-jdk \
     && pip install --upgrade pip \
     && pip install -r /tmp/requirements.txt \
     # for pyppeteer
