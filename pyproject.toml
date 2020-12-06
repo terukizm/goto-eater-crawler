@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "goto-eater-crawler"
+version = "0.1.0"
+description = "goto eat crawler"
+authors = ["KOIZUMI teruaki <1755900+terukizm@users.noreply.github.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "3.8"
+PyMuPDF = "^1.18.4"
+Scrapy = "^2.4.1"
+xlrd = "^1.2.0"
+logzero = "^1.6.3"
+requests = "^2.25.0"
+pyppeteer = "^0.2.2"
+pandas = "^1.1.4"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
