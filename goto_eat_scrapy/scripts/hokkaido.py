@@ -7,7 +7,7 @@ from logzero import logger
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
 
-# Cookieを保持するため、本来はちゃんとクラスにしてあげたりするとよさげ(気力が…)
+# Cookieを保持するため。本来はちゃんとクラスにしてあげたりするとよさげ(気力が…)
 session = requests.Session()
 
 CACHE_PATH = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / 'hokkaido_script'
@@ -21,7 +21,7 @@ def show_search_page():
     「取扱店リスト」の初期表示(GET)
     """
     r = session.get('https://gotoeat-hokkaido.jp/general/particStores', headers=HEADERS)
-    r.raise_for_status()     # retryなし。ステータスコード 40x/50x は例外で即終了とする
+    r.raise_for_status()     # リトライなし。ステータスコード 40x/50x は例外で即終了とする
 
     html = lxml.html.fromstring(r.content)
     token = html.xpath('//p[@class="buttons"]/input[@name="_token"]/@value')[0]

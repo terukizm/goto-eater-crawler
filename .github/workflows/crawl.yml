@@ -25,7 +25,8 @@ jobs:
           python -m goto_eat_scrapy.main &&
           ls data/csvs/ -al
           ls data/logs/ -al
-          head data/csvs/kagoshima.csv
+          head data/csvs/hokkaido.csv
+          head data/csvs/oita.csv
       # - name: Commit
       #   run: |
       #     git config --local user.name "goto-eater-crawler bot"
