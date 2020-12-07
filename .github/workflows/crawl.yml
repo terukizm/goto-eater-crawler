@@ -1,0 +1,35 @@
+name: Crawl All
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.actor }}/goto-eater-crawler:develop
+      # credentials:
+      #   username: ${{ github.actor }}
+      #   password: ${{ secrets.GHCR_TOKEN }}
+    steps:
+      - name: CheckOut
+        uses: actions/checkout@v2
+      - name: Crawl
+        run: |
+          ls -al
+          pwd
+          python -m goto_eat_scrapy.main
+      # - name: Commit
+      #   run: |
+      #     git config --local user.name "goto-eater-crawler bot"
+      #     git config --local user.email "action@github.com"
+      #     git pull
+      #     git status | grep modified && git add data/* && git commit -v -m "[Bot] GitHub Actions : Data Update / $(date +'%Y-%m-%d')" || true
+      # - name: Push
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}

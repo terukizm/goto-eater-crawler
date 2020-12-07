@@ -14,9 +14,10 @@ NEWSPIDER_MODULE = 'goto_eat_scrapy.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = 'goto_eat_scrapy (+http://www.yourdomain.com)'  # TODO: github.com
+USER_AGENT = 'goto-eater-crawler (+https://github.com/terukizm/goto-eater-crawler/)'
 
 # Obey robots.txt rules
+# MEMO: robots.txtの内容に従う
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
@@ -98,4 +99,3 @@ FEED_EXPORT_FIELDS = ['shop_name', 'address', 'tel', 'genre_name', 'zip_code', '
 
 # Scrapyのログレベル(デフォルト = 'DEBUG')
 #LOG_LEVEL = 'DEBUG'
-

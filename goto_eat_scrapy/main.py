@@ -124,9 +124,9 @@ if __name__ == "__main__":
     # TODO: get from args
     base = pathlib.Path.cwd() / 'data'
 
-    main = Main(base)
-    # main.run_scripts()
-    main.run_spiders()
-    main.sort_csv()
+    # main = Main(base)
+    # # main.run_scripts()
+    # main.run_spiders()
+    # main.sort_csv()
 
     logger.info(f'👍 終了')

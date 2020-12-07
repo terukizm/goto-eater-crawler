@@ -56,3 +56,12 @@ $ poetry run python -m goto_eat_scrapy.main
 $ docker run -it -v `pwd`:/app/ $IMAGE_NAME python -m goto_eat_scrapy.main
 ```
 
+
+# GitHub Actionsによる定期実行について
+
+以下の条件で実行しています。
+
+* 公的に公開・運用されている、公式なGoToEatのサイトからのみ情報を取得
+* 1秒間に1リクエストを最大値として、シリアルにアクセス
+  * 基本的には3秒おきのリクエストとして、深夜時間帯(23:00〜)で実行
+* UserAgentで`xxx`を指定
