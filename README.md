@@ -33,7 +33,7 @@ $ docker build -t $IMAGE_NAME .
 (略)
 $ docker images $IMAGE_NAME
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
-goto-eater-crawler   LATEST              1f7795025dc4        21 minutes ago      553MB
+goto-eater-crawler   LATEST              4523bbf6c7a7        17 seconds ago      1.16GB
 
 $ docker run -it -v `pwd`:/app/ $IMAGE_NAME scrapy crawl tochigi -O tochigi.csv
 (略)
