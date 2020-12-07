@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    timeout-minutes: 60
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.actor }}/goto-eater-crawler:develop
@@ -17,19 +17,24 @@ jobs:
     steps:
       - name: CheckOut
         uses: actions/checkout@v2
+      - run: |
+          echo "TZ=Asia/Tokyo" >> $GITHUB_ENV
+          echo "PR_DATETIME=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
       - name: Crawl
         run: |
-          ls -al
-          pwd
-          python -m goto_eat_scrapy.main
+          python -m goto_eat_scrapy.main &&
+          ls data/csvs/ -al
+          ls data/logs/ -al
+          head data/csvs/kagoshima.csv
       # - name: Commit
       #   run: |
       #     git config --local user.name "goto-eater-crawler bot"
       #     git config --local user.email "action@github.com"
       #     git pull
-      #     git status | grep modified && git add data/* && git commit -v -m "[Bot] GitHub Actions : Data Update / $(date +'%Y-%m-%d')" || true
+      #     git status | grep modified && git add data/csvs/* && git commit -v -m "[Bot] GitHub Actions : Csv Update / ${{ PR_DATETIME }}" || true
+      #     git status | grep modified && git add data/logs/* && git commit -v -m "[Bot] GitHub Actions : Log Update / ${{ PR_DATETIME }}" || true
       # - name: Push
       #   uses: ad-m/github-push-action@master
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: ${{ github.ref }}
+      #     branch: test-${{ PR_DATETIME }}

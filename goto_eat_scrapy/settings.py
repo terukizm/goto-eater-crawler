@@ -27,12 +27,13 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
+# MEMO: 3秒のDELAYを挟む
 DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 
-# TODO: 同一ドメインに対してはシリアルにいきたい
-#CONCURRENT_REQUESTS_PER_DOMAIN = 1
-#CONCURRENT_REQUESTS_PER_IP = 0
+# MEMO: 同一ドメインに対してはシリアルに行く
+CONCURRENT_REQUESTS_PER_DOMAIN = 1
+CONCURRENT_REQUESTS_PER_IP = 0
 
 # Disable cookies (enabled by default)
 #COOKIES_ENABLED = False

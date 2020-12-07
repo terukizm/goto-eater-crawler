@@ -43,7 +43,7 @@ class Main():
             # 'ishikawa',
             # 'iwate',
             # 'kagawa',
-            # 'kagoshima',
+            'kagoshima',
             # 'kochi',
             # 'kumamoto',
             # 'kyoto',
@@ -61,7 +61,7 @@ class Main():
             # 'saitama',
             # 'shimane',
             # 'shizuoka',
-            'tochigi',
+            # 'tochigi',
             # 'tokushima',  ### 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるのでskip
             # 'tokyo',      ### 企業サイト(ぐ○なび)な上、件数が多くて、かつ詳細ページまで見ないといけない
             # 'tottori',
@@ -124,9 +124,9 @@ if __name__ == "__main__":
     # TODO: get from args
     base = pathlib.Path.cwd() / 'data'
 
-    # main = Main(base)
+    main = Main(base)
     # # main.run_scripts()
-    # main.run_spiders()
+    main.run_spiders()
     # main.sort_csv()
 
     logger.info(f'👍 終了')
