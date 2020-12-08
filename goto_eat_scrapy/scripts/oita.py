@@ -4,78 +4,115 @@ from pyppeteer.errors import PageError
 import lxml.html
 import pathlib
 import pandas as pd
+import logging
+import logzero
 from logzero import logger
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
 
-async def crawl():
-    browser = await launch({
-        'defaultViewport': None,
-        'headless': True,           # pipenvなど手元で動かしている場合はFalseにすると実際にchroniumが動くのでわかりやすい
-        'args': ['--no-sandbox'],   # Docker内で動かす場合に必要(あんまりよろしくないらしいが)
-        'slowMo': 5,                # 適宜食わせないとコケる(？)ので
-    })
-    page = await browser.newPage()
-    await page.goto('https://oita-gotoeat.com/shop/')
+class OitaCrawler():
+    name = 'oita'
 
-    try:
-        # 適当にwait入れつつ無限スクロールの「もっと見る」ボタンを連打
-        while True:
-            await page.evaluate("""{window.scrollBy(0, document.body.scrollHeight);}""")
-            await page.waitFor(1000);
-            await page.click('input[class="more"]')
-    except PageError:
-        # FIXME: クソ実装、次ページがなくなったらボタンクリックができず、PageErrorがraiseされるのでループを抜ける
-        pass
+    LOG_LEVEL = logging.DEBUG
+    SLEEP_SEC = 3
+    HEADERS = {'User-Agent': settings.USER_AGENT}
+    CACHE_PATH = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / f'{name}_script'
 
-    html: str = await page.content()
-    await browser.close()
+    def __init__(self, csvfile=None, logfile=None, with_cache=True):
+        logger_name = f'logzero_logger_{self.name}'
+        if logfile:
+            # ログファイルに出す(標準出力には出さない)
+            self.logzero_logger = logzero.setup_logger(
+                name=logger_name,
+                logfile=logfile,
+                fileLoglevel=self.LOG_LEVEL,
+                disableStderrLogger=True
+            )
+        else:
+            # 標準出力に出すのみ
+            self.logzero_logger = logzero.setup_logger(
+                name=logger_name,
+                level=self.LOG_LEVEL
+            )
 
-    if not html:
-        raise Exception('html is none....')
+        self.csvfile = csvfile
+        self.logfile = logfile
+        self.with_cache = with_cache
+        if with_cache:
+            self.CACHE_PATH.mkdir(parents=True, exist_ok=True)
 
-    return html
+
+    async def crawl_by_pyppeteer(self):
+        browser = await launch({
+            'defaultViewport': None,
+            'headless': True,           # 手元で動かしている場合はFalseにすると、実際にchroniumが動くのでわかりやすい
+            'args': ['--no-sandbox'],   # Docker内で動かす場合に必要
+            'slowMo': 5,                # 適宜waitを食わせないとコケる(？)ので
+        })
+        page = await browser.newPage()
+        await page.goto('https://oita-gotoeat.com/shop/')
+
+        try:
+            # 適当にwait入れつつ無限スクロールの「もっと見る」ボタンを連打
+            while True:
+                await page.evaluate("""{window.scrollBy(0, document.body.scrollHeight);}""")
+                await page.waitFor(self.SLEEP_SEC * 1000);
+                await page.click('input[class="more"]')
+                self.logzero_logger.debug('  next page...')
+        except PageError:
+            # FIXME: クソ実装、次ページがなくなったらボタンクリックができず、PageErrorがraiseされるのでループを抜ける
+            pass
+
+        html: str = await page.content()
+        await browser.close()
+
+        if not html:
+            raise Exception('html is none....')
+
+        return html
 
 
-def parse(html: str):
-    """
-    lxmlを使ってxpathベースでparse
-    """
-    results = []
-    response = lxml.html.fromstring(html)
-    for article in response.xpath('//li[@class="box-sh cf"]'):
-        item = ShopItem()
-        item['genre_name'] = article.xpath('.//div[@class="tag cf"]/p[@class="genre"]/span/text()')[0].strip()
-        item['shop_name'] = article.xpath('.//p[@class="name"]/text()')[0].strip()
-        item['address'] = article.xpath('.//div[@class="first"]/p[@class="add"]/text()')[0].strip()
-        tel = article.xpath('.//div[@class="second"]/p[@class="s-call"]/span[@class="shoptel"]/a/text()')
-        item['tel'] = tel[0].strip() if tel else None
+    def parse(self, html: str):
+        """
+        lxmlを使ってxpathベースでparse
+        """
+        results = []
+        response = lxml.html.fromstring(html)
+        for article in response.xpath('//li[@class="box-sh cf"]'):
+            item = ShopItem()
+            item['genre_name'] = article.xpath('.//div[@class="tag cf"]/p[@class="genre"]/span/text()')[0].strip()
+            item['shop_name'] = article.xpath('.//p[@class="name"]/text()')[0].strip()
+            item['address'] = article.xpath('.//div[@class="first"]/p[@class="add"]/text()')[0].strip()
+            tel = article.xpath('.//div[@class="second"]/p[@class="s-call"]/span[@class="shoptel"]/a/text()')
+            item['tel'] = tel[0].strip() if tel else None
 
-        logger.debug(item)
-        results.append(item)
+            self.logzero_logger.debug(item)
+            results.append(item)
 
-    return results
+        return results
 
-def main(outfile: str):
-    # クローリングは時間かかるので一回成功したらpickleにしてる
-    # 保存先はscrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)
-    # TODO: この辺のcache処理を消す、もしくはオプションにする
-    cache_dir = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / 'oita_script'
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    _html_pkl = str(cache_dir / 'pyppeteer.pkl')
-    try:
-        logger.info('  load from pickle ...')
-        html = pd.read_pickle(_html_pkl)
-    except FileNotFoundError:
-        logger.info('  crawling ...')
-        html = asyncio.get_event_loop().run_until_complete(crawl())
-        pd.to_pickle(html, _html_pkl)
-        logger.info('  write to pickle.')
 
-    # html文字列を解析してShopItemに
-    results = parse(html)
-    df = pd.DataFrame(results, columns=settings.FEED_EXPORT_FIELDS)
-    df.to_csv(outfile, index=False, encoding=settings.FEED_EXPORT_ENCODING)
+    def crawl(self):
+        # クローリングは時間かかるので(開発用には)一回成功したら取得したhtmlをpickleにしてキャッシュ
+        # 保存先はscrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)
+        cache_file = self.CACHE_PATH / 'pyppeteer.pkl'
+        if self.with_cache and cache_file.exists():
+            self.logzero_logger.debug(f'  load from cache... {cache_file}')
+            html = pd.read_pickle(cache_file)
+        else:
+            self.logzero_logger.info('  crawling ...')
+            html = asyncio.get_event_loop().run_until_complete(self.crawl_by_pyppeteer())
+            if self.with_cache:
+                pd.to_pickle(html, cache_file)
+                self.logzero_logger.debug(f'  write cache. {cache_file}')
+
+        # html文字列を解析
+        df = pd.DataFrame(self.parse(html), columns=settings.FEED_EXPORT_FIELDS)
+        if self.csvfile:
+            df.to_csv(self.csvfile, index=False, encoding=settings.FEED_EXPORT_ENCODING)
+            self.logzero_logger.info(f'  write csv. {self.csvfile}')
+        else:
+            self.logzero_logger.info(df)
 
 
 if __name__ == "__main__":
@@ -86,6 +123,10 @@ if __name__ == "__main__":
     usage:
     $ python -m goto_eat_scrapy.scripts.oita
     """
-    outfile = '/tmp/44_oita.csv'
-    main(outfile)
-    logger.info(f'👍 success!! > {outfile}')
+    crawler = OitaCrawler()
+    crawler.crawl()
+
+    # crawler = OitaCrawler(csvfile=pathlib.Path('/tmp/oita.csv'), logfile=pathlib.Path('/tmp/oita.log'), with_cache=True)
+    # crawler.crawl()
+
+    print(f'success!!')

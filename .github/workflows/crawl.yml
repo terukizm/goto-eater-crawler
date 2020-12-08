@@ -11,29 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ github.actor }}/goto-eater-crawler:develop
-      # credentials:
-      #   username: ${{ github.actor }}
-      #   password: ${{ secrets.GHCR_TOKEN }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GHCR_TOKEN }}
     steps:
       - name: CheckOut
         uses: actions/checkout@v2
-      - run: |
+      - name: Set Env
+        run: |
           echo "TZ=Asia/Tokyo" >> $GITHUB_ENV
+          echo "BRANCH_NAME=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+          echo "PR_DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
           echo "PR_DATETIME=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
       - name: Crawl
         run: |
-          python -m goto_eat_scrapy.main &&
+          python -m goto_eat_scrapy.main
           ls data/csvs/ -al
           ls data/logs/ -al
-          head data/csvs/hokkaido.csv
-          head data/csvs/oita.csv
       # - name: Commit
       #   run: |
       #     git config --local user.name "goto-eater-crawler bot"
       #     git config --local user.email "action@github.com"
       #     git pull
-      #     git status | grep modified && git add data/csvs/* && git commit -v -m "[Bot] GitHub Actions : Csv Update / ${{ PR_DATETIME }}" || true
-      #     git status | grep modified && git add data/logs/* && git commit -v -m "[Bot] GitHub Actions : Log Update / ${{ PR_DATETIME }}" || true
+      #     git status | git add data/csvs/* && git commit -v -m "[Bot] GitHub Actions : Csv Update on ${{ PR_DATETIME }}" || true
+      #     git status | git add data/logs/* && git commit -v -m "[Bot] GitHub Actions : Log Update on ${{ PR_DATETIME }}" || true
       # - name: Push
       #   uses: ad-m/github-push-action@master
       #   with:

@@ -5,9 +5,8 @@ import pathlib
 import pandas as pd
 import multiprocessing
 from logzero import logger
-from goto_eat_scrapy.scripts import oita
+from goto_eat_scrapy.scripts.oita import OitaCrawler
 from goto_eat_scrapy.scripts.hokkaido import HokkaidoCrawler
-
 
 class Main():
     def __init__(self, base: pathlib.Path):
@@ -98,7 +97,7 @@ class Main():
     def run_scripts(self):
         logger.info('Scrapy以外で書かれたクローラを実行...')
 
-        # FIXME: multiprocessing.Processでやっつけ並行処理していたが、loggingがうまく出ない(loggerが差し替えられちゃう？)ので
+        # FIXME: multiprocessing.Processでやっつけ並行処理していたが、loggingがうまく出ない(loggerが差し替えられてしまう？)ので
         # ゴリゴリ書いている。北海道、大分県ともに多少件数はあるが、まあ処理しきれないほどの件数ではないので…
         csvfile = self.csv_dir / 'hokkaido.csv'
         logfile = self.log_dir / 'hokkaido.log'
@@ -107,28 +106,13 @@ class Main():
         c1 = HokkaidoCrawler(csvfile, logfile)
         c1.crawl()
 
-        # crawlers = [
-        #     HokkaidoCrawler(csvfile, logfile),
-        # ]
-        # processes = [ multiprocessing.Process(name=crawler.name, target=crawler.crawl) for crawler in crawlers ]
-        # for p in processes:
-        #     logger.info(f'[ {p.name} ] start ...')
-        #     p.start()
-
-        # for p in processes:
-        #     p.join()
-        #     logger.info(f'[ {p.name} ]  end  ...')
-
-
-        # for crawler in crawlers:
-        #     p1 = multiprocessing.Process(name=crawler.name, target=crawler.crawl)
-        #     # p2 = multiprocessing.Process(name="大分県", target=oita.main, args=(self.csv_dir / 'oita.csv', ))
-        #     logger.info(f'[ {crawler.name} ] start ...')
-        #     p1.start()
-        #     # p2.start()
-        #     p1.join()
-        #     # p2.join()
-        #     logger.info(f'[ {crawler.name} ]  end  ...')
+        # TODO: 北海道・大分県のリファクタリング
+        csvfile = self.csv_dir / 'oita.csv'
+        logfile = self.log_dir / 'oita.log'
+        csvfile.unlink(missing_ok=True)
+        logfile.unlink(missing_ok=True)
+        c2 = OitaCrawler(csvfile, logfile)
+        c2.crawl()
 
         logger.info('... 完了')
 
@@ -153,6 +137,6 @@ if __name__ == "__main__":
     main = Main(base)
     main.run_scripts()
     # main.run_spiders()
-    # main.sort_csv()
+    main.sort_csv()
 
     logger.info(f'👍 終了')
