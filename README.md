@@ -6,11 +6,11 @@ goto-eater-crawler
 ## poetry利用
 
 ```
-$ git clone ...
+$ git clone git@github.com:terukizm/goto-eater-crawler.git
 $ cd goto-eater-crawler/
 
-$ ls | grep Pipfile
-Pipfile
+$ ls | grep pyproject.toml
+pyproject.toml
 $ poetry install
 (略)
 
@@ -19,11 +19,10 @@ $ poetry run scrapy crawl tochigi -O tochigi.csv
 $ cat tochigi.csv | wc -l
 3270
 ```
-
 ## Docker利用
 
 ```
-$ git clone ...
+$ git clone git@github.com:terukizm/goto-eater-crawler.git
 $ cd goto-eater-crawler/
 
 $ ls | grep Dockerfile
@@ -42,6 +41,17 @@ $ cat tochigi.csv | wc -l
 3270
 ```
 
+## docker-compose利用
+
+```
+$ git clone git@github.com:terukizm/goto-eater-crawler.git
+$ cd goto-eater-crawler/
+$ docker-compose build
+$ docker-compose run crawler scrapy crawl tochigi -O tochigi.csv
+$ cat tochigi.csv | wc -l
+3270
+```
+
 ## 一括実行
 
 以下の3点を順番にすべて実行。
@@ -54,6 +64,8 @@ $ cat tochigi.csv | wc -l
 $ poetry run python -m goto_eat_scrapy.main
     or
 $ docker run -it -v `pwd`:/app/ $IMAGE_NAME python -m goto_eat_scrapy.main
+    or
+$ docker-compose run crawler python -m goto_eat_scrapy.main
 ```
 
 

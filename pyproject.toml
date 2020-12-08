@@ -6,7 +6,7 @@ authors = ["KOIZUMI teruaki <1755900+terukizm@users.noreply.github.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "3.8"
+python = "3.8.6"
 Scrapy = "^2.4.1"
 xlrd = "^1.2.0"
 logzero = "^1.6.3"

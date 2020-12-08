@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  crawler:
+    build: .
+    # command: /bin/bash -c "python -m goto_eat_scrapy.main"
+    volumes:
+      - ./:/app
