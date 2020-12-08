@@ -13,7 +13,7 @@ class HokkaidoCrawler():
     name = 'hokkaido'
 
     LOG_LEVEL = logging.DEBUG
-    SLEEP_SEC = 3
+    SLEEP_SEC = 2
     HEADERS = {'User-Agent': settings.USER_AGENT}
     CACHE_PATH = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / f'{name}_script'
 
