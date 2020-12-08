@@ -6,7 +6,7 @@ import pandas as pd
 import multiprocessing
 from logzero import logger
 from goto_eat_scrapy.scripts import oita
-from goto_eat_scrapy.scripts import hokkaido
+from goto_eat_scrapy.scripts.hokkaido import HokkaidoCrawler
 
 
 class Main():
@@ -18,7 +18,6 @@ class Main():
 
     def run_spiders(self):
         logger.info('ScrapyのSpiderを実行 ... ')
-
         settings = get_project_settings()
         settings.set('FEED_FORMAT', 'csv')
         settings.set('FEED_URI', str(self.csv_dir / '%(name)s.csv'))  # @see https://docs.scrapy.org/en/latest/topics/feed-exports.html#storage-uri-parameters
@@ -98,12 +97,39 @@ class Main():
 
     def run_scripts(self):
         logger.info('Scrapy以外で書かれたクローラを実行...')
-        p1 = multiprocessing.Process(name="北海道", target=hokkaido.main, args=(self.csv_dir / 'hokkaido.csv', ))
-        p2 = multiprocessing.Process(name="大分県", target=oita.main, args=(self.csv_dir / 'oita.csv', ))
-        p1.start()
-        p2.start()
-        p1.join()
-        p2.join()
+
+        # FIXME: multiprocessing.Processでやっつけ並行処理していたが、loggingがうまく出ない(loggerが差し替えられちゃう？)ので
+        # ゴリゴリ書いている。北海道、大分県ともに多少件数はあるが、まあ処理しきれないほどの件数ではないので…
+        csvfile = self.csv_dir / 'hokkaido.csv'
+        logfile = self.log_dir / 'hokkaido.log'
+        csvfile.unlink(missing_ok=True)
+        logfile.unlink(missing_ok=True)
+        c1 = HokkaidoCrawler(csvfile, logfile)
+        c1.crawl()
+
+        # crawlers = [
+        #     HokkaidoCrawler(csvfile, logfile),
+        # ]
+        # processes = [ multiprocessing.Process(name=crawler.name, target=crawler.crawl) for crawler in crawlers ]
+        # for p in processes:
+        #     logger.info(f'[ {p.name} ] start ...')
+        #     p.start()
+
+        # for p in processes:
+        #     p.join()
+        #     logger.info(f'[ {p.name} ]  end  ...')
+
+
+        # for crawler in crawlers:
+        #     p1 = multiprocessing.Process(name=crawler.name, target=crawler.crawl)
+        #     # p2 = multiprocessing.Process(name="大分県", target=oita.main, args=(self.csv_dir / 'oita.csv', ))
+        #     logger.info(f'[ {crawler.name} ] start ...')
+        #     p1.start()
+        #     # p2.start()
+        #     p1.join()
+        #     # p2.join()
+        #     logger.info(f'[ {crawler.name} ]  end  ...')
+
         logger.info('... 完了')
 
 
