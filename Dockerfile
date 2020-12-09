@@ -4,7 +4,7 @@ WORKDIR /tmp
 COPY pyproject.toml poetry.lock ./
 
 RUN apt-get update \
-    && apt-get install -y gcc python-dev \
+    && apt-get install -y gcc python-dev git \
     && pip install --upgrade pip \
     && pip install --no-cache-dir poetry && poetry config virtualenvs.create false && poetry install \
     # for pyppeteer
