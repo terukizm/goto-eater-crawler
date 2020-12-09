@@ -104,8 +104,8 @@ class Main():
 
 if __name__ == "__main__":
     # usage:
-    # $ python -m goto_eat_scrapy.main
-    # $ python -m goto_eat_scrapy.main --target tochigi,oita,gunma
+    # $ python main.py
+    # $ python main.py --target tochigi,oita,gunma
 
     # TODO: まともにオプション引数をやる
     parser = argparse.ArgumentParser(description='goto-eat-crawler')
@@ -113,9 +113,9 @@ if __name__ == "__main__":
     parser.add_argument('--target', help='例: tochigi,gunma')
     args = parser.parse_args()
 
-    base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path.cwd() / 'data'
-    main = Main(base)
-    main.run(args.target)
-    main.sort_csv()
+    base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path(__file__).parent / 'data'
+    runner = Main(base)
+    runner.run(args.target)
+    runner.sort_csv()
 
     logger.info(f'👍 終了')
