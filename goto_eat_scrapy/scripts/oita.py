@@ -13,7 +13,7 @@ from goto_eat_scrapy.items import ShopItem
 class OitaCrawler():
     name = 'oita'
 
-    LOG_LEVEL = logging.INFO
+    LOG_LEVEL = logging.DEBUG
     SLEEP_SEC = 2
     HEADERS = {'User-Agent': settings.USER_AGENT}
     CACHE_PATH = pathlib.Path.cwd() / '.scrapy' / settings.HTTPCACHE_DIR / f'{name}_script'
@@ -45,6 +45,7 @@ class OitaCrawler():
     async def crawl_by_pyppeteer(self):
         browser = await launch({
             'defaultViewport': None,
+            'logLevel': logging.INFO,   # 未指定だとroot loggerと同じになるので
             'headless': True,           # 手元で動かしている場合はFalseにすると、実際にchroniumが動くのでわかりやすい
             'args': ['--no-sandbox'],   # Docker内で動かす場合に必要
             'slowMo': 5,                # 適宜waitを食わせないとコケる(？)ので
