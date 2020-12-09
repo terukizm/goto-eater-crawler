@@ -27,9 +27,9 @@ class TokushimaSpider(AbstractSpider):
             item['genre_name'] = '|'.join([s.strip() for s in genre.split(',')])
 
             item['address'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "所在地")]/following-sibling::dd/text()').get().strip()
-            item['closing_day'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "定休日")]/following-sibling::dd/text()').get().strip()
-            item['opening_hours'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "営業時間")]/following-sibling::dd/text()').get().strip()
-            item['tel'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "電話番号")]/following-sibling::dd/text()').get().strip()
+            item['closing_day'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "定休日")]/following-sibling::dd/text()').get()
+            item['opening_hours'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "営業時間")]/following-sibling::dd/text()').get()
+            item['tel'] = article.xpath('.//div[@class="entry-content"]/dl/dt[contains(text(), "電話番号")]/following-sibling::dd/text()').get()
 
             # MEMO: detailのURLが取れるが、なんとなく一般公開用ではなさそうなので…
             #item['detail_page'] = article.xpath('.//a[@rel="bookmark"]/@href').get().strip()
