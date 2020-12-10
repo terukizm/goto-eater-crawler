@@ -94,6 +94,9 @@ class Main():
     def sort_csv(self):
         logger.info('出力されたCSVをソート...')
         for csv in list(self.csv_dir.glob('*.csv')):
+            if csv.stat().st_size == 0:
+                logger.error(f'ERROR! {csv} が 0byteです。crawlerが失敗している可能性があります。')
+                continue
             # 出力されたCSVを店舗名、住所、(+ジャンル名)でソートした後、上書き
             df = pd.read_csv(csv).sort_values(['shop_name', 'address', 'genre_name'])
             df.to_csv(csv, index=False)
@@ -115,7 +118,6 @@ if __name__ == "__main__":
     base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path(__file__).parent / 'data'
     runner = Main(base)
     runner.run(args.target)
-    # FIXME: 暫定コメントアウト
-    # runner.sort_csv()
+    runner.sort_csv()
 
     logger.info(f'👍 終了')
