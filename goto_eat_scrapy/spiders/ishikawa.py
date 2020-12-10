@@ -21,7 +21,7 @@ class IshikawaSpider(AbstractSpider):
             item['area_name'] = article.xpath('.//div[@class="tag_list"]/div[@class="tag_list_item city"]/text()').get().strip()
             item['shop_name'] = article.xpath('.//h4[@class="name"]/text()').get().strip()
             item['zip_code'] = article.xpath('.//div[@class="address"]/div[@class="post"]/text()').get().strip().replace('〒', '')
-            item['address'] = article.xpath('.//div[@class="address"]/p/text()').get().strip()
+            item['address'] = article.xpath('.//div[@class="address"]/div[@class="content"]/p/text()').get().strip()
 
             tel = article.xpath('.//div[@class="tel"]/text()').get()
             item['tel'] = tel.replace('TEL.', '') if tel else None
