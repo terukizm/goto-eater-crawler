@@ -63,7 +63,6 @@ class Main():
             logfile.unlink(missing_ok=True)
 
             process.crawl(spider, logfile=logfile)
-            logger.info(f'[ {spider} ]  end  ...')
 
         process.start()
 
@@ -116,6 +115,7 @@ if __name__ == "__main__":
     base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path(__file__).parent / 'data'
     runner = Main(base)
     runner.run(args.target)
-    runner.sort_csv()
+    # FIXME: 暫定コメントアウト
+    # runner.sort_csv()
 
     logger.info(f'👍 終了')
