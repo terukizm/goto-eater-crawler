@@ -28,10 +28,6 @@ class Main():
             ignores = [
                 'tokyo',     # 企業サイトであり、かつ件数が多く、詳細ページまで見る必要があり、アクセスが多くなってしまうため
                 'tokushima', # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
-                ### 以下は公式で地図アプリが提供されており、latlng自体がgoogle mapsから取ってきている値の可能性があるため
-                'chiba',
-                'kanagawa',
-                'shiga',
             ]
             process = CrawlerProcess(self.settings)
             targets = [ x for x in process.spiders.list() if not x in ignores ]
