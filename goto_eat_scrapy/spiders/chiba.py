@@ -7,10 +7,5 @@ class ChibaSpider(AbstractLinySpider):
     """
     name = 'chiba'
     base_url = 'https://gotoeat-chiba.liny.jp/map/api/data.json'
-
-    x_min = 34.85
-    x_max = 36.1
-    y_min = 139.6
-    y_max = 140.9
-    step = 0.015
+    mesh_geojson_name = '12chiba1km.geojson'
 

@@ -7,9 +7,4 @@ class ShigaSpider(AbstractLinySpider):
     """
     name = 'shiga'
     base_url = 'https://gotoeat-shiga.liny.jp/map/api/data.json'
-
-    x_min = 34.8
-    x_max = 35.6
-    y_min = 135.7
-    y_max = 136.5
-    step = 0.015
+    mesh_geojson_name = '25shiga1km.geojson'

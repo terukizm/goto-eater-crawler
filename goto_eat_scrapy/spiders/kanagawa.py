@@ -7,9 +7,4 @@ class KanagawaSpider(AbstractLinySpider):
     """
     name = 'kanagawa'
     base_url = 'https://gotoeat-kanagawa.liny.jp/map/api/data.json'
-
-    x_min = 35.1
-    x_max = 35.6
-    y_min = 138.9
-    y_max = 139.8
-    step = 0.01
+    mesh_geojson_name = '14kanagawa1km.geojson'
