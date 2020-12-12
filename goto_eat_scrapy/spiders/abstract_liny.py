@@ -5,6 +5,8 @@ from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
 class AbstractLinySpider(AbstractSpider):
+    allowed_domains = [ 'liny.jp' ]
+
     # 千葉、滋賀が面積広くて時間かかるので…
     custom_settings = {
         'DOWNLOAD_DELAY': 2,
@@ -56,10 +58,10 @@ class AbstractLinySpider(AbstractSpider):
                 # MEMO: eigyo_jikan内に定休日も含まれているが基本的に自由書式のため、分別しようがない
                 opening_hours = article['eigyo_jikan'],
 
-                # TODO: liny系は公式にlatlng(google mapの結果とはまた別っぽい…？)が提供されているので、
+                # MEMO: liny系は公式にlatlng(google mapの結果とはまた別っぽい…？)が提供されているので、
                 # これをジオコーディングせずにそのまま使えば精度が出せる
-                # lat = article['latlng']['lat'],
-                # lng = article['latlng']['lng'],
+                provided_lat = article['latlng']['lat'],
+                provided_lng = article['latlng']['lng'],
             )
             self.logzero_logger.debug(item)
             yield item

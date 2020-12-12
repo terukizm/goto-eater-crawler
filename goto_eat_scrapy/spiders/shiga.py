@@ -6,11 +6,10 @@ class ShigaSpider(AbstractLinySpider):
       $ scrapy crawl shiga -O shiga.csv
     """
     name = 'shiga'
-    allowed_domains = [ 'gotoeat-shiga.liny.jp' ]
     base_url = 'https://gotoeat-shiga.liny.jp/map/api/data.json'
 
     x_min = 34.8
     x_max = 35.6
     y_min = 135.7
     y_max = 136.5
-    step = 0.02
+    step = 0.015
