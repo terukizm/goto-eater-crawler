@@ -114,6 +114,6 @@ if __name__ == "__main__":
     base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path(__file__).parent / 'data'
     runner = Main(base)
     runner.run(args.target)
-    runner.sort_csv()
+    runner.sort_csv() # gnu sortコマンドでgit commit前にやればいい気もしてきた
 
     logger.info(f'👍 終了')

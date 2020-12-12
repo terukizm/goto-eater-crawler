@@ -19,12 +19,47 @@ class TokyoSpider(AbstractSpider):
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         'DOWNLOAD_DELAY': 1,
-        # MEMO: 16k件以上ある → 11/28に見たら23k件超えてた... 詳細ページまで見ないといけないので秒間1件で許して…
+        # MEMO: 16k件以上ある → 11/28に見たら23k件超えてた → 12/12に見たら31k超え...
+        # 詳細ページまで見ないといけないので秒間1件で許して…
     }
 
     start_urls = [
-        # 紙と電子、両方使える店とした(紙しか使えない店はあるが、電子しか使えない店はなさそう)
-        'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?gtet_all=1&resp=1&fwp=%E6%9D%B1%E4%BA%AC%E9%83%BD', # 都内全体、食事券対象店(すべて)
+        # 食事券対象店(すべて)を対象とする
+        # MEMO: 都内全体だと31k(12/12現在)くらいあるので、自分用の場合は特定エリアだけに絞って実行するとよい
+        # ただし個々に実行すると
+
+        # 都内全体
+        'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?gtet_all=1&resp=1&fwp=%E6%9D%B1%E4%BA%AC%E9%83%BD',   # 東京都
+
+        # # 個別地域
+        # 'https://r.gnavi.co.jp/area/areal2101/kods17214/rs/?gtet_all=1',    # 銀座・有楽町・築地
+        # 'https://r.gnavi.co.jp/area/areal2107/kods17214/rs/?gtet_all=1',    # 新橋・浜松町・田町
+        # 'https://r.gnavi.co.jp/area/areal2133/kods17214/rs/?gtet_all=1',    # 赤坂・六本木・麻布
+        # 'https://r.gnavi.co.jp/area/areal2184/kods17214/rs/?gtet_all=1',    # 飯田橋・四ツ谷・神楽坂
+        # 'https://r.gnavi.co.jp/area/areal2115/kods17214/rs/?gtet_all=1',    # 新宿・代々木
+        # 'https://r.gnavi.co.jp/area/areal2116/kods17214/rs/?gtet_all=1',    # 大久保・高田馬場
+        # 'https://r.gnavi.co.jp/area/areal2125/kods17214/rs/?gtet_all=1',    # 渋谷・原宿・青山
+        # 'https://r.gnavi.co.jp/area/areal2156/kods17214/rs/?gtet_all=1',    # 池袋・巣鴨・駒込
+        # 'https://r.gnavi.co.jp/area/areal2141/kods17214/rs/?gtet_all=1',    # 東京駅・丸の内・日本橋
+        # 'https://r.gnavi.co.jp/area/areal2198/kods17214/rs/?gtet_all=1',    # 上野・浅草・日暮里
+        # 'https://r.gnavi.co.jp/area/areal2142/kods17214/rs/?gtet_all=1',    # 神田・秋葉原・水道橋
+        # 'https://r.gnavi.co.jp/area/areal2169/kods17214/rs/?gtet_all=1',    # 品川・五反田・大崎
+        # 'https://r.gnavi.co.jp/area/areal2170/kods17214/rs/?gtet_all=1',    # お台場・豊洲・湾岸
+        # 'https://r.gnavi.co.jp/area/areal2178/kods17214/rs/?gtet_all=1',    # 恵比寿・中目黒・目黒
+        # 'https://r.gnavi.co.jp/area/areal2164/kods17214/rs/?gtet_all=1',    # 自由が丘・三軒茶屋・二子玉川
+        # 'https://r.gnavi.co.jp/area/areal2207/kods17214/rs/?gtet_all=1',    # 下北沢・明大前・成城学園前
+        # 'https://r.gnavi.co.jp/area/areal2217/kods17214/rs/?gtet_all=1',    # 中野・吉祥寺・三鷹
+        # 'https://r.gnavi.co.jp/area/areal2222/kods17214/rs/?gtet_all=1',    # 練馬・江古田・田無
+        # 'https://r.gnavi.co.jp/area/areal2228/kods17214/rs/?gtet_all=1',    # 錦糸町・押上・新小岩
+        # 'https://r.gnavi.co.jp/area/areal2146/kods17214/rs/?gtet_all=1',    # 人形町・門前仲町・葛西
+        # 'https://r.gnavi.co.jp/area/areal2241/kods17214/rs/?gtet_all=1',    # 北千住・綾瀬・亀有
+        # 'https://r.gnavi.co.jp/area/areal2250/kods17214/rs/?gtet_all=1',    # 板橋・成増・赤羽
+        # 'https://r.gnavi.co.jp/area/areal2254/kods17214/rs/?gtet_all=1',    # 大井町・大森・蒲田
+        # 'https://r.gnavi.co.jp/area/areal2273/kods17214/rs/?gtet_all=1',    # 府中・調布
+        # 'https://r.gnavi.co.jp/area/areal2923/kods17214/rs/?gtet_all=1',    # 町田・多摩
+        # 'https://r.gnavi.co.jp/area/areal2278/kods17214/rs/?gtet_all=1',    # 小金井・国分寺・国立
+        # 'https://r.gnavi.co.jp/area/areal2286/kods17214/rs/?gtet_all=1',    # 立川・八王子・青梅
+        # 'https://r.gnavi.co.jp/area/aream2295/kods17214/rs/?gtet_all=1',    # 伊豆諸島・小笠原諸島
     ]
 
     def parse(self, response):
@@ -80,6 +115,12 @@ class TokyoSpider(AbstractSpider):
             # MEMO: こちらを利用する場合、ジャンル分けが自由入力なのでcsv2geojsonの方できちんとジャンルの名寄せをやる必要がある(やった)
             # それでもアホみたいなジャンルが多数設定されているが、そういうのはしょうがない…
             item['genre_name'] = response.xpath('//header[@role="banner"]//dd[@id="header-meta-cat-desc"]/text()').get().strip()
+
+        # (こっそりlat, lngを取る)
+        src = response.xpath('//a[@id="info-table-map-img"]/p[@class="figure"]/img/@src').extract_first()
+        m = re.search(r'(.*)marker_ns\.png%7C(?P<lat>.*)\,(?P<lng>.*?)\&(.*)', src)
+        item['provided_lat'] = m.group('lat')
+        item['provided_lng'] = m.group('lng')
 
         self.logzero_logger.debug(item)
         return item
