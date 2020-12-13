@@ -67,10 +67,8 @@ class IwateSpider(AbstractSpider):
             m = re.match(r'.*(?P<tel>0\d{1,4}-\d{1,4}-\d{3,4})', tel)
             item['tel'] = m.group('tel')
 
-            # item['genre_name'] = article.xpath('.//p[@class="stores_box_genre"]/text()').get().strip()
-            # で取れるが、ジャンル指定が自由入力になっていて地獄 (ジャンル: 「イカの唐揚げ」ってなんだよ...)
-            # もしやるなら、部分一致で引っ掛けてジャンル分けするしかなさそう...　とりあえず諦めてジャンルなし
-            item['genre_name'] = None
+            # ジャンル名がほぼ自由入力 (ジャンル: 「イカの唐揚げ」ってなんだよ...)
+            item['genre_name'] = article.xpath('.//p[@class="stores_box_genre"]/text()').get().strip()
 
             self.logzero_logger.debug(item)
             yield item

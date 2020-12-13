@@ -33,6 +33,7 @@ class AkitaSpider(AbstractSpider):
             item = ShopItem()
             # CSV中に <!-- --> 形式で検索用(?)のふりがな/フリガナが入っているので削除
             item['shop_name'] = w3lib.html.remove_tags(row['店舗名']).strip()
+            item['area_name'] = row['市町村']
 
             # 同じく検索用(?)の文字列が入っているものがあるが、こちらの入力値は利用する
             # (申請時に未入力だった項目を手作業で埋めてる？)
