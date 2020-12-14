@@ -35,6 +35,8 @@ class MiyazakiSpider(AbstractSpider):
             item['official_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
             item['detail_page'] = article.xpath('.//a[@class="store-card__button"]/@href').get().strip()
 
+            # MEMO: 詳細ページの「店舗からのお知らせ」欄に営業時間、定休日が自由書式で記入されているが、とりあえず見送り
+
             self.logzero_logger.debug(item)
             yield item
 

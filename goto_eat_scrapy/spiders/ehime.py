@@ -25,7 +25,7 @@ class EhimeSpider(AbstractSpider):
             item['detail_page'] = article.xpath('.//p[@class="btn_link"]/a/@href').get().strip()
             # MEMO: closing_day, opening_hours, official_pageなどを
             # 詳細ページから取得可能だが、とりあえず未対応
-            # エリアについては検索条件でのみ設定可能なため、結果(一覧/詳細)ページからは取得不可
+            # エリアについては検索条件でのみ設定可能なため、結果(一覧/詳細)ページからは取得不可だが、山口県と同様に対応可能
 
             self.logzero_logger.debug(item)
             yield item

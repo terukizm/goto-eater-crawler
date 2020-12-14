@@ -41,7 +41,7 @@ class AkitaSpider(AbstractSpider):
 
             item['tel'] = row['電話番号']
             item['official_page'] = row['公式ホームページ']
-            item['genre_name'] = None    # 秋田にはジャンル情報なし
+            # item['genre_name'] = None    # 秋田はジャンル情報なし
 
             self.logzero_logger.debug(item)
             yield item

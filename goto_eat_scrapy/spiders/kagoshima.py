@@ -73,9 +73,10 @@ class KagoshimaSpider(AbstractSpider):
                 address = article.xpath('./td[4]/text()').get().strip()
                 item['address'] = ' '.join(address.splitlines())
 
-                # MEMO: エリア名は取れなくもないが、Excelベースの表構造なのでしんどい
-                # area_nameから取るのもdisplay:noneで出し分けされてるのでめんどい
-                # 最後まで本気でこのWebページ形式で行く感じだったら対応するかも
+                # MEMO: エリア名はhtmlから取れなくもないが、Excelベースの表構造なのでしんどい
+                # area_list経由で取るのも、実質2データしかなく、それらをdisplay:noneで出し分けしている
+                # (おそらく一つのExcelシートを非表示にしたりして出してる)ので大変めんどい
+                # 最後まで本気でこのWebページ形式で行く感じだったら、諦めた対応するかも
 
                 # item['genre_name'] = None   # 鹿児島はジャンル情報なし
 
