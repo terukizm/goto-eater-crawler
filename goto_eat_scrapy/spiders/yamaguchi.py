@@ -10,17 +10,34 @@ class YamaguchiSpider(AbstractSpider):
     """
     name = 'yamaguchi'
     allowed_domains = [ 'gotoeat-yamaguchi.com' ] # .comとは
-    start_urls = ['https://gotoeat-yamaguchi.com/use/?post_type=post&s=']
+
+    def start_requests(self):
+        area_list = [
+            {'code': '01-shop-area', 'name': '岩国エリア'},
+            {'code': '02-shop-area', 'name': '柳井エリア'},
+            {'code': '03-shop-area', 'name': '周南エリア'},
+            {'code': '04-shop-area', 'name': '山口・防府エリア'},
+            {'code': '05-shop-area', 'name': '萩エリア'},
+            {'code': '06-shop-area', 'name': '長門エリア'},
+            {'code': '07-shop-area', 'name': '宇部・小野田・美祢エリア'},
+            {'code': '08-shop-area', 'name': '下関エリア'},
+        ]
+        for area in area_list:
+            url = 'https://gotoeat-yamaguchi.com/use/?post_type=post&s=&cat_area%5B%5D={}'.format(area['code'])
+            yield scrapy.Request(url, callback=self.parse, meta={'area_name': area['name']})
 
     def parse(self, response):
+        area_name = response.meta['area_name']
+
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
         for article in response.xpath('//ul[@id="shop-list"]/li'):
             item = ShopItem()
             item['shop_name'] = article.xpath('.//div[@class="left"]/h3/a/text()').get().strip()
+            item['area_name'] = area_name
 
             genres = article.xpath('.//div[@class="left"]/p[@class="type"]/a/text()').getall()
-            item['genre_name'] = '|'.join([g.replace('●', '') for g in genres]) # 複数ジャンル
+            item['genre_name'] = '|'.join([g.replace('●', '') for g in genres]) # 複数ジャンル有り
 
             item['address'] = article.xpath('.//div[@class="left break"]/p/strong[contains(text(), "［住所］")]/../text()').get().strip()
             item['opening_hours'] = article.xpath('.//div[@class="left break"]/p/strong[contains(text(), "［営業時間］")]/../text()').get().strip()
@@ -29,8 +46,6 @@ class YamaguchiSpider(AbstractSpider):
 
             # MEMO: 山口県の"rink"は複数指定でき、公式HP以外にも各種SNSアカウント等が登録されているが、とりあえず先頭のものだけ取得している
             item['official_page'] = article.xpath('.//div[@class="rink"]/a[1]/@href').get()
-
-            # MEMO: エリア情報については検索結果に含まれず、検索条件を指定して取得しなければいけないため、現時点では非対応とする
 
             self.logzero_logger.debug(item)
             yield item
@@ -42,4 +57,4 @@ class YamaguchiSpider(AbstractSpider):
             return
 
         self.logzero_logger.info(f'🛫 next url = {next_page}')
-        yield scrapy.Request(next_page, callback=self.parse)
+        yield scrapy.Request(next_page, callback=self.parse, meta=response.meta)
