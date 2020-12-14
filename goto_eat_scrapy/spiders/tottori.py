@@ -31,7 +31,8 @@ class TottoriSpider(AbstractSpider):
             # 他にもテイクアウトの有無など、鳥取は検索オプションが豪華
 
             item['address'] = article.xpath('.//div[2]/p/text()').get().strip()
-            item['tel'] = article.xpath('.//div[2]/div[@class="d-flex"]/a/@href').get()
+            item['tel'] = article.xpath('.//div[2]/div[@class="d-flex"]/a[contains(@class, "tel-link")]/@href').get()
+            item['official_page'] = article.xpath('.//div[2]/div[@class="d-flex"]/a[contains(@target, "_blank")]/@href').get()
 
             genres = article.xpath('.//p[@class="mb-0"]/span[contains(@class, "icon-genre")]/text()').getall()
             item['genre_name'] = '|'.join(genres)
