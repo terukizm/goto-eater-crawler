@@ -86,6 +86,8 @@ class OitaCrawler():
             item['address'] = article.xpath('.//div[@class="first"]/p[@class="add"]/text()')[0].strip()
             tel = article.xpath('.//div[@class="second"]/p[@class="s-call"]/span[@class="shoptel"]/a/text()')
             item['tel'] = tel[0].strip() if tel else None
+            official_page = article.xpath('.//div[@class="first"]/p[@class="web"]/a/@href')
+            item['official_page'] = official_page[0].strip() if official_page else None
 
             self.logzero_logger.debug(item)
             results.append(item)
