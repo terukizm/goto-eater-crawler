@@ -20,11 +20,7 @@ class OkinawaSpider(AbstractSpider):
             item['area_name'] = article.xpath('.//p[@class="category"]/a[@class="areas"]/text()').get()
             item['genre_name'] = article.xpath('.//p[@class="category"]/a[@class="industry"]/text()').get()
             item['shop_name'] = article.xpath('.//h4[@class="title"]/text()').get().strip()
-
-            address = article.xpath('.//p[@class="address"]/text()').get().strip()
-            m = re.match(r'(?P<zip_code>[0-9]{3}-[0-9]{4}\s+?)*(?P<address>.*)', address.strip())
-            item['address'] = m.group('address')
-            item['zip_code'] = m.group('zip_code')  # 郵便番号は入ってたり入ってなかったりが混在
+            item['address'] = article.xpath('.//p[@class="address"]/text()').get().strip()
 
             tel = article.xpath('.//div[@class="column"]/p[@class="tel"]/a/text()').get()
             item['tel'] = tel.replace('TEL:', '') if tel else None
