@@ -5,6 +5,8 @@ from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
 class ShizuokaSpider(AbstractSpider):
     """
+    通称: 赤券の方
+
     usage:
       $ scrapy crawl shizuoka -O shizuoka.csv
     """

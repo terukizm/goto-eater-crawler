@@ -28,6 +28,7 @@ class Main():
             ignores = [
                 'tokyo',     # 企業サイトであり、かつ件数が多く、詳細ページまで見る必要があり、アクセスが多くなってしまうため
                 'tokushima', # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
+                'shizuoka_blue', # 静岡県商工会による(青券)の方。赤券の方と結果をmergeする事も考えたが、住所の表記ゆれがありうるので見送り。
             ]
             process = CrawlerProcess(self.settings)
             targets = [ x for x in process.spiders.list() if not x in ignores ]
@@ -76,7 +77,7 @@ class Main():
         logger.info(f'[ {target} ]  end  ...')
 
     def run_oita(self):
-        # TODO: 北海道・大分県のリファクタリング
+        # FIXME: 北海道・大分県のリファクタリング
         target = 'oita'
         logger.info(f'[ {target} ] start ...')
         csvfile = self.csv_dir / f'{target}.csv'
@@ -114,6 +115,10 @@ if __name__ == "__main__":
     base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path(__file__).parent / 'data'
     runner = Main(base)
     runner.run(args.target)
-    runner.sort_csv() # gnu sortコマンドでgit commit前にやればいい気もしてきた
+
+    # MEMO: ソートしないでリポジトリに入れるとdiffが出まくるという理由でのソート処理
+    # (csv2geojsonの入力CSVとしては必須ではない)
+    # gnu sortコマンドでgit commit前にやるのでもよいが、まあこっちでもそんな遅くはないので → やっぱソートコマンドのほうがよさげでは？
+    runner.sort_csv()
 
     logger.info(f'👍 終了')

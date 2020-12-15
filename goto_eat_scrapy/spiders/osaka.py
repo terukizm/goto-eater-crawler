@@ -38,7 +38,7 @@ class OsakaSpider(AbstractSpider):
             # MEMO: 2020/11/28現在、「珉珉上新庄駅前店」だけ店名が取れないため例外対応。
             # og:title辺りには出ており、他の「珉珉」では普通に表示される店もあるので、謎…
             # (京橋店はひらがなで「みんみん」となっており、謎は深まっている)
-            item['shop_name'] = shop_name or '珉珉上新庄駅前店'
+            item['shop_name'] = shop_name.strip() if shop_name else '珉珉上新庄駅前店'
 
             # ジャンル名
             # MEMO: 複数ジャンルを想定した実装だが、大阪の場合は複数ジャンルが指定されているデータはない(はず)
