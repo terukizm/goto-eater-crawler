@@ -32,7 +32,7 @@ class naraSpider(AbstractSpider):
         for _, row in df.iterrows():
             item = ShopItem()
             item['area_name'] = row['エリア'].strip()
-            item['shop_name'] = ' '.join(row['店舗名称'].splitlines()) # 店舗名に改行が入ってるものがあるので半角スペースに置換
+            item['shop_name'] = row['店舗名称'] # MEMO: 店舗名に改行が入ってるものがある
             item['genre_name'] = row['カテゴリー'].strip()
             item['address'] = row['住所'].strip()
             item['tel'] = row['電話番号']

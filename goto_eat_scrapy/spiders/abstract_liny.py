@@ -58,7 +58,8 @@ class AbstractLinySpider(AbstractSpider):
                 official_page = article['url'],
 
                 # MEMO: eigyo_jikan内に定休日も含まれているが基本的に自由書式のため、分別しようがない
-                opening_hours = ' '.join(article['eigyo_jikan'].splitlines()), # 改行コードが入ってるものがあるので半角スペースに置換
+                # まとめて全部、営業時間の方に入れておく
+                opening_hours = article['eigyo_jikan'],
 
                 # MEMO: liny系は公式にlatlng(google mapの結果とはまた別っぽい…？)が提供されているので、
                 # これをジオコーディングせずにそのまま使えば精度が出せる

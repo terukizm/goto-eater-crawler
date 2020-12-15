@@ -67,11 +67,9 @@ class KagoshimaSpider(AbstractSpider):
         for article in response.xpath('//table/tr'):
             if article.xpath('.//td[2]/a[contains(text(), "検索")]').get():
                 item = ShopItem()
-                # 店舗名、住所に改行が入ってるものがあるので半角スペースに置換
-                shop_name = article.xpath('.//td[3]/text()').get().strip()
-                item['shop_name'] = ' '.join(shop_name.splitlines())
-                address = article.xpath('./td[4]/text()').get().strip()
-                item['address'] = ' '.join(address.splitlines())
+                # MEMO: 店舗名、住所に改行が入ってるものがある(item pipelineで対応)
+                item['shop_name'] = article.xpath('.//td[3]/text()').get().strip()
+                item['address'] = article.xpath('./td[4]/text()').get().strip()
 
                 # MEMO: エリア名はhtmlから取れなくもないが、Excelベースの表構造なのでしんどい
                 # area_list経由で取るのも、実質2データしかなく、それらをdisplay:noneで出し分けしている
