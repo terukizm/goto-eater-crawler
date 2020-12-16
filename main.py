@@ -18,7 +18,6 @@ class Main():
         settings = get_project_settings()
         settings.set('FEED_FORMAT', 'csv')
         settings.set('FEED_URI', str(self.csv_dir / '%(name)s.csv'))  # @see https://docs.scrapy.org/en/latest/topics/feed-exports.html#storage-uri-parameters
-        settings.set('LOG_FILE', str(self.log_dir / '_scrapy.log'))   # scrapyのログ(request/httpcache周りの切り分け用)
         self.settings = settings
 
     def run(self, target):
