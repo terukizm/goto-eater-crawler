@@ -42,7 +42,7 @@ class shimaneSpider(AbstractSpider):
         item['closing_day'] = response.xpath('//div[@class="info holidays"]/p/text()').get()
 
         genre_name = response.xpath('//div[@class="info select genre"]/p/span/text()').get()
-        item['genre_name'] = ''.join(genre_name.split())
+        item['genre_name'] = ''.join(genre_name.split()) if genre_name else None
 
         tel = response.xpath('//div[@class="info line tel"]/p/text()').get()
         item['tel'] = tel.strip() if tel else None
