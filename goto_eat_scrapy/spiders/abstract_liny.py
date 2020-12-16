@@ -33,11 +33,6 @@ def _get_max_and_min(coordinates: list):
 class AbstractLinySpider(AbstractSpider):
     allowed_domains = [ 'liny.jp' ]
 
-    # 千葉、滋賀が面積広くて時間かかるので…
-    custom_settings = {
-        'DOWNLOAD_DELAY': 2,
-    }
-
     def start_requests(self):
         path = pathlib.Path(__file__).parent / '1km_mesh' / self.mesh_geojson_name
         with open(path) as f:

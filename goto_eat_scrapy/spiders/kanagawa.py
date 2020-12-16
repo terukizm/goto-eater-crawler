@@ -8,3 +8,8 @@ class KanagawaSpider(AbstractLinySpider):
     name = 'kanagawa'
     base_url = 'https://gotoeat-kanagawa.liny.jp/map/api/data.json'
     mesh_geojson_name = '14kanagawa1km.geojson'
+
+    # MEMO: 神奈川は狭いから3secくらいでも行けるかもしれない
+    custom_settings = {
+        'DOWNLOAD_DELAY': 2,
+    }

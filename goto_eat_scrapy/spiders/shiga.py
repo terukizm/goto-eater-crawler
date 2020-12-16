@@ -8,3 +8,7 @@ class ShigaSpider(AbstractLinySpider):
     name = 'shiga'
     base_url = 'https://gotoeat-shiga.liny.jp/map/api/data.json'
     mesh_geojson_name = '25shiga1km.geojson'
+
+    custom_settings = {
+        'DOWNLOAD_DELAY': 2,
+    }
