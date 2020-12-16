@@ -27,21 +27,21 @@ class AkitaSpider(AbstractSpider):
 
         df = pd.read_csv(tmp_csv, header=None, \
             names=('店舗名', '市町村', '所在地', '電話番号', '公式ホームページ')
-        ).fillna({'公式ホームページ': ''})
+        ).fillna({'公式ホームページ': '', '電話番号': ''})
 
         for _, row in df.iterrows():
             item = ShopItem()
-            # CSV中に <!-- --> 形式で検索用(?)のふりがな/フリガナが入っているので削除
-            item['shop_name'] = w3lib.html.remove_tags(row['店舗名']).strip()
-            item['area_name'] = row['市町村']
+
+            # CSV中に <!-- --> 形式で検索用(?)のふりがな/フリガナが入っているので削除(item pipelineで対応)
+            item['shop_name'] = row['店舗名']
 
             # 同じく検索用(?)の文字列が入っているものがあるが、こちらの入力値は利用する
             # (申請時に未入力だった項目を手作業で埋めてる？)
             item['address'] = row['所在地'].replace('<!--', '').replace('-->', '').strip()
 
+            item['area_name'] = row['市町村']
             item['tel'] = row['電話番号']
             item['official_page'] = row['公式ホームページ']
             # item['genre_name'] = None    # 秋田はジャンル情報なし
 
-            self.logzero_logger.debug(item)
             yield item

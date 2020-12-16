@@ -30,7 +30,7 @@ class ToyamaSpider(AbstractSpider):
 
             # MEMO: 検索結果にエリア情報が含まれないため、必要なら検索条件で絞り込んで取得する必要がある
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

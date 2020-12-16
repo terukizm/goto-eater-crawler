@@ -26,7 +26,7 @@ class IshikawaSpider(AbstractSpider):
             tel = article.xpath('.//div[@class="tel"]/text()').get()
             item['tel'] = tel.replace('TEL.', '') if tel else None
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

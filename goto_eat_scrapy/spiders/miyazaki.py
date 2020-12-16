@@ -37,7 +37,7 @@ class MiyazakiSpider(AbstractSpider):
 
             # MEMO: 詳細ページの「店舗からのお知らせ」欄に営業時間、定休日が自由書式で記入されているが、とりあえず見送り
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「次へ」がなければ(最終ページなので)終了

@@ -43,7 +43,7 @@ class IbarakiSpider(AbstractSpider):
             # MEMO: 詳細ページまで見れば「公式URL」「定休日」「営業時間」が取れるが、推理の絆をあんまり叩きたくないので今回はパス
             # -> といっても同じ推理の絆を使ってる三重県、岐阜県では(仕方なく)詳細ページまで叩いてるので今更感はある
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

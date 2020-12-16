@@ -32,7 +32,7 @@ class HyogoSpider(AbstractSpider):
             # 結果のマージがめんどくさく、とりあえず兵庫県については「ジャンルなし」で固定とした。
             item['genre_name'] = None
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

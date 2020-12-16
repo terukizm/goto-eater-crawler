@@ -113,5 +113,5 @@ class SaitamaSpider(AbstractSpider):
                     tel = article.xpath('.//span[5]/text()').get(),
                     official_page = article.xpath('.//span[6]/a/@href').get()
                 )
-                self.logzero_logger.debug(item)
+
                 yield item

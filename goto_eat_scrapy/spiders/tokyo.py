@@ -122,6 +122,6 @@ class TokyoSpider(AbstractSpider):
         item['provided_lat'] = m.group('lat')
         item['provided_lng'] = m.group('lng')
 
-        self.logzero_logger.debug(item)
+
         return item
 

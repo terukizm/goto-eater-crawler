@@ -79,7 +79,7 @@ class NiigataSpider(AbstractSpider):
                 genres.append(tagtext)
             item['genre_name'] = '|'.join(genres)
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「次へ」ボタンがなければ(最終ページなので)終了

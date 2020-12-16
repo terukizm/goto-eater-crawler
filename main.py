@@ -16,9 +16,9 @@ class Main():
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
         settings = get_project_settings()
+        settings.set('LOG_LEVEL', 'WARNING')
         settings.set('FEED_FORMAT', 'csv')
         settings.set('FEED_URI', str(self.csv_dir / '%(name)s.csv'))  # @see https://docs.scrapy.org/en/latest/topics/feed-exports.html#storage-uri-parameters
-        settings.set('LOG_FILE', str(self.log_dir / '_scrapy.log'))   # scrapyのログ(request/httpcache周りの切り分け用)
         self.settings = settings
 
     def run(self, target):
@@ -89,6 +89,8 @@ class Main():
         logger.info(f'[ {target} ]  end  ...')
 
     def sort_csv(self):
+        # MEMO: Scrapyの結果は順番が保証されないので、ソートしないでリポジトリに入れると同じレコードに対してもdiffが出まくるという理由でのソート処理
+        # MEMO: csvsortを使うようにしたので、もう利用してない
         logger.info('出力されたCSVをソート...')
         for csv in list(self.csv_dir.glob('*.csv')):
             if csv.stat().st_size == 0:
@@ -116,9 +118,6 @@ if __name__ == "__main__":
     runner = Main(base)
     runner.run(args.target)
 
-    # MEMO: ソートしないでリポジトリに入れるとdiffが出まくるという理由でのソート処理
-    # (csv2geojsonの入力CSVとしては必須ではない)
-    # gnu sortコマンドでgit commit前にやるのでもよいが、まあこっちでもそんな遅くはないので → やっぱソートコマンドのほうがよさげでは？
-    runner.sort_csv()
+    # runner.sort_csv()
 
     logger.info(f'👍 終了')

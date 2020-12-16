@@ -31,7 +31,7 @@ class OkayamaSpider(AbstractSpider):
             item['address'] = article.xpath('.//dl/dt[contains(text(), "住所")]/following-sibling::dd/text()').get().strip()
             item['official_page'] = article.xpath('.//dl/dt[contains(text(), "URL")]/following-sibling::dd/a/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>>」ボタンがなければ(最終ページなので)終了

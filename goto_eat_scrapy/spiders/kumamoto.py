@@ -28,7 +28,7 @@ class KumamotoSpider(AbstractSpider):
             item['official_page'] = article.xpath('.//p[3]/a/@href').get()
             item['genre_name'] = None   # 熊本県はジャンル設定なし
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

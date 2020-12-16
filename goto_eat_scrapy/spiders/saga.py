@@ -29,7 +29,7 @@ class SagaSpider(AbstractSpider):
             # MEMO: 佐賀は検索結果にエリア情報が含まれないため、エリア情報を取得したければ検索条件に指定して
             # エリア別に検索する必要がある。また詳細ページはなし
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「NEXT」ボタンがなければ(最終ページなので)終了

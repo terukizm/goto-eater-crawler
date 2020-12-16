@@ -25,7 +25,7 @@ class KyotoSpider(AbstractSpider):
             item['official_page'] = article.xpath('.//table/tr/th[contains(text(), "U R L")]/following-sibling::td/a/@href').get()
             item['detail_page'] = response.urljoin(article.xpath('.//a[@class="btnDetail"]/@href').get().strip())
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

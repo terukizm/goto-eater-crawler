@@ -29,7 +29,7 @@ class WakayamaSpider(AbstractSpider):
             item['tel'] = article.xpath('.//div[2]/div[@class="shop_info flex"]/p[@class="shop_tel"]/text()').get()
             item['official_page'] = article.xpath('.//div[2]/div[@class="shop_info flex"]/p[@class="shop_web"]/a/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

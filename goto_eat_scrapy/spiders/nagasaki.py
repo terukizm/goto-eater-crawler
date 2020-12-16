@@ -29,7 +29,7 @@ class NagasakiSpider(AbstractSpider):
             item['tel'] = article.xpath('.//div[@class="shop-list-content-tel-002"]/text()').get()
             item['official_page'] = article.xpath('.//div[@class="shop-list-content-url"]/a/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

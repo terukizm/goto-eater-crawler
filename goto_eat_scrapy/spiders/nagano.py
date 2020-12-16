@@ -25,7 +25,7 @@ class NaganoSpider(AbstractSpider):
             item['tel'] = article.xpath('.//p[@class="shop_tel"]/span/text()').get()
             item['official_page'] = article.xpath('.//p[@class="shop_tel"]/a/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

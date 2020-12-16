@@ -33,20 +33,20 @@ class FukuiSpider(AbstractSpider):
 
         for dl in response.xpath('//div[@id="contents"]/dl'):
             # MEMO: ジャンル指定がされていない(dt[1]が空の)データ、「グルメ民宿 はまもと」があり、その場合following-siblingが変なところ
-            # (dd/text()の値が存在する「住所」？)を見に行ってしまうので、暫定的にジャンル部分だけ直指定で実装
+            # (dd/text()の値が存在する「住所」？)を見に行ってしまうので、暫定的にジャンル部分だけ直接指定で実装
             # 参考: https://gotoeat-fukui.com/shop/?id=180097  (にしても画像がうまそうでつらい)
 
             genre_name = dl.xpath('.//dt[1]/dd/text()').get()
             genre_name = genre_name.strip() if genre_name else ''   # はまもとだけの例外対応
-            item['genre_name'] = genre_name.replace('、', '|')  # 複数ジャンル指定あり
+            item['genre_name'] = genre_name.replace('、', '|')      # 複数ジャンル指定あり
             # 元データが修正されれば以下の実装でよい
             # genre_name = dl.xpath('.//dt[contains(text(), "ジャンル")]/following-sibling::dd/text()').get().strip()
 
             item['tel'] = dl.xpath('.//dt[contains(text(), "電　　話")]/following-sibling::dd/a/text()').get().strip()
             item['address'] = dl.xpath('.//dt[contains(text(), "住　　所")]/following-sibling::dd/text()').get().strip()
             item['opening_hours'] = dl.xpath('.//dt[contains(text(), "営業時間")]/following-sibling::dd/text()').get().strip()
-            item['closing_day'] = dl.xpath('.//dt[contains(text(), "定 休 日")]/following-sibling::dd/text()').get().strip()
+            item['closing_day'] = dl.xpath('.//dt[contains(text(), "定 休 日")]/following-sibling::dd/text()').get()
             item['official_page'] = dl.xpath('.//dt[contains(text(), "HP・SNS")]/following-sibling::dd/text()').get()
 
-        self.logzero_logger.debug(item)
+
         return item

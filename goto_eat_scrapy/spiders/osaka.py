@@ -63,7 +63,7 @@ class OsakaSpider(AbstractSpider):
             # MEMO: 詳細ページまで回せば公式ページのURLが取れるが、それだけのために15k以上のデータにアクセスすべきとは
             # 思えなかったのでやってない。大阪の場合、2020/11/28現在でも881ページもあるし…
             item['detail_page'] = article.xpath('.//a[contains(text(), "詳しく見る")]/@href').get().strip()
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

@@ -36,7 +36,7 @@ class ShizuokaBlueSpider(AbstractSpider):
             item['closing_day'] = article.xpath('.//dl[@class="accordion"]//table/tr/th[contains(text(), "定休日")]/following-sibling::td/text()').get()
             item['official_page'] = article.xpath('.//dl[@class="accordion"]/dd/a[@class="btn_link btn__shop_link"]/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

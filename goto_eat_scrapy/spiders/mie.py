@@ -61,6 +61,6 @@ class MieSpider(AbstractSpider):
             item['genre_name'] = tr.xpath('.//tr/th[contains(text(), "業態")]/following-sibling::td/text()').get().strip()
             item['official_page'] = tr.xpath('.//tr/th[contains(text(), "WEB URL")]/following-sibling::td/a/@href').get()
 
-        self.logzero_logger.debug(item)
+
         return item
 

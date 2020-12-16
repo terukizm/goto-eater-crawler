@@ -28,5 +28,5 @@ class YamanashiSpider(AbstractSpider):
                     address = tr.xpath('.//td[2]/text()').get().strip(),
                     tel = tr.xpath('.//td[3]/text()').get().strip(),
                 )
-                self.logzero_logger.debug(item)
+
                 yield item

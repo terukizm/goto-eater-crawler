@@ -39,7 +39,7 @@ class GunmaSpider(AbstractSpider):
             item['tel'] = tel.replace('TEL.', '') if tel else None
             item['official_page'] = article.xpath('.//div[2]/div[@class="shopinfo"]/a[2]/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了
