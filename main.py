@@ -16,6 +16,7 @@ class Main():
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
         settings = get_project_settings()
+        settings.set('LOG_LEVEL', 'WARNING')
         settings.set('FEED_FORMAT', 'csv')
         settings.set('FEED_URI', str(self.csv_dir / '%(name)s.csv'))  # @see https://docs.scrapy.org/en/latest/topics/feed-exports.html#storage-uri-parameters
         self.settings = settings
