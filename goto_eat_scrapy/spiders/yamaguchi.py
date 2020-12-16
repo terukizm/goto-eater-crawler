@@ -47,7 +47,7 @@ class YamaguchiSpider(AbstractSpider):
             # MEMO: 山口県の"rink"は複数指定でき、公式HP以外にも各種SNSアカウント等が登録されているが、とりあえず先頭のものだけ取得している
             item['official_page'] = article.xpath('.//div[@class="rink"]/a[1]/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

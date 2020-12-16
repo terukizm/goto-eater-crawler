@@ -28,7 +28,7 @@ class KagawaSpider(AbstractSpider):
             item['tel'] = article.xpath('.//table/tr/th/span[contains(text(), "電話番号")]/../following-sibling::td/text()').get().strip()
             item['address'] = article.xpath('.//table/tr/th/span[contains(text(), "住所")]/../following-sibling::td/text()').get().strip()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

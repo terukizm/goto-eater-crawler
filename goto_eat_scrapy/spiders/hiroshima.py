@@ -26,7 +26,7 @@ class HiroshimaSpider(AbstractSpider):
             item['official_page'] = article.xpath('.//div[@class="result__data"]/h3/a/@href').get()
             item['address'] = article.xpath('.//div[@class="result__data"]/p[@class="result__address"]/text()').get().strip()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「»」ボタンがなければ(最終ページなので)終了

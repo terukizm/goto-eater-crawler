@@ -37,7 +37,7 @@ class TottoriSpider(AbstractSpider):
             genres = article.xpath('.//p[@class="mb-0"]/span[contains(@class, "icon-genre")]/text()').getall()
             item['genre_name'] = '|'.join(genres)
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

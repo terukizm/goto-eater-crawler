@@ -78,5 +78,5 @@ class KagoshimaSpider(AbstractSpider):
 
                 # item['genre_name'] = None   # 鹿児島はジャンル情報なし
 
-                self.logzero_logger.debug(item)
+
                 yield item

@@ -31,7 +31,7 @@ class AomoriSpider(AbstractSpider):
             item['official_page'] = article.xpath('.//table/tbody/tr/th[contains(text(), "URL：")]/following-sibling::td/a/@href').get()
             item['detail_page'] = article.xpath('.//a[@class="store-card__button"]/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「次へ」がなければ(最終ページなので)終了

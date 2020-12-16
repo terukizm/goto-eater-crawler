@@ -48,5 +48,5 @@ class FukuiSpider(AbstractSpider):
             item['closing_day'] = dl.xpath('.//dt[contains(text(), "定 休 日")]/following-sibling::dd/text()').get().strip()
             item['official_page'] = dl.xpath('.//dt[contains(text(), "HP・SNS")]/following-sibling::dd/text()').get()
 
-        self.logzero_logger.debug(item)
+
         return item

@@ -26,7 +26,7 @@ class OkinawaSpider(AbstractSpider):
             item['tel'] = tel.replace('TEL:', '') if tel else None
             item['official_page'] = article.xpath('.//div[@class="column"]/p[@class="url"]/a[@rel="noopener"]/@href').get()
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # リンクボタンがなければ(最終ページなので)終了

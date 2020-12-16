@@ -33,7 +33,7 @@ class ShizuokaSpider(AbstractSpider):
             # MEMO: エリア情報、営業時間、定休日は詳細ページから取得可能。とりあえずは未対応。
             item['detail_page'] = response.urljoin(article.xpath('.//a[contains(@class, "content")]/@href').get().strip())
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「次の一覧」がなければ終了

@@ -37,7 +37,7 @@ class TokushimaSpider(AbstractSpider):
             # MEMO: 地域名については結果に表示されないので検索条件から抜いてくるしかない。(山口県と同様に対応可能)
             # (なお地域名、ジャンル名は複数指定するとちゃんと検索できない (2020/12/07))
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「>」ボタンがなければ(最終ページなので)終了

@@ -47,5 +47,5 @@ class shimaneSpider(AbstractSpider):
         tel = response.xpath('//div[@class="info line tel"]/p/text()').get()
         item['tel'] = tel.strip() if tel else None
 
-        self.logzero_logger.debug(item)
+
         yield item

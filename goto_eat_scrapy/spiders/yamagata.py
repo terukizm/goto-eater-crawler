@@ -102,7 +102,7 @@ class YamagataSpider(AbstractSpider):
                     continue
                 item['genre_name'] = tagtext
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 最後のページを表示させても「次へ(最後へ)」の出し分けがされてないので、

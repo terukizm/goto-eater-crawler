@@ -24,16 +24,21 @@ def normalize_text(text):
 
 class GotoEatScrapyPipeline:
     def process_item(self, item, spider):
+        # バリデーションと正規化(改行コード削除、HTMLタグ削除、strip()等)
         self._validate(item)
-        return self._normalize(item)
+        item = self._normalize(item)
+
+        # ログ出力
+        spider.logzero_logger.debug(item)
+        return item
 
     def _normalize(self, item):
-        # 改行コード削除とHTMLタグの削除
+        # 改行コード削除とHTMLタグの削除を行う項目
         for attr in ['shop_name', 'address', 'opening_hours', 'closing_day']:
             if (text:= item.get(attr)):
                 item[attr] = normalize_text(text)
 
-        # strip()のみ
+        # strip()のみの項目
         for attr in ['genre_name', 'area_name']:
             if (text:= item.get(attr)):
                 item[attr] = text.strip()
@@ -45,7 +50,7 @@ class GotoEatScrapyPipeline:
         for attr in ['shop_name', 'address']:
             if not item.get(attr):
                 raise DropItemException(f'{attr}は必須です。')
-        # 書式エラー
+        # 書式エラー(未入力を許可)
         # (MEMO: DropItemExceptionが発生した場合、クローリング処理自体は止まらず該当データだけが落ちる)
         if (tel := item.get('tel')) and not re.match(r'^0\d{9,10}$', str(tel).replace('-', '')):
             # MEMO: 最初は phonenumbers.is_valid_number() で実装したが、入力データのいい加減さから見て

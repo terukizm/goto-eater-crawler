@@ -38,5 +38,5 @@ class naraSpider(AbstractSpider):
             item['tel'] = row['電話番号']
             item['official_page'] = row['URL']
 
-            self.logzero_logger.debug(item)
+
             yield item

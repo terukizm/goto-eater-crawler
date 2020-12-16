@@ -26,7 +26,7 @@ class FukushimaSpider(AbstractSpider):
             item['opening_hours'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[4]/span[@class="info-text"]/text()').get()
             item['closing_day'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[5]/span[@class="info-text"]/text()').get()
             item['official_page'] = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[6]/span[@class="info-text"]/a/@href').get()
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「NEXT」ボタンがなければ(最終ページなので)終了

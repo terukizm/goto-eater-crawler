@@ -60,6 +60,6 @@ class GifuSpider(AbstractSpider):
             # 岐阜もテーブル構造(tr)が壊れてた…
             item['tel'] = tr.xpath('.//th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
 
-        self.logzero_logger.debug(item)
+
         return item
 

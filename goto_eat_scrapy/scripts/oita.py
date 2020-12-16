@@ -89,7 +89,7 @@ class OitaCrawler():
             official_page = article.xpath('.//div[@class="first"]/p[@class="web"]/a/@href')
             item['official_page'] = official_page[0].strip() if official_page else None
 
-            self.logzero_logger.debug(item)
+
             results.append(item)
 
         return results

@@ -33,7 +33,6 @@ class AichiSpider(AbstractSpider):
             item['tel'] = article.xpath('.//a[@class="lcl-shop__link lcl-shop__link--tel"]/@href').get()
             item['official_page'] = article.xpath('.//a[@class="lcl-shop__link lcl-shop__link--web"]/@href').get()
 
-            self.logzero_logger.debug(item)
             yield item
 
         # 「次へ」がなければ終了

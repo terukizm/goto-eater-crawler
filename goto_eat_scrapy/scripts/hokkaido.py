@@ -116,7 +116,7 @@ class HokkaidoCrawler():
             tel = article.xpath('.//div[@class="right"]/p[@class="results-txt03"]/text()')
             item['tel'] = tel[0].strip() if tel else None
 
-            self.logzero_logger.debug(item)
+
             result.append(item)
 
         next_page = response.xpath('//ul[@role="navigation"]/li/a[@rel="next"]/@href')

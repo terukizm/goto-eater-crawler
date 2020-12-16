@@ -32,7 +32,7 @@ class TochigiSpider(AbstractSpider):
 
             # MEMO: エリア情報は検索結果中に含まれないので、必要なら検索条件として指定する必要がある
 
-            self.logzero_logger.debug(item)
+
             yield item
 
         # 「次の一覧」がなければ終了

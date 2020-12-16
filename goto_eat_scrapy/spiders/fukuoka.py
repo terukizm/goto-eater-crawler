@@ -55,5 +55,5 @@ class FukuokaSpider(AbstractSpider):
             item['address'] = '{}{}{}'.format(row['16.店舗住所：市町村'], row['17.店舗住所：町域、番地'], row['18.店舗住所：建物名'])
             item['tel'] = row['19.店舗情報：電話番号']
             item['official_page'] = row['20.店舗ホームページ']
-            self.logzero_logger.debug(item)
+
             yield item

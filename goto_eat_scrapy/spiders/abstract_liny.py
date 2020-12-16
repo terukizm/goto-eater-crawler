@@ -66,7 +66,7 @@ class AbstractLinySpider(AbstractSpider):
                 provided_lat = article['latlng']['lat'],
                 provided_lng = article['latlng']['lng'],
             )
-            self.logzero_logger.debug(item)
+
             yield item
 
 if __name__ == "__main__":

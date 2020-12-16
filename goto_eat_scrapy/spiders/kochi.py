@@ -36,5 +36,5 @@ class KochiSpider(AbstractSpider):
                 address = row[7],
                 tel = row[8],
             )
-            self.logzero_logger.debug(item)
+
             yield item
