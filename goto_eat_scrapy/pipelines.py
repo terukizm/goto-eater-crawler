@@ -39,7 +39,7 @@ class GotoEatScrapyPipeline:
                 item[attr] = normalize_text(text)
 
         # strip()のみの項目
-        for attr in ['genre_name', 'area_name']:
+        for attr in ['genre_name', 'area_name', 'tel', 'zip_code']:
             if (text:= item.get(attr)):
                 item[attr] = text.strip()
 
