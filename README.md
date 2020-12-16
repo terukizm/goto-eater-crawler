@@ -96,9 +96,9 @@ Scrapyを使っていない北海道、大分県も取得したHTMLの内容を`
 
 # 結果CSVのソート
 
-poetryでcsvkitが入っているので、csvsortコマンドを使うと楽です。
+poetryでcsvkitが入っているので、csvsortコマンドを使うと楽。
 
 ```
 $ poetry shell
-$ find ./data/csvs -type f -name "*.csv" -print0 | xargs -0 -I {} sh -c 'csvsort -c 1 {} > {}.sorted && mv {}.sorted {}'
+$ find ./data/csvs -type f -name "*.csv" -print0 | xargs -0 -I {} sh -c 'csvsort -c 1 -d "," -q \" {} > {}.sorted && mv {}.sorted {}'
 ```
