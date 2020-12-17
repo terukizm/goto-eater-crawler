@@ -76,7 +76,7 @@ class HokkaidoCrawler():
         r.raise_for_status()
 
         html = lxml.html.fromstring(r.content)
-        return self.parse(html)
+        return self.parse(html, area_name=area)
 
 
     def get_page(self, url, area):
@@ -100,22 +100,22 @@ class HokkaidoCrawler():
                 self.logzero_logger.debug(f'  write cache. {cache_file}')
 
         response = lxml.html.fromstring(r.content)
-        return self.parse(response)
+        return self.parse(response, area_name=area)
 
 
-    def parse(self, response):
+    def parse(self, response, area_name):
         """
         htmlを解析
         """
         result = []
         for article in response.xpath('//div[@id="contents"]/div[@class="results"]/ul/li'):
             item = ShopItem()
+            item['area_name'] = area_name
             item['shop_name'] = article.xpath('.//div[@class="left"]/h4[@class="results-tit"]/text()')[0].strip()
             item['address'] = article.xpath('.//div[@class="left"]/p[@class="results-txt01"]/text()')[0].strip()
             item['genre_name'] = article.xpath('.//div[@class="right"]/p[@class="results-txt02"]/text()')[0].strip()
             tel = article.xpath('.//div[@class="right"]/p[@class="results-txt03"]/text()')
             item['tel'] = tel[0].strip() if tel else None
-
 
             result.append(item)
 
