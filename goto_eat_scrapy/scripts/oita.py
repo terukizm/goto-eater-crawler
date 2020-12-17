@@ -81,14 +81,17 @@ class OitaCrawler():
         response = lxml.html.fromstring(html)
         for article in response.xpath('//li[@class="box-sh cf"]'):
             item = ShopItem()
-            item['genre_name'] = article.xpath('.//div[@class="tag cf"]/p[@class="genre"]/span/text()')[0].strip()
+            item['area_name'] = article.xpath('.//div[@class="tag cf"]/p[@class="area"]/span/text()')[0].strip()
+            genres = [g.strip() for g in article.xpath('.//div[@class="tag cf"]/p[@class="genre"]/span/text()')]
+            item['genre_name'] = '|'.join(genres)
+
             item['shop_name'] = article.xpath('.//p[@class="name"]/text()')[0].strip()
             item['address'] = article.xpath('.//div[@class="first"]/p[@class="add"]/text()')[0].strip()
+
             tel = article.xpath('.//div[@class="second"]/p[@class="s-call"]/span[@class="shoptel"]/a/text()')
             item['tel'] = tel[0].strip() if tel else None
             official_page = article.xpath('.//div[@class="first"]/p[@class="web"]/a/@href')
             item['official_page'] = official_page[0].strip() if official_page else None
-
 
             results.append(item)
 
