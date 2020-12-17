@@ -44,6 +44,6 @@ class KochiSpider(AbstractSpider):
 
             # TODO: クロール結果はjsonかなんかで出す ->  その後でデータクレンジングをかける ->
             # 最後にcsv2geojsonに通す、みたいにすべきかもしれない (それでも例外対応は要るが)
-            item['shop_name'].replace('<きてみいや>', 'きてみいや'):
+            item['shop_name'] = item['shop_name'].replace('<きてみいや>', '　きてみいや')
 
             yield item
