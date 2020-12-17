@@ -10,5 +10,5 @@ class ShigaSpider(AbstractLinySpider):
     mesh_geojson_name = '25shiga1km.geojson'
 
     custom_settings = {
-        'DOWNLOAD_DELAY': 2,
+        'DOWNLOAD_DELAY': 1.5,
     }

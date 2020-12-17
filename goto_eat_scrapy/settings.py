@@ -99,3 +99,6 @@ FEED_EXPORT_FIELDS = ['shop_name', 'address', 'tel', 'genre_name', 'zip_code', '
 
 # Scrapyのログレベル(デフォルト = 'DEBUG')
 #LOG_LEVEL = 'DEBUG'
+
+# リトライ回数(default=2)
+RETRY_TIMES = 5

@@ -11,5 +11,5 @@ class KanagawaSpider(AbstractLinySpider):
 
     # MEMO: 神奈川は狭いから3secくらいでも行けるかもしれない
     custom_settings = {
-        'DOWNLOAD_DELAY': 2,
+        'DOWNLOAD_DELAY': 1.5,
     }
