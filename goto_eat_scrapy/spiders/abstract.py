@@ -1,6 +1,7 @@
 import scrapy
 import logging
 import logzero
+from scrapy import signals
 
 class AbstractSpider(scrapy.Spider):
     def __init__(self, logfile=None, *args, **kwargs):
@@ -25,5 +26,16 @@ class AbstractSpider(scrapy.Spider):
                 level=logging.INFO
             )
 
-    # MEMO: きちんとやる場合エラーハンドリングを実装
-    #   @see https://nori-life.com/get-error-download-scrapy/
+    # MEMO: やっつけエラーハンドリング (注意: spiderの中でraise Exceptionしても届かない)
+    # GitHub Actionでログに出したやつを find xargs grep とかで拾って、エラーがあったらコケさせるような想定
+    # slack notifyとかでもよい
+    @classmethod
+    def from_crawler(cls, crawler, *args, **kwargs):
+        spider = super().from_crawler(crawler, *args, **kwargs)
+        crawler.signals.connect(spider._errback_handle, signal=signals.spider_error)
+        return spider
+
+    def _errback_handle(self, failure, response, spider):
+        # @see https://blog.mudatobunka.org/entry/2016/09/24/232456
+        spider.logzero_logger.error(f'### {spider.name} Spider Error ###')
+        spider.logzero_logger.error('{} {}'.format(failure.type, failure.getErrorMessage()))
