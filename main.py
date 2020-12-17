@@ -28,7 +28,6 @@ class Main():
             ignores = [
                 'tokyo',     # 企業サイトであり、かつ件数が多く、詳細ページまで見る必要があり、アクセスが多くなってしまうため
                 'tokushima', # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
-                'shizuoka_blue', # 静岡県商工会による(青券)の方。赤券の方と結果をmergeする事も考えたが、住所の表記ゆれがありうるので見送り。
             ]
             process = CrawlerProcess(self.settings)
             targets = [ x for x in process.spiders.list() if not x in ignores ]
