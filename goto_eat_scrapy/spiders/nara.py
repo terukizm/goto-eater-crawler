@@ -13,11 +13,11 @@ class naraSpider(AbstractSpider):
     """
     name = 'nara'
     allowed_domains = [ 'premium-gift.jp' ]
-    start_urls = ['https://premium-gift.jp/nara-eat']
+    start_urls = ['https://premium-gift.jp/nara-eat/use_store/detail?id=215783']
 
     def parse(self, response):
-        # Topページからリンクを取る(多分最新版が最初に来るだろうという決め打ち)
-        xlsx_url = response.xpath('//section[@class="news-list"]//a[contains(text(), "Excel形式")]/@href').extract_first()
+        # 利用店舗一覧の中から適当にリンクが貼られている(キレそう)
+        xlsx_url = response.xpath('//table[@class="common-table"]/tbody/tr/th[contains(text(), "店舗URL")]/following-sibling::td/a/@href').extract_first()
         yield scrapy.Request(xlsx_url, callback=self.parse_from_xlsx)
 
     def parse_from_xlsx(self, response):
@@ -26,7 +26,7 @@ class naraSpider(AbstractSpider):
 
         with open(tmp_xlsx, 'wb') as f:
             f.write(response.body)
-        self.logzero_logger.info(f'💾 saved pdf: {response.request.url} > {tmp_xlsx}')
+            self.logzero_logger.info(f'💾 saved xlsx: {response.request.url} > {tmp_xlsx}')
 
         df = pd.read_excel(tmp_xlsx, sheet_name='リスト').fillna({'電話番号': '', 'URL': ''})
         for _, row in df.iterrows():
