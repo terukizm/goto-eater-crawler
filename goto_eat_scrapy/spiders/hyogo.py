@@ -1,5 +1,6 @@
 import re
 import scrapy
+import urllib.parse
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
@@ -24,7 +25,6 @@ class HyogoSpider(AbstractSpider):
             item['zip_code'] = places[0].strip().replace('〒', '')
 
             item['tel'] = article.xpath('.//span[contains(text(), "TEL：")]/following-sibling::span/a/text()').get()
-            item['detail_page'] = article.xpath('.//div/p[@class="search-results-list-btn"]/a/@href').get().strip()
 
             # MEMO: 詳細ページ中にも「ジャンル」に相当する情報がHTMLに含まれていないため、「ジャンル」を抜いてくる方法がない。
             # (おそらく内部的にはデータとして保持しているが、検索クエリで当てていく以外に取得する方法がない)
@@ -32,6 +32,10 @@ class HyogoSpider(AbstractSpider):
             # 結果のマージがめんどくさく、とりあえず兵庫県については「ジャンルなし」で固定とした。
             item['genre_name'] = None
 
+            # MEMO: 詳細ページに何故か(ページネーション関係？)で?page=xxxというクエリパラメータがつくが、これによってCSVの差分が発生してしまうので削除
+            url = article.xpath('.//div/p[@class="search-results-list-btn"]/a/@href').get().strip()
+            parse_result = urllib.parse.urlparse(url)
+            item['detail_page'] = url.replace(parse_result.query, '')[:-1]
 
             yield item
 
