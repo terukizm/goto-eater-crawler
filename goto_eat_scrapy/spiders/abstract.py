@@ -37,5 +37,5 @@ class AbstractSpider(scrapy.Spider):
 
     def _errback_handle(self, failure, response, spider):
         # @see https://blog.mudatobunka.org/entry/2016/09/24/232456
-        spider.logzero_logger.error(f'### {spider.name} Spider Error ###')
+        spider.logzero_logger.error(f'Spider Error ### {spider.name} ###')
         spider.logzero_logger.error('{} {}'.format(failure.type, failure.getErrorMessage()))
