@@ -1,5 +1,6 @@
 import re
 import scrapy
+import urllib.parse
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
@@ -33,7 +34,13 @@ class shimaneSpider(AbstractSpider):
     def detail(self, response):
         self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
         item = ShopItem()
-        item['detail_page'] = response.request.url
+
+        # MEMO: 詳細ページに?page=xxxというクエリパラメータがつくが、これによってCSVの差分が発生してしまうので削除
+        # (どうも検索一覧画面に戻るときにページネーションを保持するための値っぽい… そんなん引き回す…？)
+        url = response.request.url
+        parse_result = urllib.parse.urlparse(url)
+        item['detail_page'] = url.replace(parse_result.query, '')[:-1]
+
         item['area_name'] = response.xpath('//div[contains(@class, "com-location")]/p[contains(@class, "area")]/span/text()').get().strip()
 
         item['shop_name'] = response.xpath('//h1[@class="title"]/text()').get().strip()
