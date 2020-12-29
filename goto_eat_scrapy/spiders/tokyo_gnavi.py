@@ -5,12 +5,12 @@ import json
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
-class TokyoSpider(AbstractSpider):
+class TokyoGnaviSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl tokyo -O tokyo.csv
+      $ scrapy crawl tokyo_gnavi -O tokyo.csv
     """
-    name = 'tokyo'
+    name = 'tokyo_gnavi'
     allowed_domains = [ 'r.gnavi.co.jp' ]
 
     # 企業サイトなので(それもどうかと思うが…) 一応気を使う
@@ -19,14 +19,13 @@ class TokyoSpider(AbstractSpider):
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         'DOWNLOAD_DELAY': 1,
-        # MEMO: 16k件以上ある → 11/28に見たら23k件超えてた → 12/12に見たら31k超え...
+        # MEMO: 16k件以上ある → 11/28に見たら23k件超えてた → 12/29に見たら32k超え...
         # 詳細ページまで見ないといけないので秒間1件で許して…
     }
 
     start_urls = [
         # 食事券対象店(すべて)を対象とする
         # MEMO: 都内全体だと31k(12/12現在)くらいあるので、自分用の場合は特定エリアだけに絞って実行するとよい
-        # ただし個々に実行すると
 
         # 都内全体
         'https://r.gnavi.co.jp/area/tokyo/kods17214/rs/?gtet_all=1&resp=1&fwp=%E6%9D%B1%E4%BA%AC%E9%83%BD',   # 東京都
