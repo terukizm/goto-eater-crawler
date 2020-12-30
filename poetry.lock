@@ -437,6 +437,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "pymupdf"
+version = "1.18.5"
+description = "Python bindings for the PDF rendering library MuPDF"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pyopenssl"
 version = "20.0.0"
 description = "Python wrapper module around the OpenSSL library"
@@ -722,7 +730,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "03c256bea735a8b89af1f18e1414bea18a6527a826c91dd949f83a29193f76fe"
+content-hash = "477db50e0340ac575141f3aba9a5aebf2d80a0cd78183d6e909fe5fe4b1c0bbc"
 
 [metadata.files]
 agate = [
@@ -1047,6 +1055,25 @@ pyee = [
 pyhamcrest = [
     {file = "PyHamcrest-2.0.2-py3-none-any.whl", hash = "sha256:7ead136e03655af85069b6f47b23eb7c3e5c221aa9f022a4fbb499f5b7308f29"},
     {file = "PyHamcrest-2.0.2.tar.gz", hash = "sha256:412e00137858f04bde0729913874a48485665f2d36fe9ee449f26be864af9316"},
+]
+pymupdf = [
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:5317389463a0b05ca929011b3915e9a0b79cf7bab21a369073697bc3c6bd9216"},
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:d085480542e873b746972af7ff07148e3822e626815212c92180f4104044d891"},
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-win32.whl", hash = "sha256:7ce1639ca0d2c0dba08a41499798c5cf05fd475a2ea83a16a6b5e4eefb44ad69"},
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-win_amd64.whl", hash = "sha256:abec339f8d19ebbc115638e867a6b8af2eb02956fabfbd3c23762e0a29e67a9f"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5c84bb30dbefbc03fe95cbcf68045e1b4b39c7de713e84bb14fdab7b7a082448"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:e3ce406e95b8cf49bfdf7be15a9ba67d210982b3358c5451bf02fdf389bc5f02"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-win32.whl", hash = "sha256:97e1349cf7f2f581906563ec0f020c92b02ae364f07daf72b028d0042432ba68"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-win_amd64.whl", hash = "sha256:90de33c2c425d7bb15badb01073aa0610950725c96d4a8439c001ac5ffa7aa94"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:055f96f407ff46428bfa30c12a72cc94dc07d694f2debc1ae86319afa7c19952"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:9d90c4d83fe0639e9344311f32c4cb7bbd96ef6b0f80d48b2d878aa6af77276a"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-win32.whl", hash = "sha256:bb691145720a72287489c2804e6bc0aca0c27592a26f8efc979cfdaaef224d16"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-win_amd64.whl", hash = "sha256:43f42f5cc9543255469fca484b5e6e6be9963bc691d3487c0516b075658bcbd8"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:bf55a95ef59cb7393fb1dcd0e82aee8de4036527ca1cf16ec8a3052ec22d11d3"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:38b2cbd7c42025601d7cf57d92adb187862dd4cf0292eefd279ec80ffe9f30ef"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-win32.whl", hash = "sha256:2a0fde5f94d2a8d5deb7ed97e3ded5a78a287e14522e3266219726ee5b821e7a"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-win_amd64.whl", hash = "sha256:de0a18f9f283bb9775a9e6c7ed364a37ce5dbbdcf0afb0c3a9ecf301a4c1cd2e"},
+    {file = "PyMuPDF-1.18.5.tar.gz", hash = "sha256:ab710e069531922c75daca7f9abcce86cf2d04c01394445b2b830b5462a144ba"},
 ]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.0-py2.py3-none-any.whl", hash = "sha256:898aefbde331ba718570244c3b01dcddb1b31a3b336613436a45e52e27d9a82d"},
