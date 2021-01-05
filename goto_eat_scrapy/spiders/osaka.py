@@ -28,6 +28,12 @@ class OsakaSpider(AbstractSpider):
         '泉州',
     ]
 
+    # MEMO: 稀に504 Gateway Time-outになるので、DELAYを多めに設定して様子見
+    # ただし大阪はそもそも件数が多いので、あまり多くしすぎると時間がかかってしまう
+    custom_settings = {
+        'DOWNLOAD_DELAY': 4,
+    }
+
     def parse(self, response):
         # 各加盟店情報を抽出
         self.logzero_logger.info(f'💾 url = {response.request.url}')
