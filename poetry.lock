@@ -194,6 +194,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "distro"
+version = "1.5.0"
+description = "Distro - an OS platform information API"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "et-xmlfile"
 version = "1.0.1"
 description = "An implementation of lxml.xmlfile for the standard library"
@@ -437,6 +445,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "pymupdf"
+version = "1.18.5"
+description = "Python bindings for the PDF rendering library MuPDF"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "pyopenssl"
 version = "20.0.0"
 description = "Python wrapper module around the OpenSSL library"
@@ -619,6 +635,24 @@ postgresql_psycopg2cffi = ["psycopg2cffi"]
 pymysql = ["pymysql"]
 
 [[package]]
+name = "tabula-py"
+version = "2.2.0"
+description = "Simple wrapper for tabula-java, read tables from PDF into DataFrame"
+category = "main"
+optional = false
+python-versions = ">=3.5"
+
+[package.dependencies]
+distro = "*"
+numpy = "*"
+pandas = ">=0.25.3"
+
+[package.extras]
+dev = ["pytest", "flake8", "black", "isort"]
+doc = ["sphinx", "sphinx-rtd-theme"]
+test = ["pytest"]
+
+[[package]]
 name = "text-unidecode"
 version = "1.3"
 description = "The most basic Text::Unidecode port"
@@ -722,7 +756,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "03c256bea735a8b89af1f18e1414bea18a6527a826c91dd949f83a29193f76fe"
+content-hash = "4c51971d71d2a87cb4d6fa2693151bae7e760614b62522f32cb630528283fffc"
 
 [metadata.files]
 agate = [
@@ -842,6 +876,10 @@ csvkit = [
 dbfread = [
     {file = "dbfread-2.0.7-py2.py3-none-any.whl", hash = "sha256:f604def58c59694fa0160d7be5d0b8d594467278d2bb6a47d46daf7162c84cec"},
     {file = "dbfread-2.0.7.tar.gz", hash = "sha256:07c8a9af06ffad3f6f03e8fe91ad7d2733e31a26d2b72c4dd4cfbae07ee3b73d"},
+]
+distro = [
+    {file = "distro-1.5.0-py2.py3-none-any.whl", hash = "sha256:df74eed763e18d10d0da624258524ae80486432cd17392d9c3d96f5e83cd2799"},
+    {file = "distro-1.5.0.tar.gz", hash = "sha256:0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92"},
 ]
 et-xmlfile = [
     {file = "et_xmlfile-1.0.1.tar.gz", hash = "sha256:614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b"},
@@ -1048,6 +1086,25 @@ pyhamcrest = [
     {file = "PyHamcrest-2.0.2-py3-none-any.whl", hash = "sha256:7ead136e03655af85069b6f47b23eb7c3e5c221aa9f022a4fbb499f5b7308f29"},
     {file = "PyHamcrest-2.0.2.tar.gz", hash = "sha256:412e00137858f04bde0729913874a48485665f2d36fe9ee449f26be864af9316"},
 ]
+pymupdf = [
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:5317389463a0b05ca929011b3915e9a0b79cf7bab21a369073697bc3c6bd9216"},
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:d085480542e873b746972af7ff07148e3822e626815212c92180f4104044d891"},
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-win32.whl", hash = "sha256:7ce1639ca0d2c0dba08a41499798c5cf05fd475a2ea83a16a6b5e4eefb44ad69"},
+    {file = "PyMuPDF-1.18.5-cp36-cp36m-win_amd64.whl", hash = "sha256:abec339f8d19ebbc115638e867a6b8af2eb02956fabfbd3c23762e0a29e67a9f"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:5c84bb30dbefbc03fe95cbcf68045e1b4b39c7de713e84bb14fdab7b7a082448"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:e3ce406e95b8cf49bfdf7be15a9ba67d210982b3358c5451bf02fdf389bc5f02"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-win32.whl", hash = "sha256:97e1349cf7f2f581906563ec0f020c92b02ae364f07daf72b028d0042432ba68"},
+    {file = "PyMuPDF-1.18.5-cp37-cp37m-win_amd64.whl", hash = "sha256:90de33c2c425d7bb15badb01073aa0610950725c96d4a8439c001ac5ffa7aa94"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:055f96f407ff46428bfa30c12a72cc94dc07d694f2debc1ae86319afa7c19952"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:9d90c4d83fe0639e9344311f32c4cb7bbd96ef6b0f80d48b2d878aa6af77276a"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-win32.whl", hash = "sha256:bb691145720a72287489c2804e6bc0aca0c27592a26f8efc979cfdaaef224d16"},
+    {file = "PyMuPDF-1.18.5-cp38-cp38-win_amd64.whl", hash = "sha256:43f42f5cc9543255469fca484b5e6e6be9963bc691d3487c0516b075658bcbd8"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:bf55a95ef59cb7393fb1dcd0e82aee8de4036527ca1cf16ec8a3052ec22d11d3"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:38b2cbd7c42025601d7cf57d92adb187862dd4cf0292eefd279ec80ffe9f30ef"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-win32.whl", hash = "sha256:2a0fde5f94d2a8d5deb7ed97e3ded5a78a287e14522e3266219726ee5b821e7a"},
+    {file = "PyMuPDF-1.18.5-cp39-cp39-win_amd64.whl", hash = "sha256:de0a18f9f283bb9775a9e6c7ed364a37ce5dbbdcf0afb0c3a9ecf301a4c1cd2e"},
+    {file = "PyMuPDF-1.18.5.tar.gz", hash = "sha256:ab710e069531922c75daca7f9abcce86cf2d04c01394445b2b830b5462a144ba"},
+]
 pyopenssl = [
     {file = "pyOpenSSL-20.0.0-py2.py3-none-any.whl", hash = "sha256:898aefbde331ba718570244c3b01dcddb1b31a3b336613436a45e52e27d9a82d"},
     {file = "pyOpenSSL-20.0.0.tar.gz", hash = "sha256:92f08eccbd73701cf744e8ffd6989aa7842d48cbe3fea8a7c031c5647f590ac5"},
@@ -1133,6 +1190,10 @@ sqlalchemy = [
     {file = "SQLAlchemy-1.3.20-cp39-cp39-win32.whl", hash = "sha256:0cca1844ba870e81c03633a99aa3dc62256fb96323431a5dec7d4e503c26372d"},
     {file = "SQLAlchemy-1.3.20-cp39-cp39-win_amd64.whl", hash = "sha256:d05cef4a164b44ffda58200efcb22355350979e000828479971ebca49b82ddb1"},
     {file = "SQLAlchemy-1.3.20.tar.gz", hash = "sha256:d2f25c7f410338d31666d7ddedfa67570900e248b940d186b48461bd4e5569a1"},
+]
+tabula-py = [
+    {file = "tabula-py-2.2.0.tar.gz", hash = "sha256:bb4b8bb37616b4baf74deed7114e75bfcf0faa41bc55d2aa04834f56a98ab838"},
+    {file = "tabula_py-2.2.0-py3-none-any.whl", hash = "sha256:ab225dcc1715a8e1c64dce57efc5318f18ff7c4ef2398bbd8787591c0d6edcbb"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
