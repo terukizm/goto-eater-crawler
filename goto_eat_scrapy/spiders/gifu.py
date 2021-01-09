@@ -55,7 +55,7 @@ class GifuSpider(AbstractSpider):
 
             place_list = tr.xpath('.//tr/th[contains(text(), "住所情報")]/following-sibling::td/text()').getall()
             item['zip_code'] = place_list[0].strip()
-            item['address'] = ''.join(place_list[1:]).strip()
+            item['address'] = ' '.join(place_list[1:]).strip()
 
             # 岐阜もテーブル構造(tr)が壊れてた…
             item['tel'] = tr.xpath('.//th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()

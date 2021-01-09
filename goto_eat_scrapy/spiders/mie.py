@@ -52,7 +52,7 @@ class MieSpider(AbstractSpider):
 
             place_list = tr.xpath('.//tr/th[contains(text(), "住所情報")]/following-sibling::td/text()').getall()
             item['zip_code'] = place_list[0].strip()
-            item['address'] = ''.join(place_list[1:]).strip()
+            item['address'] = ' '.join(place_list[1:]).strip()
 
             # MEMO: 「電話番号」だけテーブル構造が壊れてて<tr>タグがないのに注意。ブラウザだと普通にレンダリング表示されるのでハマった…
             item['tel'] = tr.xpath('.//th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
