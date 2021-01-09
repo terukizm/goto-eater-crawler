@@ -194,6 +194,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "demjson"
+version = "2.2.4"
+description = "encoder, decoder, and lint/validator for JSON (JavaScript Object Notation) compliant with RFC 7159"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "distro"
 version = "1.5.0"
 description = "Distro - an OS platform information API"
@@ -756,7 +764,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.6"
-content-hash = "4c51971d71d2a87cb4d6fa2693151bae7e760614b62522f32cb630528283fffc"
+content-hash = "f9cb96a9e3bfae53b6f55198f88c35980c8b15eb1c04efda9fc649d1aea52a2c"
 
 [metadata.files]
 agate = [
@@ -876,6 +884,9 @@ csvkit = [
 dbfread = [
     {file = "dbfread-2.0.7-py2.py3-none-any.whl", hash = "sha256:f604def58c59694fa0160d7be5d0b8d594467278d2bb6a47d46daf7162c84cec"},
     {file = "dbfread-2.0.7.tar.gz", hash = "sha256:07c8a9af06ffad3f6f03e8fe91ad7d2733e31a26d2b72c4dd4cfbae07ee3b73d"},
+]
+demjson = [
+    {file = "demjson-2.2.4.tar.gz", hash = "sha256:31de2038a0fdd9c4c11f8bf3b13fe77bc2a128307f965c8d5fb4dc6d6f6beb79"},
 ]
 distro = [
     {file = "distro-1.5.0-py2.py3-none-any.whl", hash = "sha256:df74eed763e18d10d0da624258524ae80486432cd17392d9c3d96f5e83cd2799"},
