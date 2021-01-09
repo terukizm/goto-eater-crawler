@@ -70,7 +70,8 @@ class KagoshimaSpider(AbstractSpider):
                 item = ShopItem()
                 # MEMO: 店舗名、住所に改行が入ってるものがある(item pipelineで対応)
                 item['shop_name'] = article.xpath('.//td[3]/text()').get().strip()
-                item['address'] = article.xpath('./td[4]/text()').get().strip()
+                address = article.xpath('./td[4]/text()').get().strip()
+                item['address'] = f'鹿児島市{address}' if area_name == '鹿児島市全域' else address
                 # item['genre_name'] = None   # 鹿児島はジャンル情報なし
 
                 # MEMO: エリア名はhtmlから取れなくもないが、Excelベースの表構造になっているので相当しんどい
