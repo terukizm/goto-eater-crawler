@@ -26,7 +26,7 @@ class Main():
         if not targets:  # all
             # 特定の都道府県を除いて一括実行
             ignores = [
-                'tokyo',     # 企業サイトであり、かつ件数が多く、詳細ページまで見る必要があり、アクセスが多くなってしまうため
+                'tokyo_gnavi', # 企業サイトであり、かつ件数が多く、詳細ページまで見る必要があり、アクセスが多くなってしまうため。東京都はPDF版クローラで対応。
                 'tokushima', # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
             ]
             process = CrawlerProcess(self.settings)

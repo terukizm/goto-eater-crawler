@@ -8,7 +8,7 @@ from goto_eat_scrapy.spiders.abstract import AbstractSpider
 class TokyoGnaviSpider(AbstractSpider):
     """
     usage:
-      $ scrapy crawl tokyo_gnavi -O tokyo.csv
+      $ scrapy crawl tokyo_gnavi -O tokyo_gnavi.csv
     """
     name = 'tokyo_gnavi'
     allowed_domains = [ 'r.gnavi.co.jp' ]
