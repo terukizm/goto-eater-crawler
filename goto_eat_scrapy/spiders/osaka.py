@@ -31,7 +31,7 @@ class OsakaSpider(AbstractSpider):
     # MEMO: 稀に504 Gateway Time-outになるので、DELAYを多めに設定して様子見
     # ただし大阪はそもそも件数が多いので、あまり多くしすぎると時間がかかってしまう
     custom_settings = {
-        'DOWNLOAD_DELAY': 4,
+        'DOWNLOAD_DELAY': 5,
     }
 
     def parse(self, response):
