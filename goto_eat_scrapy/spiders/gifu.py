@@ -48,14 +48,15 @@ class GifuSpider(AbstractSpider):
         item['detail_page'] = response.request.url
         self.logzero_logger.info(f'💾 url(detail) = {response.request.url}')
         for tr in response.xpath('//table[@class="smp-card-list"]'):
-            item['shop_name'] = tr.xpath('.//tr/th[contains(text(), "店舗名")]/following-sibling::td/text()').get().strip()
+            shop_name = tr.xpath('.//tr/th[contains(text(), "店舗名")]/following-sibling::td/text()').get().strip()
+            item['shop_name'] = shop_name
             item['genre_name'] = tr.xpath('.//tr/th[contains(text(), "業態")]/following-sibling::td/text()').get().strip()
             item['official_page'] = tr.xpath('.//tr/th[contains(text(), "WEB URL")]/following-sibling::td/a/@href').get()
             item['area_name'] = tr.xpath('.//tr/th[contains(text(), "店舗エリア")]/following-sibling::td/text()').get().strip()
 
             place_list = tr.xpath('.//tr/th[contains(text(), "住所情報")]/following-sibling::td/text()').getall()
             item['zip_code'] = place_list[0].strip()
-            item['address'] = ' '.join(place_list[1:]).strip()
+            item['address'] = ' '.join(place_list[1:]).strip().replace(shop_name, '')   # 何故か住所中に店舗名が含まれるのがあるので暫定対応
 
             # 岐阜もテーブル構造(tr)が壊れてた…
             item['tel'] = tr.xpath('.//th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
