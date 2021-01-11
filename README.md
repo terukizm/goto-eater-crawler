@@ -8,7 +8,7 @@ Scrapyをベースにしていますが、北海道と大分県については�
 
 ## Scrapyコマンドで実行
 
-ログ出力、成果物出力等はScrapyコマンドに準拠します。
+ログ出力、成果物出力等はScrapyコマンドに準拠。
 
 ### poetry利用
 
@@ -58,7 +58,7 @@ $ poetry run python main.py
 $ docker-compose run crawler python main.py
 ```
 
-なお、`--target` を加えることで任意の都道府県だけ実行できます。,区切りで複数指定も可能です。
+`--target` を加えることで任意の都道府県だけ実行できます。,区切りで複数指定も可能。
 
 ```
 $ poetry run python main.py --target fukuoka
