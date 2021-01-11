@@ -18,9 +18,12 @@ PyMuPDF = "^1.18.5"
 tabula-py = "^2.2.0"
 demjson = "^2.2.4"
 
-[tool.poetry.dev-dependencies]
+
 black = "^20.8b1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 120
