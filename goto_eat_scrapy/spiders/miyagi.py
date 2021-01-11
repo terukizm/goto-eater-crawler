@@ -1,6 +1,8 @@
-import demjson
 import re
+
+import demjson
 import scrapy
+
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 

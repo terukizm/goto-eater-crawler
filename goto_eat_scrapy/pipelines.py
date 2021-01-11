@@ -3,12 +3,13 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
-import scrapy
 import re
+
+import scrapy
 import w3lib
 
-# useful for handling different item types with a single interface
 from itemadapter import ItemAdapter
+
 from goto_eat_scrapy.items import ShopItem
 
 

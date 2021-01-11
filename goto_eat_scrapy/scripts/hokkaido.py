@@ -1,11 +1,13 @@
-import requests
-import lxml
-import time
-import pathlib
-import pandas as pd
 import logging
+import pathlib
+import time
+
 import logzero
+import lxml
+import pandas as pd
+import requests
 from logzero import logger
+
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
 

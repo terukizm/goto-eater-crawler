@@ -1,12 +1,14 @@
 import asyncio
+import logging
+import pathlib
+
+import logzero
+import lxml.html
+import pandas as pd
+from logzero import logger
 from pyppeteer import launch
 from pyppeteer.errors import PageError
-import lxml.html
-import pathlib
-import pandas as pd
-import logging
-import logzero
-from logzero import logger
+
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
 

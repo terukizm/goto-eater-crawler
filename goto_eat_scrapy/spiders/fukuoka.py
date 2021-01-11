@@ -1,6 +1,8 @@
-import scrapy
 import pathlib
+
 import pandas as pd
+import scrapy
+
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider

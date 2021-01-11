@@ -1,6 +1,7 @@
-import scrapy
 import logging
+
 import logzero
+import scrapy
 from scrapy import signals
 
 

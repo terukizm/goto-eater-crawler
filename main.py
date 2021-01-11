@@ -1,12 +1,14 @@
-from scrapy.utils.project import get_project_settings
+import argparse
+import pathlib
+
+import pandas as pd
+from logzero import logger
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
-import pathlib
-import pandas as pd
-import argparse
-from logzero import logger
-from goto_eat_scrapy.scripts.oita import OitaCrawler
+from scrapy.utils.project import get_project_settings
+
 from goto_eat_scrapy.scripts.hokkaido import HokkaidoCrawler
+from goto_eat_scrapy.scripts.oita import OitaCrawler
 
 
 class Main:
@@ -19,9 +21,7 @@ class Main:
         settings = get_project_settings()
         settings.set("LOG_LEVEL", "WARNING")
         settings.set("FEED_FORMAT", "csv")
-        settings.set(
-            "FEED_URI", str(self.csv_dir / "%(name)s.csv")
-        )
+        settings.set("FEED_URI", str(self.csv_dir / "%(name)s.csv"))
         self.settings = settings
 
     def run(self, target):
@@ -102,11 +102,7 @@ if __name__ == "__main__":
     parser.add_argument("--target", help="例: tochigi,gunma")
     args = parser.parse_args()
 
-    base = (
-        pathlib.Path(args.basedir)
-        if args.basedir
-        else pathlib.Path(__file__).parent / "data" / "input"
-    )
+    base = pathlib.Path(args.basedir) if args.basedir else pathlib.Path(__file__).parent / "data" / "input"
     runner = Main(base)
     runner.run(args.target)
 

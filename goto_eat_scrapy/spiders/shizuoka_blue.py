@@ -1,6 +1,8 @@
 import re
+
 import scrapy
 import w3lib
+
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
 
