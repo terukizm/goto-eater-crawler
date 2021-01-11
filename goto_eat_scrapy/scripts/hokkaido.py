@@ -71,7 +71,7 @@ class HokkaidoCrawler:
         }
 
         # FIXME: 本来はこっちもキャッシュするべきなんだけど手を抜いている
-        # 各エリア最初の1回だけなので許して…
+        # 各エリア最初の1回だけなのでゆるして…
         time.sleep(self.SLEEP_SEC)
         r = self.session.post("https://gotoeat-hokkaido.jp/general/particStores/search", params, headers=self.HEADERS)
         r.raise_for_status()
