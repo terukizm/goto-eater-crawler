@@ -7,7 +7,6 @@ import re
 
 import scrapy
 import w3lib
-
 from itemadapter import ItemAdapter
 
 from goto_eat_scrapy.items import ShopItem
