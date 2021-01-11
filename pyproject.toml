@@ -40,3 +40,4 @@ multi_line_output = 3
 format = "task black && task isort"
 black = "black ."
 isort = "isort ."
+csvsort = 'csvsort -c 1 -d "," -q \"'
