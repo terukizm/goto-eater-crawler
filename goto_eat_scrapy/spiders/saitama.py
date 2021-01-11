@@ -1,20 +1,22 @@
 import os
-import urllib.parse
 import re
+import urllib.parse
+
 import scrapy
+
 from goto_eat_scrapy.items import ShopItem
 from goto_eat_scrapy.spiders.abstract import AbstractSpider
+
 
 class SaitamaSpider(AbstractSpider):
     """
     usage:
       $ scrapy crawl saitama -O saitama.csv
     """
-    name = 'saitama'
-    allowed_domains = [ 'saitama-goto-eat.com' ]    # .comとは
 
-    # 埼玉県は各市区町村の固定htmlをjQueryで読んでるだけ
-    # @see https://saitama-goto-eat.com/store.html
+    name = "saitama"
+    allowed_domains = ["saitama-goto-eat.com"]
+
     area_list = [
         "さいたま市西区",
         "さいたま市北区",
@@ -90,28 +92,30 @@ class SaitamaSpider(AbstractSpider):
         "北葛飾郡松伏町",
         "北埼玉郡騎西町",
     ]
-    start_urls = [ f'https://saitama-goto-eat.com/store/{area}.html' for area in area_list ]
+
+    def start_requests(self):
+        # 埼玉県は各市区町村の固定htmlをjQueryで読んでるだけ
+        # @see https://saitama-goto-eat.com/store.html
+        for area in self.area_list:
+            yield scrapy.Request(
+                url=f"https://saitama-goto-eat.com/store/{area}.html", callback=self.parse, meta={"area_name": area}
+            )
 
     def parse(self, response):
-        # MEMO: start_requests()でやった方がシンプルかもしれないが、愚直に
-        area_name = os.path.split(response.request.url)[1].replace('.html', '')
-        area_name = urllib.parse.unquote(area_name)
-
-        # MEMO: ジャンル別のテーブル構造になっている
-        self.logzero_logger.info(f'💾 url = {response.request.url}')
+        self.logzero_logger.info(f"💾 url = {response.request.url}")
+        area_name = response.meta["area_name"]
         for genre in response.xpath('//div[@class="tab_content"]'):
             genre_name = genre.xpath('.//div[@class="aria_genre"]/text()').get().strip()
-            # 各店の情報
             for article in genre.xpath('.//div[@class="aria_store_content"]/div[@class="storebox"]'):
                 item = ShopItem(
-                    area_name = area_name,
-                    genre_name = genre_name,
-                    shop_name = article.xpath('.//span[1]/text()').get().strip(),
-                    # (span[2]はひととおり見たが一つも入ってない)
-                    zip_code = article.xpath('.//span[3]/text()').get().strip(),
-                    address = article.xpath('.//span[4]/text()').get().strip(),
-                    tel = article.xpath('.//span[5]/text()').get(),
-                    official_page = article.xpath('.//span[6]/a/@href').get()
+                    area_name=area_name,
+                    genre_name=genre_name,
+                    shop_name=article.xpath(".//span[1]/text()").get().strip(),
+                    # MEMO: span[2]はひととおり見たが一つも入ってない
+                    zip_code=article.xpath(".//span[3]/text()").get().strip(),
+                    address=article.xpath(".//span[4]/text()").get().strip(),
+                    tel=article.xpath(".//span[5]/text()").get(),
+                    official_page=article.xpath(".//span[6]/a/@href").get(),
                 )
 
                 yield item
