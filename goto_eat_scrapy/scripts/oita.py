@@ -4,6 +4,7 @@ import pathlib
 
 import logzero
 import lxml.html
+import nest_asyncio
 import pandas as pd
 from logzero import logger
 from pyppeteer import launch
@@ -11,6 +12,8 @@ from pyppeteer.errors import PageError
 
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
+
+nest_asyncio.apply()
 
 
 class OitaCrawler:
@@ -27,12 +30,24 @@ class OitaCrawler:
     CACHE_PATH = pathlib.Path.cwd() / ".scrapy" / settings.HTTPCACHE_DIR / f"{name}_script"
     CACHE_PATH.mkdir(parents=True, exist_ok=True)
 
+    def _check_pyppeteer(self):
+        # @see https://rinoguchi.hatenablog.com/entry/2020/08/09/004925#pyppeteererrorsBrowserError-Browser-closed-unexpectedly
+        # Docker内でpyppeteerが動かない場合があるので、その確認用
+        import os
+
+        from pyppeteer.launcher import Launcher
+
+        cmd: str = " ".join(Launcher({"args": ["--no-sandbox"]}).cmd)
+        print(f"cmd: {cmd}")
+        os.system(cmd)
+
     def __init__(self, csvfile=None, logfile=None, with_cache=True):
+        # self._check_pyppeteer()
         logger_name = f"logzero_logger_{self.name}"
         if logfile:
             # ログファイルに出す(標準出力には出さない)
             self.logzero_logger = logzero.setup_logger(
-                name=logger_name, logfile=logfile, fileLoglevel=self.LOG_LEVEL, disableStderrLogger=True
+                name=logger_name, logfile=logfile, fileLoglevel=self.LOG_LEVEL, disableStderrLogger=False
             )
         else:
             # 標準出力に出すのみ
@@ -80,7 +95,8 @@ class OitaCrawler:
         """
         results = []
         response = lxml.html.fromstring(html)
-        for article in response.xpath('//li[@class="box-sh cf"]'):
+
+        for article in response.xpath('//ul[@class="shop-list cf"]/li[@class="box-sh cf"]'):
             item = ShopItem()
             item["area_name"] = article.xpath('.//div[@class="tag cf"]/p[@class="area"]/span/text()')[0].strip()
             genres = [g.strip() for g in article.xpath('.//div[@class="tag cf"]/p[@class="genre"]/span/text()')]
@@ -114,11 +130,15 @@ class OitaCrawler:
 
         # html文字列を解析
         df = pd.DataFrame(self.parse(html), columns=settings.FEED_EXPORT_FIELDS)
+
         if self.csvfile:
             df.to_csv(self.csvfile, index=False, encoding=settings.FEED_EXPORT_ENCODING)
             self.logzero_logger.info(f"  write csv. {self.csvfile}")
         else:
             self.logzero_logger.info(df)
+
+        if len(df) < 2:
+            raise Exception("CSVが空です。多分DOM構造が変わってるのでXPathを確認してください。")
 
 
 if __name__ == "__main__":
@@ -126,6 +146,7 @@ if __name__ == "__main__":
     usage:
     $ python -m goto_eat_scrapy.scripts.oita
     """
+
     crawler = OitaCrawler()
     crawler.crawl()
 
