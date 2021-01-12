@@ -100,4 +100,4 @@ ENV/
 .mypy_cache/
 
 tmp/
-result/csv/logs/
+data/input/
