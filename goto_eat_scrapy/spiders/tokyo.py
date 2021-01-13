@@ -51,7 +51,7 @@ class TokyoSpider(AbstractSpider):
             # tabulaで1ページ単位でCSVに変換してからdfに読み込む
             tmp_csv = self.CACHE_PATH / f"{prefix}_p{page_no}.csv"
             if not tmp_csv.exists():
-                tabula.convert_into(tmp_pdf, str(tmp_csv), output_format="csv", pages=page_no, lattice=True)
+                tabula.convert_into(tmp_pdf, str(tmp_csv), output_format="csv", pages=page_no, lattice=True, silent=True)
                 self.logzero_logger.info(f"💾 saved csv: >>>>>> {tmp_csv}")
 
             # ページによっては空行、空列、不要カラムを含むため、それらを除去
