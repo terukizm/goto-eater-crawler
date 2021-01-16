@@ -61,6 +61,10 @@ class MieSpider(AbstractSpider):
             item["zip_code"] = place_list[0].strip()
             item["address"] = " ".join(place_list[1:]).strip()
 
+            # MEMO: 三重県なのに愛知県名古屋市のデータが入ってるやつが6件ほどあるので暫定対応(2021/01/16)
+            if item["address"].startswith("愛知県"):
+                return
+
             # MEMO: 「電話番号」だけテーブル構造が壊れてて<tr>タグがないのに注意。ブラウザだと普通にレンダリング表示されるのでハマった…
             item["tel"] = tr.xpath('.//th[contains(text(), "電話番号")]/following-sibling::td/text()').get().strip()
 
