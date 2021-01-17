@@ -37,6 +37,12 @@ class FukushimaSpider(AbstractSpider):
                 './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[6]/span[@class="info-text"]/a/@href'
             ).get()
 
+            gmap_url = article.xpath('.//div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[@class="map-box"]/iframe[@class="acf-map"]/@src').get()
+            m = re.search("q=(?P<lat>\d+\.\d+)\,(?P<lng>\d+\.\d+)", gmap_url)
+            if m:
+                item["provided_lat"] = m.group("lat")
+                item["provided_lng"] = m.group("lng")
+
             yield item
 
         # 「NEXT」ボタンがなければ(最終ページなので)終了
