@@ -1,5 +1,3 @@
-import re
-
 import scrapy
 
 from goto_eat_scrapy.items import ShopItem

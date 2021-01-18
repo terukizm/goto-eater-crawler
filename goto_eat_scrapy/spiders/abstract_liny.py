@@ -1,7 +1,6 @@
 import json
 import pathlib
 
-import numpy as np
 import scrapy
 
 from goto_eat_scrapy.items import ShopItem

@@ -1,5 +1,4 @@
 import pathlib
-import re
 
 import pandas as pd
 import scrapy

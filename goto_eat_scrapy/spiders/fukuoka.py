@@ -1,7 +1,6 @@
 import pathlib
 
 import pandas as pd
-import scrapy
 
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem

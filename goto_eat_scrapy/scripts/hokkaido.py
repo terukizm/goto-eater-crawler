@@ -6,7 +6,6 @@ import logzero
 import lxml
 import pandas as pd
 import requests
-from logzero import logger
 
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem

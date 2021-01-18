@@ -82,7 +82,7 @@ class NiigataSpider(AbstractSpider):
                 genres.append(tagtext)
             item["genre_name"] = "|".join(genres)
 
-            gmap_url = article.xpath('.//p[@class="add"]/span/a/@href').get() or ''
+            gmap_url = article.xpath('.//p[@class="add"]/span/a/@href').get() or ""
             m = re.search("\/@(?P<lat>\d+\.\d+)\,(?P<lng>\d+\.\d+)\,", gmap_url)
             if m:
                 item["provided_lat"] = m.group("lat")

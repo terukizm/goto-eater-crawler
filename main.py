@@ -1,10 +1,8 @@
 import argparse
 import pathlib
 
-import pandas as pd
 from logzero import logger
 from scrapy.crawler import CrawlerProcess
-from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 
 from goto_eat_scrapy.scripts.hokkaido import HokkaidoCrawler

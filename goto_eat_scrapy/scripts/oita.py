@@ -6,7 +6,6 @@ import logzero
 import lxml.html
 import nest_asyncio
 import pandas as pd
-from logzero import logger
 from pyppeteer import launch
 from pyppeteer.errors import PageError
 

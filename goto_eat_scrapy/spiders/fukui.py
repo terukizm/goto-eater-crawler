@@ -61,7 +61,9 @@ class FukuiSpider(AbstractSpider):
             item["closing_day"] = dl.xpath('.//dt[contains(text(), "定 休 日")]/following-sibling::dd/text()').get()
             item["official_page"] = dl.xpath('.//dt[contains(text(), "HP・SNS")]/following-sibling::dd/text()').get()
 
-            gmap_url = dl.xpath('.//dt[contains(text(), "住　　所")]/following-sibling::dd/a[@class="gmap"]/@href').get().strip()
+            gmap_url = (
+                dl.xpath('.//dt[contains(text(), "住　　所")]/following-sibling::dd/a[@class="gmap"]/@href').get().strip()
+            )
             m = re.search("q=(?P<lat>\d+\.\d+)\,(?P<lng>\d+\.\d+)", gmap_url)
             if m:
                 item["provided_lat"] = m.group("lat")

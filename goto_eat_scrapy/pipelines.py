@@ -3,13 +3,8 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 
-import re
 
-import scrapy
 import w3lib
-from itemadapter import ItemAdapter
-
-from goto_eat_scrapy.items import ShopItem
 
 
 def normalize_text(text):

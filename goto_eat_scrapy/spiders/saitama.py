@@ -1,7 +1,3 @@
-import os
-import re
-import urllib.parse
-
 import scrapy
 
 from goto_eat_scrapy.items import ShopItem
