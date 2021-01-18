@@ -15,6 +15,12 @@ class FukuiSpider(AbstractSpider):
     name = "fukui"
     allowed_domains = ["gotoeat-fukui.com"]
 
+    # MEMO: 稀に503になるので、個別にDELAYを多めに設定して様子見
+    # ただし福井はそもそも詳細ページまで回してて件数が多いので、あまり多くしすぎると時間がかかってしまう
+    custom_settings = {
+        "DOWNLOAD_DELAY": 4,
+    }
+
     def start_requests(self):
         params = {"Keyword": "", "Action": "text_search"}
         yield scrapy.FormRequest(
@@ -54,5 +60,11 @@ class FukuiSpider(AbstractSpider):
             )
             item["closing_day"] = dl.xpath('.//dt[contains(text(), "定 休 日")]/following-sibling::dd/text()').get()
             item["official_page"] = dl.xpath('.//dt[contains(text(), "HP・SNS")]/following-sibling::dd/text()').get()
+
+            gmap_url = dl.xpath('.//dt[contains(text(), "住　　所")]/following-sibling::dd/a[@class="gmap"]/@href').get().strip()
+            m = re.search("q=(?P<lat>\d+\.\d+)\,(?P<lng>\d+\.\d+)", gmap_url)
+            if m:
+                item["provided_lat"] = m.group("lat")
+                item["provided_lng"] = m.group("lng")
 
         return item
