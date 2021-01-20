@@ -31,7 +31,7 @@ class Main:
                 "tokushima",  # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
             ]
             process = CrawlerProcess(self.settings)
-            targets = [x for x in process.spiders.list() if not x in ignores]
+            targets = [x for x in process.spider_loader.list() if not x in ignores]
             targets += ["hokkaido", "oita"]
 
         if "hokkaido" in targets:
