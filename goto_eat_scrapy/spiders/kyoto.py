@@ -18,7 +18,7 @@ class KyotoSpider(AbstractSpider):
 
     # MEMO: detailまで回すので
     custom_settings = {
-        "DOWNLOAD_DELAY": 1.5,
+        "DOWNLOAD_DELAY": 1.2,
     }
 
     def parse(self, response):

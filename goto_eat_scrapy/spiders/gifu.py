@@ -25,7 +25,7 @@ class GifuSpider(AbstractSpider):
         "CONCURRENT_REQUESTS": 1,
         "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
         "CONCURRENT_REQUESTS_PER_IP": 0,
-        "DOWNLOAD_DELAY": 2,  # 詳細ページまで見ないといけないので(4000件前後だからゆるして…)
+        "DOWNLOAD_DELAY": 1.7,  # 詳細ページまで見ないといけないので(4000件前後だからゆるして…)
     }
 
     def parse(self, response):
