@@ -116,4 +116,4 @@ FEED_EXPORT_FIELDS = [
 # LOG_LEVEL = 'DEBUG'
 
 # リトライ回数(default=2)
-RETRY_TIMES = 5
+RETRY_TIMES = 8
