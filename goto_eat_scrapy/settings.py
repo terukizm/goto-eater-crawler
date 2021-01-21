@@ -54,9 +54,11 @@ CONCURRENT_REQUESTS_PER_IP = 0
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'goto_eat_scrapy.middlewares.GotoEatScrapyDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+    "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
+    "goto_eat_scrapy.middlewares.GotoEatScrapyDownloaderMiddleware": 543,
+    "goto_eat_scrapy.middlewares.CustomRetryMiddleware": 550,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
