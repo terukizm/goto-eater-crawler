@@ -93,7 +93,7 @@ class MiyagiSpider(AbstractSpider):
             m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
             item["address"] = m.group("address").strip()
             item["zip_code"] = m.group("zip_code").strip()
-            item["tel"] = article.xpath(".//dd[3]/span[2]/text()").get().strip()
+            item["tel"] = article.xpath(".//dd[3]/span[2]/text()").get()
 
             # MEMO: 本来は@hrefで取りたいが、aリンクが貼られてないのもあるため(2020/11/28)
             item["official_page"] = article.xpath('.//dd[4]/span[@class="url"]/text()').get()
