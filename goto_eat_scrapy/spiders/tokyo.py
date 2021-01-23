@@ -56,10 +56,22 @@ class TokyoSpider(AbstractSpider):
                 )
                 self.logzero_logger.info(f"💾 saved csv: >>>>>> {tmp_csv}")
 
-            # ページによっては空行、空列、不要カラムを含むため、それらを除去
-            df = pd.read_csv(tmp_csv, dtype=str).dropna(how="all").dropna(how="all", axis=1).reset_index(drop=True)
-            df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]
-            df = df.drop(["紙", "電子"], axis=1).fillna("")
+            try:
+                # ページによっては空行、空列、不要カラムを含むため、それらを除去
+                df = pd.read_csv(tmp_csv, dtype=str).dropna(how="all").dropna(how="all", axis=1).reset_index(drop=True)
+                df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]
+                df = df.drop(["紙", "電子"], axis=1).fillna("")
+            except ValueError:
+                # 最終ページで行数が少ないなど、1ページ中に有効なURLが1件もない場合に空行とみなされて
+                # 該当行のURL列が削除されてしまうため、暫定対応
+                df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "業態"]
+                df = df.drop(["紙", "電子"], axis=1).fillna("")
+                df["URL"] = ""
+            except Exception:
+                self.logzero_logger.error(f"❗ {page_no}")
+                self.logzero_logger.error(f"❗ {df}")
+                raise
+
             for _, row in df.iterrows():
                 if row["飲食店名"] == "飲食店名":
                     # MEMO: 特定ページでヘッダ列がうまく処理できない(データレコードに含まれてしまう)ことがあるため
