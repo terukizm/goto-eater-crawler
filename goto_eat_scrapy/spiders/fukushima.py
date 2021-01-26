@@ -25,16 +25,16 @@ class FukushimaSpider(AbstractSpider):
             item["genre_name"] = article.xpath('.//a/p[@class="result-cat"]/span/text()').get().strip()
 
             item["tel"] = article.xpath(
-                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[3]/span[@class="info-text"]/text()'
+                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li/span[contains(text(), "電話")]/following-sibling::span/text()'
             ).get()
             item["opening_hours"] = article.xpath(
-                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[4]/span[@class="info-text"]/text()'
+                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li/span[contains(text(), "営業時間")]/following-sibling::span/text()'
             ).get()
             item["closing_day"] = article.xpath(
-                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[5]/span[@class="info-text"]/text()'
+                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li/span[contains(text(), "定休日")]/following-sibling::span/text()'
             ).get()
             item["official_page"] = article.xpath(
-                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[6]/span[@class="info-text"]/a/@href'
+                './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li/span[contains(text(), "URL")]/following-sibling::span/a/@href'
             ).get()
 
             gmap_url = article.xpath(
