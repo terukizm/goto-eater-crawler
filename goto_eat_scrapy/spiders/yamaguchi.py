@@ -26,7 +26,7 @@ class YamaguchiSpider(AbstractSpider):
         ]
         for area in area_list:
             url = "https://gotoeat-yamaguchi.com/use/?post_type=post&s=&cat_area%5B%5D={}".format(area["code"])
-            yield scrapy.Request(url, callback=self.parse, meta={"area_name": area["name"]})
+            yield scrapy.Request(url, callback=self.parse, meta={"area_name": area["name"], 'cookiejar': area["code"]})
 
     def parse(self, response):
         self.logzero_logger.info(f"💾 url = {response.request.url}")
