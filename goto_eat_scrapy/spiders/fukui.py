@@ -49,7 +49,7 @@ class FukuiSpider(AbstractSpider):
             # 参考: https://gotoeat-fukui.com/shop/?id=180097  (にしても画像がうまそうでつらい)
             # 元データが修正されれば以下の実装でよい
             # genre_name = dl.xpath('.//dt[contains(text(), "ジャンル")]/following-sibling::dd/text()').get().strip()
-            genre_name = dl.xpath(".//dt[1]/dd/text()").get()
+            genre_name = dl.xpath(".//dd[1]/text()").get()
             genre_name = genre_name.strip() if genre_name else ""  # はまもとだけの例外対応
             item["genre_name"] = genre_name.replace("、", "|")  # 複数ジャンルあり
 
