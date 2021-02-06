@@ -30,7 +30,7 @@ class OitaCrawler:
     CACHE_PATH.mkdir(parents=True, exist_ok=True)
 
     def _check_pyppeteer(self):
-        # @see https://rinoguchi.hatenablog.com/entry/2020/08/09/004925#pyppeteererrorsBrowserError-Browser-closed-unexpectedly
+        # @see https://rinoguchi.net/2020/08/pyppeteer-manual.html
         # Docker内でpyppeteerが動かない場合があるので、その確認用
         import os
 
