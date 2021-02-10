@@ -143,7 +143,8 @@ class OitaCrawler:
 if __name__ == "__main__":
     """
     usage:
-    $ python -m goto_eat_scrapy.scripts.oita
+    $ PYPPETEER_CHROMIUM_REVISION=839847 python -m goto_eat_scrapy.scripts.oita
+    (無指定で使われるREV=588429のChromium(古い)だと大分県のサイトが表示できなかったので)
     """
 
     crawler = OitaCrawler()
