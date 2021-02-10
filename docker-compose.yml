@@ -8,3 +8,4 @@ services:
       - ./:/app
     environment:
       TZ: Asia/Tokyo
+      # PYPPETEER_CHROMIUM_REVISION: 839847
