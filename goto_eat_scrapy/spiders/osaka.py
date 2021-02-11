@@ -36,9 +36,12 @@ class OsakaSpider(AbstractSpider):
 
     # MEMO: 稀に504 Gateway Time-outになるので、個別にDELAYを多めに設定して様子見
     # ただし大阪はそもそも件数が多いので、あまり多くしすぎると時間がかかってしまう
-    custom_settings = {
-        "DOWNLOAD_DELAY": 6,
-    }
+    # 2020/02/12 backoff retryを実装して5分程度ならリトライで拾えるはず
+    # 逆に言えばそれでも504で対応しきれなかったので、サーバメンテナンスだったのではないかと思われる
+    # とりあえず元に戻して暫定対処
+    # custom_settings = {
+    #     "DOWNLOAD_DELAY": 6,
+    # }
 
     def parse(self, response):
 
