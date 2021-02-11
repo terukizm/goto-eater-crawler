@@ -39,10 +39,6 @@ class naraSpider(AbstractSpider):
 
         df = pd.read_excel(tmp_xlsx, sheet_name="リスト", dtype=str).fillna({"電話番号": "", "URL": ""})
         for _, row in df.iterrows():
-            # hotfix: 2021/02/03 "梅酒ダイニングT.O.M"の住所が未入力
-            if pd.isna(row["住所"]):
-                continue
-
             item = ShopItem()
             item["area_name"] = row["エリア"].strip()
             item["shop_name"] = row["店舗名称"]  # MEMO: 店舗名に改行が入ってるものがある
