@@ -71,13 +71,13 @@ class TokyoSpider(AbstractSpider):
                     df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]
                     df = df[df.query("店舗住所 == '店舗住所' & 飲食店名 == '飲食店名'") != -1]
                 # URL列が全部空になってるときがある(URLが存在しなくなってしまうので補填)
-                if len(df.columns) == 6 and not "URL" in df.columns:
+                if not "URL" in df.columns:
                     df["URL"] = ""
 
                 df = df[["飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]].fillna("")
             except Exception as e:
                 self.logzero_logger.error(e)
-                self.logzero_logger.error(f"❗ {page_no}")
+                self.logzero_logger.error(f"❗ {tmp_csv}")
                 self.logzero_logger.error(f"❗ {df}")
                 raise
 
