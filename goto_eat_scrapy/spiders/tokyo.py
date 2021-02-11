@@ -24,6 +24,8 @@ class TokyoSpider(AbstractSpider):
     CACHE_PATH.mkdir(parents=True, exist_ok=True)
 
     def parse(self, response):
+        ## MEMO: 東京のshop4.pdfは特によくコケるのでデバッグ用に
+        # yield scrapy.Request('https://pr.gnavi.co.jp/promo/gotoeat-tokyo/pdf/shop4.pdf', callback=self.parse_from_pdf)
         for li in response.xpath('//section[@id="c-search__pdf"]/ul/li'):
             pdf_url = li.xpath(".//a/@href").get().strip()
             yield scrapy.Request(pdf_url, callback=self.parse_from_pdf)
@@ -41,11 +43,10 @@ class TokyoSpider(AbstractSpider):
             f.write(response.body)
             self.logzero_logger.info(f"💾 saved pdf: {response.request.url} > {tmp_pdf}")
 
-        # MEMO: pymupdfは比較的綺麗に取れるが、空セルを読み飛ばしてしまうため、空セルがありえるURL行が難しかった。
+        # MEMO: pymupdfは比較的綺麗に取れるが、空セルを読み飛ばしてしまうため、空セルがありえるURLの対応行が難しかった。
         # また、Excelシートのヘッダー、フッター文字列(ページ番号とかを含むやつ)との兼ね合いなのか、最終ページだけ
         # 順番が入れ替わったりといった固有の問題もあり、最終的にはtabulaで1ページずつ(補正しつつ)処理していく方式とした。
-        # PDF読み込みライブラリは色々あるが、読み込むPDFによって向き不向きが非常に大きいため、一つずつ試していくしかない…
-
+        # PDF読み込みライブラリは色々あるが、読み込むPDFのデザインによって向き不向きが非常に大きいため、一つずつ試していくしかない…
         page_count = fitz.open(tmp_pdf).pageCount
         for page_no in range(1, page_count + 1):
             # tabulaで1ページ単位でCSVに変換してからdfに読み込む
@@ -59,15 +60,23 @@ class TokyoSpider(AbstractSpider):
             try:
                 # ページによっては空行、空列、不要カラムを含むため、それらを除去
                 df = pd.read_csv(tmp_csv, dtype=str).dropna(how="all").dropna(how="all", axis=1).reset_index(drop=True)
-                df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]
-                df = df.drop(["紙", "電子"], axis=1).fillna("")
-            except ValueError:
-                # 最終ページで行数が少ないなど、1ページ中に有効なURLが1件もない場合に空行とみなされて
-                # 該当行のURL列が削除されてしまうため、暫定対応
-                df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "業態"]
-                df = df.drop(["紙", "電子"], axis=1).fillna("")
-                df["URL"] = ""
-            except Exception:
+
+                # MEMO: tabulaで1ページずつpdf2csv処理すると(概ね)きれいに取れるが、罫線とか罫線内のデータとかの関係で
+                # 一部レイアウトがうまく取れない場合がある。そういった場合にdfを整形する処理
+                # (本当は生成されたcsv自体をparseしてクレンジングしてからdfに読ませる方がよいが、もうpdfこねくり回すの辛いんすよ…)
+
+                # CSVの最初の行が空白行で、ヘッダになってない場合がある
+                if len(df.columns) == 7 and not "飲食店名" in df.columns:
+                    # カラム名を強引に設定し、紛れ込んでいるヘッダ行を削除
+                    df.columns = ["紙", "電子", "飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]
+                    df = df[df.query("店舗住所 == '店舗住所' & 飲食店名 == '飲食店名'") != -1]
+                # URL列が全部空になってるときがある(URLが存在しなくなってしまうので補填)
+                if len(df.columns) == 6 and not "URL" in df.columns:
+                    df["URL"] = ""
+
+                df = df[["飲食店名", "店舗住所", "店舗電話番号", "URL", "業態"]].fillna("")
+            except Exception as e:
+                self.logzero_logger.error(e)
                 self.logzero_logger.error(f"❗ {page_no}")
                 self.logzero_logger.error(f"❗ {df}")
                 raise
