@@ -85,6 +85,10 @@ class TokyoSpider(AbstractSpider):
                 if row["飲食店名"] == "飲食店名":
                     # MEMO: 特定ページでヘッダ列がうまく処理できない(データレコードに含まれてしまう)ことがあるため
                     continue
+                if not row["飲食店名"] or not row["店舗住所"]:
+                    # MEMO: 不要カラムなどは削除してあるはずだが、PDFに空行が紛れ込んでいるため
+                    continue
+
                 item = ShopItem()
                 item["shop_name"] = row["飲食店名"]
                 item["address"] = row["店舗住所"]
