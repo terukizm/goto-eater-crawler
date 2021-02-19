@@ -25,7 +25,8 @@ class TottoriSpider(AbstractSpider):
             # comment = article.xpath('.//div[1]/p[2]/text()').get()
 
             item["address"] = article.xpath(".//div[2]/p/text()").get().strip()
-            item["tel"] = article.xpath('.//div[2]/div[@class="d-flex"]/a[contains(@class, "tel-link")]/@href').get()
+            tel = article.xpath('.//div[2]/div[@class="d-flex"]/a[contains(@class, "tel-link")]/@href').get()
+            item["tel"] = tel.replace("tel:", "") if tel else None
             item["official_page"] = article.xpath(
                 './/div[2]/div[@class="d-flex"]/a[contains(@target, "_blank")]/@href'
             ).get()
