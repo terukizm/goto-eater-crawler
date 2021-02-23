@@ -27,7 +27,7 @@ class AkitaSpider(AbstractSpider):
         self.logzero_logger.info(f"💾 saved csv: {response.request.url} > {tmp_csv}")
 
         df = pd.read_csv(tmp_csv, header=None, names=("店舗名", "市町村", "所在地", "電話番号", "公式ホームページ")).fillna(
-            {"公式ホームページ": "", "電話番号": ""}
+            ""
         )
 
         for _, row in df.iterrows():
@@ -36,6 +36,10 @@ class AkitaSpider(AbstractSpider):
             # MEMO: 店舗名情報に <!-- --> 形式で検索用(?)のふりがな/フリガナが入っているが、
             # item pipelineでHTMLタグとして剥ぎ取られる
             item["shop_name"] = row["店舗名"]
+
+            # MEMO: 2021/02/23、所在地が空になっているものがあるので暫定対処
+            if not row["所在地"]:
+                continue
 
             # 同じく検索用(?)の文字列が入っているものがあるが、こちらの入力値は利用する
             # (申請時に住所として未入力だった項目を手作業で埋めてる？)
