@@ -64,9 +64,15 @@ class NiigataSpider(AbstractSpider):
             item["official_page"] = article.xpath(".//h4/a/@href").get()
 
             place = "".join(article.xpath('.//p[@class="add"]/text()').getall()).strip()
-            m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
-            item["address"] = m.group("address")
-            item["zip_code"] = m.group("zip_code")
+            if place.startswith('〒'):
+                m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
+                item["address"] = m.group("address")
+                item["zip_code"] = m.group("zip_code")
+            else:
+                # MEMO: 2021/02/25: "ジョリーパスタ長岡今朝白店"だけ郵便番号がなく、書式が異なる
+                item["address"] = place
+                item["zip_code"] = None
+
             item["tel"] = article.xpath('.//p[@class="tel"]/text()').get()
 
             # 新潟県は「地域名」と「ジャンル名」がタグで一緒になっているため、ジャンル名だけを取得
