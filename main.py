@@ -6,7 +6,7 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 
 from goto_eat_scrapy.scripts.hokkaido import HokkaidoCrawler
-from goto_eat_scrapy.scripts.oita import OitaCrawler
+from goto_eat_scrapy.scripts.oita import crawl as oita_crawl
 
 
 class Main:
@@ -77,15 +77,13 @@ class Main:
         logger.info(f"[ {target} ]  end  ...")
 
     def run_oita(self):
-        # FIXME: 北海道・大分県のリファクタリング
         target = "oita"
         logger.info(f"[ {target} ] start ...")
         csvfile = self.csv_dir / f"{target}.csv"
         logfile = self.log_dir / f"{target}.log"
         csvfile.unlink(missing_ok=True)
         logfile.unlink(missing_ok=True)
-        c2 = OitaCrawler(csvfile, logfile)
-        c2.crawl()
+        oita_crawl(csvfile, logfile)
         logger.info(f"[ {target} ]  end  ...")
 
 
