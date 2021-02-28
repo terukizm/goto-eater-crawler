@@ -1,11 +1,10 @@
-from playwright.sync_api import sync_playwright
-
 import logging
 import pathlib
 
 import logzero
 import lxml.html
 import pandas as pd
+from playwright.sync_api import sync_playwright
 
 from goto_eat_scrapy import settings
 from goto_eat_scrapy.items import ShopItem
@@ -20,7 +19,7 @@ def run(playwright, logzero_logger):
     # iPhone11相当(webkit)でクローリングするが、UAは明示的にgoto-eaterを示す
     browser = playwright.webkit.launch(headless=True)
     device = playwright.devices["iPhone 11"]
-    device['user_agent'] = settings.USER_AGENT
+    device["user_agent"] = settings.USER_AGENT
     context = browser.new_context(**device)
 
     page = context.new_page()
@@ -32,7 +31,7 @@ def run(playwright, logzero_logger):
             page.evaluate("""{window.scrollBy(0, document.body.scrollHeight);}""")
             page.click('input[class="more"]')
             logzero_logger.debug("next page...")
-    except Exception as e:
+    except Exception:
         pass
 
     html = page.content()
@@ -80,15 +79,11 @@ def crawl(csvfile=None, logfile=None, with_cache=True):
             level=logging.INFO,
             fileLoglevel=logging.DEBUG,
             # formatter=None,
-            disableStderrLogger=False
+            disableStderrLogger=False,
         )
     else:
         # 標準出力(開発用)
-        logzero_logger = logzero.setup_logger(
-            name=name,
-            level=logging.DEBUG,
-            disableStderrLogger=False
-        )
+        logzero_logger = logzero.setup_logger(name=name, level=logging.DEBUG, disableStderrLogger=False)
 
     # クローリングは時間かかるので(開発用には)一回成功したら取得したhtmlをpickleにしてキャッシュ
     # 保存先はscrapyのhttpcacheと同じ場所(settings.HTTPCACHE_DIR)
