@@ -64,7 +64,7 @@ class NiigataSpider(AbstractSpider):
             item["official_page"] = article.xpath(".//h4/a/@href").get()
 
             place = "".join(article.xpath('.//p[@class="add"]/text()').getall()).strip()
-            if place.startswith('〒'):
+            if place.startswith("〒"):
                 m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
                 item["address"] = m.group("address")
                 item["zip_code"] = m.group("zip_code")

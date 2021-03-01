@@ -26,9 +26,7 @@ class AkitaSpider(AbstractSpider):
             f.write(response.body)
         self.logzero_logger.info(f"💾 saved csv: {response.request.url} > {tmp_csv}")
 
-        df = pd.read_csv(tmp_csv, header=None, names=("店舗名", "市町村", "所在地", "電話番号", "公式ホームページ")).fillna(
-            ""
-        )
+        df = pd.read_csv(tmp_csv, header=None, names=("店舗名", "市町村", "所在地", "電話番号", "公式ホームページ")).fillna("")
 
         for _, row in df.iterrows():
             item = ShopItem()
