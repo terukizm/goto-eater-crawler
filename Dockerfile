@@ -3,6 +3,10 @@ FROM ubuntu:focal
 # for playwright
 # @see https://github.com/microsoft/playwright-python/blob/master/Dockerfile
 
+# @see https://playwright.dev/python/docs/installation/#managing-browser-binaries
+# browser binary folder is "site-packages/playwright"
+ENV PLAYWRIGHT_BROWSERS_PATH 0
+
 # 1. Install latest Python
 RUN apt-get update && apt-get install -y python3 python3-pip && \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 && \
@@ -50,7 +54,7 @@ RUN apt-get update \
     && mkdir -p /usr/share/man/man1 && apt-get install -y openjdk-11-jdk \
     && pip install --upgrade pip \
     && pip install --no-cache-dir poetry && poetry config virtualenvs.create false && poetry install --no-dev \
-    && playwright install webkit \
+    && python -m playwright install webkit \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
