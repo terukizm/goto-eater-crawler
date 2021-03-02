@@ -1,5 +1,6 @@
 import logging
 import pathlib
+import time
 
 import logzero
 import lxml.html
@@ -30,6 +31,7 @@ def run(playwright, logzero_logger):
         while True:
             page.evaluate("""{window.scrollBy(0, document.body.scrollHeight);}""")
             page.click('input[class="more"]')
+            time.sleep(1)
             logzero_logger.debug("next page...")
     except Exception:
         pass
