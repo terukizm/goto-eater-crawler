@@ -30,8 +30,8 @@ def run(playwright, logzero_logger):
         # 無限スクロールの「もっと見る」ボタンを連打
         while True:
             page.evaluate("""{window.scrollBy(0, document.body.scrollHeight);}""")
+            time.sleep(3)
             page.click('input[class="more"]')
-            time.sleep(1)
             logzero_logger.debug("next page...")
     except Exception:
         pass
