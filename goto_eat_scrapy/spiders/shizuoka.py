@@ -28,7 +28,8 @@ class ShizuokaSpider(AbstractSpider):
             )
 
             place = article.xpath('.//div[@class="infoArea__item"][1]/div[@class="detail"]/p/text()').get().strip()
-            m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
+            m = re.match(r"〒(?P<zip_code>\d{3}-\d{4})(?P<address>.*)", place)
+            # MEMO: https://gotoeat.s-reserve.com/index/118009602.html だけ郵便番号との間に半角がない
             item["address"] = m.group("address")
             item["zip_code"] = m.group("zip_code")
 
