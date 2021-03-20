@@ -64,7 +64,7 @@ class KagoshimaSpider(AbstractSpider):
     def parse_from_area_html(self, response):
         area_name = response.meta["area_name"]
         for article in response.xpath("//table/tr"):
-            if article.xpath('.//td[2]//a[contains(text(), "検索")]').get():
+            if article.xpath('.//td[2]//*[contains(text(), "検索")]').get():
                 item = ShopItem()
                 # MEMO: 店舗名、住所に改行が入ってるものがある(item pipelineで対応)
                 item["shop_name"] = article.xpath(".//td[3]/text()").get().strip()
