@@ -51,6 +51,7 @@ class KagoshimaSpider(AbstractSpider):
     def parse(self, response):
         for p in response.xpath('//div[@id="contents_layer"]/span/p'):
             area_name = p.xpath(".//a/text()").get()
+            self.logzero_logger.info(f"🗻 area_name = {area_name}")
             if not area_name:
                 continue
             if area_name in self.not_target_area_list:
