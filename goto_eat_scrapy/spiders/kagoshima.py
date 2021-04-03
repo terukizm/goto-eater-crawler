@@ -49,15 +49,14 @@ class KagoshimaSpider(AbstractSpider):
     ]
 
     def parse(self, response):
-        for article in response.xpath('//div[@id="contents_layer"]/span/a'):
-            area_name = article.xpath(".//text()").get()
-            self.logzero_logger.info(f"⛲ area_name = {area_name}")
+        for p in response.xpath('//div[@id="contents_layer"]/span/p'):
+            area_name = p.xpath(".//a/text()").get()
             if not area_name:
                 continue
             if area_name in self.not_target_area_list:
                 continue
             if area_name in self.area_list:
-                url = article.xpath(".//@href").get().strip()
+                url = p.xpath(".//a/@href").get().strip()
                 yield scrapy.Request(url, callback=self.parse_from_area_html, meta={"area_name": area_name})
             else:
                 pass
