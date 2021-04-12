@@ -49,7 +49,7 @@ class KagoshimaSpider(AbstractSpider):
     ]
 
     def parse(self, response):
-        for p in response.xpath('//div[@id="contents_layer"]/span/p'):
+        for p in response.xpath('//div[@id="second_page"]/p'):
             area_name = p.xpath(".//a/text()").get()
             self.logzero_logger.info(f"🗻 area_name = {area_name}")
             if not area_name:
