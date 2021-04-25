@@ -39,6 +39,15 @@ class TochigiSpider(AbstractSpider):
                 './/ul[@class="hp"]//a[contains(text(),"ホームページ")]/@href'
             ).extract_first()
 
+            # latlng取得
+            google_map_url = article.xpath('.//ul[@class="hp"]//a[contains(text(),"GoogleMap")]/@href').extract_first()
+            # MEMO: google.co.jpへのリンクとgoogle.comへのリンクが混在
+            # 書式もいくつかパターンが混在、latlngが無いやつもある
+            m = re.search(r"/maps/.*/@(?P<lat>.*?),(?P<lng>.*?),(?P<zoom>.*)/data", google_map_url)
+            if m:
+                item["provided_lat"] = m.group("lat")
+                item["provided_lng"] = m.group("lng")
+
             # MEMO: エリア情報は検索結果中に含まれないので、必要なら検索条件として指定する必要がある
             # 山口県同様に実現可能だが、とりあえずは見送り。
 
