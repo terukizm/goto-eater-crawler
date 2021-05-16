@@ -26,7 +26,7 @@ class naraSpider(AbstractSpider):
 
     def parse(self, response):
         xlsx_url = response.xpath(
-            '//table[@class="common-table"]/tbody/tr/th[contains(text(), "店舗URL")]/following-sibling::td/a/@href'
+            '//table[@class="common-table"]/tbody/tr/th[contains(text(), "URL")]/following-sibling::td/a/@href'
         ).extract_first()
         yield scrapy.Request(xlsx_url, callback=self.parse_from_xlsx)
 
@@ -37,14 +37,14 @@ class naraSpider(AbstractSpider):
             f.write(response.body)
             self.logzero_logger.info(f"💾 saved xlsx: {response.request.url} > {tmp_xlsx}")
 
-        df = pd.read_excel(tmp_xlsx, sheet_name="リスト", dtype=str).fillna({"電話番号": "", "URL": ""})
+        df = pd.read_excel(tmp_xlsx, sheet_name="リスト", dtype=str).fillna({"店舗_TEL": "", "店舗_URL": ""})
         for _, row in df.iterrows():
             item = ShopItem()
             item["area_name"] = row["エリア"].strip()
-            item["shop_name"] = row["店舗名称"]  # MEMO: 店舗名に改行が入ってるものがある
+            item["shop_name"] = row["店舗_名称"]  # MEMO: 店舗名に改行が入ってるものがある
             item["genre_name"] = row["カテゴリー"].strip()
-            item["address"] = row["住所"].strip()
-            item["tel"] = row["電話番号"]
-            item["official_page"] = row["URL"]
+            item["address"] = row["店舗_住所"].strip()
+            item["tel"] = row["店舗_TEL"]
+            item["official_page"] = row["店舗_URL"]
 
             yield item
