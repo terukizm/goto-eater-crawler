@@ -31,8 +31,13 @@ class TochigiSpider(AbstractSpider):
             # MEMO: 郵便番号形式にはたまに入力ブレがあるので、正規表現で適当に処理
             place = article.xpath('.//div[@class="add"]/p[1]/text()').get().strip()
             m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
-            item["address"] = m.group("address")
-            item["zip_code"] = m.group("zip_code")
+            if m:
+                item["address"] = m.group("address")
+                item["zip_code"] = m.group("zip_code")
+            else:
+                # MEMO: 「日本海庄や　宇都宮本店」など、郵便番号が入ってない場合がある
+                item["address"] = place
+                item["zip_code"] = None
 
             item["tel"] = article.xpath('.//div[@class="add"]/p[2]/a/text()').extract_first()
             item["official_page"] = article.xpath(
