@@ -40,6 +40,10 @@ class FukushimaSpider(AbstractSpider):
             gmap_url = article.xpath(
                 './/div[@class="mfp-hide"]//ul[@class="list_store-info"]/li[@class="map-box"]/iframe[@class="acf-map"]/@src'
             ).get()
+
+            if not gmap_url:
+                yield item
+
             m = re.search("q=(?P<lat>\d+\.\d+)\,(?P<lng>\d+\.\d+)", gmap_url)
             if m:
                 item["provided_lat"] = m.group("lat")
