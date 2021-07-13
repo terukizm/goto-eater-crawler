@@ -11,7 +11,7 @@ class KochiSpider(AbstractSpider):
     """
 
     name = "kochi"
-    allowed_domains = ["gotoeat-kochi.jp"]
+    allowed_domains = ["gotoeat-kochi.com"]
 
     start_urls = [
         "https://www.gotoeat-kochi.com/js/shop_list.php",  # jsonが帰ってくる
