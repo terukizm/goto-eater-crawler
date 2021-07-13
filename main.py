@@ -30,7 +30,8 @@ class Main:
                 "tokyo_gnavi",  # 企業サイトであり、かつ件数が多く、詳細ページまで見る必要があり、アクセスが多くなってしまうため。東京都はPDF版クローラで対応。
                 "tokushima",  # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
                 "kochi",    # 2021/07に入ってからrobots.txtにDisallowが追記されたため
-                "iwate",    # 参加店舗検索が準備中になった、岩手はGoToEatキャンペーンが6末で一区切りになった？？
+                "yamanashi", # 山梨県は2021/06末をもってキャンペーン終了
+                "iwate", # 岩手県は2021/08〜第二弾を実施？ 一時的に参加店舗検索がcloseされている
             ]
             process = CrawlerProcess(self.settings)
             targets = [x for x in process.spider_loader.list() if not x in ignores]
