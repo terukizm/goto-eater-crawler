@@ -31,6 +31,7 @@ class Main:
                 "tokushima",  # 「※本サイトのコンテンツの無断転載を禁じます。」という一文があるため (2020/12/09)
                 "kochi",    # 2021/07に入ってからrobots.txtにDisallowが追記されたため
                 "yamanashi", # 山梨県は2021/06末をもってキャンペーン終了
+                "kagoshima", # 鹿児島県は2021/07/14をもってキャンペーン終了
                 "iwate", # 岩手県は2021/08〜第二弾を実施？ 一時的に参加店舗検索がcloseされている
             ]
             process = CrawlerProcess(self.settings)
