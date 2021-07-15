@@ -28,7 +28,7 @@ class IshikawaSpider(AbstractSpider):
             item["zip_code"] = (
                 article.xpath('.//div[@class="address"]/div[@class="post"]/text()').get().strip().replace("〒", "")
             )
-            item["address"] = article.xpath('.//div[@class="address"]/div[@class="content"]/p/text()').get().strip()
+            item["address"] = article.xpath('normalize-space(.//div[@class="address"]/div[@class="content"]/p)').get().strip()
 
             tel = article.xpath('.//div[@class="tel"]/text()').get()
             item["tel"] = tel.replace("TEL.", "") if tel else None
