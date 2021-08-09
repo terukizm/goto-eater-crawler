@@ -18,7 +18,7 @@ class MiyazakiSpider(AbstractSpider):
 
     def parse(self, response):
         self.logzero_logger.info(f"💾 url = {response.request.url}")
-        for article in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
+        for article in response.xpath('//div[@class="l-store-card"]//div[@class="store-card__item"]'):
             item = ShopItem()
 
             # 宮崎は"/"もしくは"／"区切りで「店舗名部分に」ジャンル情報を無理やり入れているため、その書式になっていればジャンル名として利用する

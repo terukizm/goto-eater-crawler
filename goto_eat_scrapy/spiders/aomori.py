@@ -18,7 +18,7 @@ class AomoriSpider(AbstractSpider):
 
     def parse(self, response):
         self.logzero_logger.info(f"💾 url = {response.request.url}")
-        for article in response.xpath('//section[@class="l-store-section"]//div[@class="store-card__item"]'):
+        for article in response.xpath('//div[@class="l-store-card"]//div[@class="store-card__item"]'):
             item = ShopItem()
             item["shop_name"] = " ".join(article.xpath('.//h3[@class="store-card__title"]/text()').getall()).strip()
             item["genre_name"] = article.xpath('.//p[@class="store-card__tag"]/text()').get().strip()
