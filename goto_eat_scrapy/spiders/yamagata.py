@@ -88,8 +88,13 @@ class YamagataSpider(AbstractSpider):
 
             place = article.xpath(".//div[1]/text()").get().strip()
             m = re.match(r"(?P<zip_code>.*?)\s(?P<address>.*)", place)
-            item["address"] = m.group("address")
-            item["zip_code"] = m.group("zip_code")
+
+            if m:
+                item["address"] = m.group("address")
+                item["zip_code"] = m.group("zip_code")
+            else:
+                item["address"] = place
+                item["zip_code"] = None # MEMO: 2021/08/19 "エノテーカ"に郵便番号がない
 
             tel = article.xpath(".//div[2]/text()").get()
             item["tel"] = tel.replace("TEL : ", "") if tel else None
