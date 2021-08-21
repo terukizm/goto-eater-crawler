@@ -19,7 +19,10 @@ class NaganoSpider(AbstractSpider):
         self.logzero_logger.info(f"💾 url = {response.request.url}")
         for article in response.xpath('//div[@class="shop_block"]/div[@class="shop"]'):
             item = ShopItem()
-            item["shop_name"] = article.xpath('.//p[@class="shop_title"]/text()').get().strip()
+            shop_name = article.xpath('.//p[@class="shop_title"]/text()').get()
+            if not shop_name:
+                continue
+            item["shop_name"] = shop_name.strip()
             item["area_name"] = (
                 article.xpath('.//p[@class="shop_type"]/span[@class="shop_shozaichi"]/text()').get().strip()
             )
