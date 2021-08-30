@@ -44,7 +44,8 @@ class Main:
             self.run_hokkaido()
             targets.remove("hokkaido")
         if "oita" in targets:
-            self.run_oita()
+            # 2021/08/15をもってキャンペーン終了
+            # self.run_oita()
             targets.remove("oita")
         if targets:
             self.run_spiders(spiders=targets)
