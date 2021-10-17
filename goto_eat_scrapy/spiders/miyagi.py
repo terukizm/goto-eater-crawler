@@ -16,37 +16,42 @@ class MiyagiSpider(AbstractSpider):
     name = "miyagi"
     allowed_domains = ["gte-miyagi.jp"]
 
-    # @see https://gte-miyagi.jp/available.html
+    # @see https://gte-miyagi.jp/gte/available.html
+
+    # 2021/10/15: GoToEatとは別におうえん食事券という似たようなものが開始された
+    # 期間が重複するため、とりあえず既存のGoToEat商品券のみを引き続き対象とする
+    # @see https://gte-miyagi.jp/ouen/available.html
+
     # 宮城県はページングなし
     area_list = [
         {
-            "url": "https://gte-miyagi.jp/available_aobaku.php",
+            "url": "https://gte-miyagi.jp/gte/available_aobaku.php",
             "params": {"searchwords": " ", "area": "仙台市青葉区", "ch": "all"},
         },
         {
-            "url": "https://gte-miyagi.jp/available_miyaginoku.php",
+            "url": "https://gte-miyagi.jp/gte/available_miyaginoku.php",
             "params": {"searchwords": " ", "area": "仙台市宮城野区", "ch": "all"},
         },
         {
-            "url": "https://gte-miyagi.jp/available_wakabayashiku.php",
+            "url": "https://gte-miyagi.jp/gte/available_wakabayashiku.php",
             "params": {"searchwords": " ", "area": "仙台市若林区", "ch": "all"},
         },
         {
-            "url": "https://gte-miyagi.jp/available_taihakuku.php",
+            "url": "https://gte-miyagi.jp/gte/available_taihakuku.php",
             "params": {"searchwords": " ", "area": "仙台市太白区", "ch": "all"},
         },
         {
-            "url": "https://gte-miyagi.jp/available_izumiku.php",
+            "url": "https://gte-miyagi.jp/gte/available_izumiku.php",
             "params": {"searchwords": " ", "area": "仙台市泉区", "ch": "all"},
         },
         {
             # 宮城県北部
-            "url": "https://gte-miyagi.jp/available03.php",
+            "url": "https://gte-miyagi.jp/gte/available03.php",
             "params": {"searchwords": " ", "area": "all", "ch": "all"},
         },
         {
             # 宮城県南部
-            "url": "https://gte-miyagi.jp/available04.php",
+            "url": "https://gte-miyagi.jp/gte/available04.php",
             "params": {"searchwords": " ", "area": "all", "ch": "all"},
         },
     ]
