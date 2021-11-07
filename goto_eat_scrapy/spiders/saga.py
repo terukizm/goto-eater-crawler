@@ -11,8 +11,8 @@ class SagaSpider(AbstractSpider):
     """
 
     name = "saga"
-    allowed_domains = ["gotoeat-saga.jp"]
-    start_urls = ["https://gotoeat-saga.jp/consumer/shop.php?name=#search_result"]
+    allowed_domains = ["www.sagaoishi-to.com"]
+    start_urls = ["https://www.sagaoishi-to.com/consumer/shop.php?name=#search_result"]
 
     def parse(self, response):
         self.logzero_logger.info(f"💾 url = {response.request.url}")
