@@ -33,10 +33,11 @@ class Main:
                 "yamanashi", # 2021/06/30をもってキャンペーン終了
                 "kagoshima", # 2021/07/14をもってキャンペーン終了
                 "fukushima", # 2021/07/31をもってキャンペーン終了
-                "tochigi", # 2021/07/31をもってキャンペーン終了
                 "miyazaki", # 2021/07/31をもってキャンペーン終了
                 "tottori", # 2021/08/31をもってキャンペーン終了
                 "aomori", # 2021/09/30をもってキャンペーン終了
+                "niigata", # 2021/10/31をもってキャンペーン終了
+                "yamaguchi", # 2021/10/31をもってキャンペーン終了
             ]
             process = CrawlerProcess(self.settings)
             targets = [x for x in process.spider_loader.list() if not x in ignores]
