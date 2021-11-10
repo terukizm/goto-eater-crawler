@@ -69,7 +69,6 @@ class KyotoSpider(AbstractSpider):
                 './/div[@class="store-cont"]/table/tr/th[contains(text(), "電話番号")]/following-sibling::td/text()'
             )
             .get()
-            .strip()
         )
         # MEMO: 詳細ページに項目自体はあるが、電話番号、定休日が入ってるデータは1件もない(2021/01/18)
         item["opening_hours"] = article.xpath(
