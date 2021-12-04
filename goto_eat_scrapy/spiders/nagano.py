@@ -11,8 +11,8 @@ class NaganoSpider(AbstractSpider):
     """
 
     name = "nagano"
-    allowed_domains = ["shinshu-gotoeat.com"]
-    start_urls = ["https://shinshu-gotoeat.com/riyou.php"]
+    allowed_domains = ["shinshu-premium.jp"]
+    start_urls = ["https://shinshu-premium.jp/riyou.php"]
     page_no = 1
 
     def parse(self, response):
@@ -42,7 +42,7 @@ class NaganoSpider(AbstractSpider):
             return
 
         self.page_no += 1
-        next_page = f"https://shinshu-gotoeat.com/riyou.php?p={self.page_no}#search-result"
+        next_page = f"https://shinshu-premium.jp/riyou.php?p={self.page_no}#search-result"
         self.logzero_logger.info(f"🛫 next url = {next_page}")
 
         yield scrapy.Request(next_page, callback=self.parse)
