@@ -18,7 +18,7 @@ class SagaSpider(AbstractSpider):
         self.logzero_logger.info(f"💾 url = {response.request.url}")
         for article in response.xpath('//main[@id="primary"]//div[@class="shop_info"]/div[@class="shop_detail"]'):
             item = ShopItem()
-            item["shop_name"] = article.xpath('.//div[@class="ttl"]/text()').get().strip()
+            item["shop_name"] = article.xpath('.//div[@class="ttl"]/text()').get()
             item["genre_name"] = article.xpath('.//div[@class="genre"]/text()').get().strip()
 
             item["address"] = "".join(article.xpath(".//dl[1]/dd/text()").getall()).strip()
