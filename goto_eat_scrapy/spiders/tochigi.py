@@ -24,7 +24,7 @@ class TochigiSpider(AbstractSpider):
             item = ShopItem()
             item["shop_name"] = article.xpath('.//p[@class="name"]/text()').get().strip()
             item["genre_name"] = (
-                article.xpath('.//p[@class="name"]/span[contains(@class, "genre")]/text()').get().strip()
+                article.xpath('.//p[@class="name"]/span[contains(@class, "genre")]/text()').get()
             )
 
             # 「所在地」から「郵便番号」「住所」を取得
