@@ -21,7 +21,7 @@ class KumamotoSpider(AbstractSpider):
         for article in response.xpath('//section[@id="sale-page"]//div[@class="sec-body__inner"]/article'):
             item = ShopItem()
             item["shop_name"] = article.xpath(".//h3/text()").get().strip()
-            item["area_name"] = article.xpath('.//p[@class="cat"]/a[@class="tag"]/text()').get().strip()
+            item["area_name"] = article.xpath('.//p[@class="cat"]/a[@class="tag"]/text()').get()
 
             place = article.xpath(".//p[1]/text()").get().strip()
             m = re.match(r"〒(?P<zip_code>.*?)\s(?P<address>.*)", place)
