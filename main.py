@@ -40,6 +40,7 @@ class Main:
                 "yamaguchi", # 2021/10/31をもってキャンペーン終了
                 "toyama", # 2021/11/30をもってキャンペーン終了
                 "ehime", # 2021/11/30をもってキャンペーン終了
+                "akita", # 2021/11/30をもってキャンペーン終了
             ]
             process = CrawlerProcess(self.settings)
             targets = [x for x in process.spider_loader.list() if not x in ignores]
