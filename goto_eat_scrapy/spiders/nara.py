@@ -16,21 +16,12 @@ class naraSpider(AbstractSpider):
 
     name = "nara"
     allowed_domains = ["premium-gift.jp"]
-
-    # MEMO: 利用店舗一覧の中から適当にリンクが貼られている
-    # @see https://premium-gift.jp/nara-eat/use_store
-    start_urls = ["https://premium-gift.jp/nara-eat/use_store/detail?id=215783"]
+    start_urls = ["https://premium-gift.jp/files/140/document/1660/利用店舗一覧.xlsx"]
 
     CACHE_PATH = pathlib.Path(__file__).parent.parent.parent / ".scrapy" / settings.HTTPCACHE_DIR / name
     CACHE_PATH.mkdir(parents=True, exist_ok=True)
 
     def parse(self, response):
-        xlsx_url = response.xpath(
-            '//table[@class="common-table"]/tbody/tr/th[contains(text(), "URL")]/following-sibling::td/a/@href'
-        ).extract_first()
-        yield scrapy.Request(xlsx_url, callback=self.parse_from_xlsx)
-
-    def parse_from_xlsx(self, response):
         tmp_xlsx = str(self.CACHE_PATH / "利用店舗一覧.xlsx")
 
         with open(tmp_xlsx, "wb") as f:
