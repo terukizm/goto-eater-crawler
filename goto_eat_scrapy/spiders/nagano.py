@@ -24,7 +24,7 @@ class NaganoSpider(AbstractSpider):
                 continue
             item["shop_name"] = shop_name.strip()
             item["area_name"] = (
-                article.xpath('.//p[@class="shop_type"]/span[@class="shop_shozaichi"]/text()').get().strip()
+                article.xpath('.//p[@class="shop_type"]/span[@class="shop_shozaichi"]/text()').get()
             )
             item["genre_name"] = article.xpath('.//p[@class="shop_type"]/span[@class="shopgenre"]/text()').get().strip()
             item["address"] = (
