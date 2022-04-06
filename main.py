@@ -47,6 +47,7 @@ class Main:
                 "shiga", # 2022/02/28をもってキャンペーン終了
                 "fukui", # 2022/02/28をもってキャンペーン終了
                 "shimane", # 2022/03/25をもってキャンペーン終了
+                "gunma", # 2021/12/15をもってキャンペーン終了
             ]
             process = CrawlerProcess(self.settings)
             targets = [x for x in process.spider_loader.list() if not x in ignores]
