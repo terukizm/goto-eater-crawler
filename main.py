@@ -36,6 +36,7 @@ class Main:
                 "miyazaki", # 2021/07/31をもってキャンペーン終了
                 "tottori", # 2021/08/31をもってキャンペーン終了
                 "aomori", # 2021/09/30をもってキャンペーン終了
+                "wakayama", # 2021/09/30をもってキャンペーン終了
                 "niigata", # 2021/10/31をもってキャンペーン終了
                 "yamaguchi", # 2021/10/31をもってキャンペーン終了
                 "toyama", # 2021/11/30をもってキャンペーン終了
@@ -56,19 +57,21 @@ class Main:
                 "shimane", # 2022/03/25をもってキャンペーン終了
                 "miyagi", # 2022/04/30をもってキャンペーン終了
                 "kumamoto", # 2022/04/30をもってキャンペーン終了
+                "hyogo", # 2022/05/15をもってキャンペーン終了
+                "aichi", # 2022/05/15をもってキャンペーン終了
             ]
             process = CrawlerProcess(self.settings)
             targets = [x for x in process.spider_loader.list() if not x in ignores]
-            targets += ["hokkaido", "oita"]
+            # targets += ["hokkaido", "oita"]
 
-        if "hokkaido" in targets:
-            # 2022/05/10をもってキャンペーン終了
-            # self.run_hokkaido()
-            targets.remove("hokkaido")
-        if "oita" in targets:
-            # 2021/08/15をもってキャンペーン終了
-            # self.run_oita()
-            targets.remove("oita")
+        # if "hokkaido" in targets:
+        #     # 2022/05/10をもってキャンペーン終了
+        #     # self.run_hokkaido()
+        #     targets.remove("hokkaido")
+        # if "oita" in targets:
+        #     # 2021/08/15をもってキャンペーン終了
+        #     # self.run_oita()
+        #     targets.remove("oita")
         if targets:
             self.run_spiders(spiders=targets)
 
