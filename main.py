@@ -60,6 +60,7 @@ class Main:
                 "hyogo", # 2022/05/15をもってキャンペーン終了
                 "aichi", # 2022/05/15をもってキャンペーン終了
                 "kyoto", # 2022/05/20をもってキャンペーン終了
+                "ishikawa", # 2022/05/22をもってキャンペーン終了
                 "chiba", # 2022/06/10をもってキャンペーン終了
             ]
             process = CrawlerProcess(self.settings)
