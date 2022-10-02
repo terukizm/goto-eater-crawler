@@ -68,6 +68,7 @@ class Main:
                 "kyoto", # 2022/05/20をもってキャンペーン終了
                 "ishikawa", # 2022/05/22をもってキャンペーン終了
                 "chiba", # 2022/06/10をもってキャンペーン終了
+                "kanagawa", # 2022/09/30をもってキャンペーン終了
             ]
             process = CrawlerProcess(self.settings)
             targets = [x for x in process.spider_loader.list() if not x in ignores]
